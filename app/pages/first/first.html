@@ -1,0 +1,14 @@
+ <StackLayout (loaded)="loaded()" (unloaded)="unLoaded()"> 
+  <ActionBar  title="hello" style="opacity:0.5;background-color:#ff0000;color:white" [style.marginTop]="statusBarHeight" ></ActionBar> 
+  <TextField hint="path" [(ngModel)]="path"></TextField>
+  <Button text="play" (tap)="play()"></Button>
+  <ListView [items]="paths" (itemTap)="onItemTap($event)">
+      <template let-item="item" let-i="index" let-odd="odd" let-even="even">
+          <StackLayout [class.odd]="odd" [class.even]="even">
+              <Label [text]='item'></Label>
+          </StackLayout>
+      </template>
+  </ListView>
+</StackLayout>
+
+
