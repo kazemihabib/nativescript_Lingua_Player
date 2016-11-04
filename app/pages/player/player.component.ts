@@ -37,6 +37,8 @@ export class playerPage implements OnInit{
     public audioTracks = new Array<{id:number,name:string}>();
     public dd:any;
 
+    public visible:boolean = true;
+
     public subText=[{'text':'','isWord':false}];
 
     currentPosition = 0; 
@@ -175,7 +177,7 @@ export class playerPage implements OnInit{
           console.log('op '+ this.op);
 
           this._ngZone.run(() => {
-            this.op = 0;
+            this.visible = false;
           });
       }
       else{
@@ -184,7 +186,7 @@ export class playerPage implements OnInit{
           let page = frame.topmost().currentPage;
           page.actionBarHidden = false;
           this._ngZone.run(() => {
-            this.op = 0.6;
+            this.visible = true;
           });
       }
 

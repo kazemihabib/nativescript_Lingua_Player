@@ -26,7 +26,7 @@
           <Label *ngIf="!item.isWord" [text]="item.text" style="color:white" marginLeft="5"></Label>
     </div>
   </WrapLayout>
-  <GridLayout row="1" rows="auto,auto" columns="auto, *, auto"  style="background-color:black;" [style.opacity]="op" >
+  <GridLayout row="1" rows="auto,auto" columns="auto, *, auto"  style="background-color:black;" [visibility] ="visible ? 'visible' : 'collapse' " >
 
       <TNSSlider row= "0" col="0" colSpan="3" [value]="currentPosition" [maxValue]="movieLength" (dragged)="fromUser($event)"  ></TNSSlider>
 
