@@ -6,7 +6,7 @@ import {ActivatedRoute} from "@angular/router";
 import appSettings = require("application-settings");
 import {registerElement} from "nativescript-angular/element-registry";
 let frame = require("ui/frame");
-import gestures = require("ui/gestures");
+// import gestures = require("ui/gestures");
 import {Subtitle} from "../../services/subtitle.service";
 
 registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown);
@@ -18,10 +18,10 @@ import {Guestures} from './guestures'
 
 declare var android:any;
 
-export enum Direction{
-  vertical,
-  horizontal
-}
+// export enum Direction{
+//   vertical,
+//   horizontal
+// }
 
 @Component({
     selector: "player",
@@ -40,14 +40,14 @@ export class playerPage implements OnInit{
     public position:number = 0;
     public currentAspectRatio = 0;
     public currentAudioTrack = -1;
-    public selectedIndex = 0;
+    // public selectedIndex = 0;
     // public items:Array<number>=[-1];
     public audioTracks = new Array<{id:number,name:string}>();
     public dd:any;
 
     public subText=[{'text':'','isWord':false}];
 
-    text = 8;
+    // text = 8;
     currentPosition = 0; 
     movieLength = 0;
     eventHardwareAccelerationError = function(){
@@ -60,6 +60,7 @@ export class playerPage implements OnInit{
 
       this.currentPosition = this.vlcAction.getPosition();
       let text = this.subtitle.getText(this.currentPosition);
+      console.log('text ',text.text);
       // this.isSub = text != -1 ? true:false; 
       this._ngZone.run(() => {
         this.subText = text;
@@ -101,17 +102,17 @@ export class playerPage implements OnInit{
       this.dd = dd;
     }
 
-    public isTouching:boolean = false;
-    public currentVolume = 15;
-    public prevDelta = 0;
+    // public isTouching:boolean = false;
+    // public currentVolume = 15;
+    // public prevDelta = 0;
 
     //------------------
     public op = 0.9;
-    public prevY:number = null;
-    public prevX:number = null;
+    // public prevY:number = null;
+    // public prevX:number = null;
     public label1GuestureHandler= null;
     public label2GuestureHandler = null;
-    private direction = null;
+    // private direction = null;
 
     // public sleep = null;
     label2Loaded(lbl){
@@ -121,7 +122,7 @@ export class playerPage implements OnInit{
       guestures.rightSideguestures(lbl);
     }
 
-    public label1TouchGesture = null;
+    // public label1TouchGesture = null;
     label1Loaded(lbl){
       this.label1GuestureHandler = lbl;
 
@@ -190,7 +191,7 @@ export class playerPage implements OnInit{
       }
       return result;
     } 
-
+    //TODO:change this member name
     public sta=true;
 
     public hideBars(){
@@ -259,6 +260,7 @@ export class playerPage implements OnInit{
 
      public addSub(){
       this.subtitle.loadSubtitle('sdcard/Download/han.srt');
+      console.log('sub button')
     }
 
 }

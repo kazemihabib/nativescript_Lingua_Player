@@ -1,17 +1,17 @@
 ﻿import 'reflect-metadata';
-import {Component,OnInit,ChangeDetectionStrategy,NgZone} from "@angular/core";
+import {Component,OnInit} from "@angular/core";
 import application = require("application");
-import {View} from "ui/core/view";
+// import {View} from "ui/core/view";
 import {Router} from "@angular/router";
 import {chroma,HW,VLCSettings} from "../../components/VLCSettings";
-import fs = require("file-system");
-import {Folder} from 'file-system';
+// import fs = require("file-system");
+// import {Folder} from 'file-system';
 
 import {FileExplorer} from "../../services/fileExplorer.service";
 
-class DataItem {
-    constructor(public id: number, public name: string) {}
-}
+// class DataItem {
+//     constructor(public id: number, public name: string) {}
+// }
 
 @Component({
     selector: "first",
@@ -26,16 +26,16 @@ export class firstPage{
    paths:Array<string> = [];
    path:string = 'file:///sdcard/Download/hello/si.mkv';
 
-    public myItems:Array<DataItem>;
+    // public myItems:Array<DataItem>;
     public counter:number;
     
    constructor(private _router: Router,private fileExplorer:FileExplorer){
-        this.myItems = [];
-        this.counter = 0;
-        for (var i = 0; i < 50; i++) {
-            this.myItems.push(new DataItem(i, "data item " + i));
-            this.counter = i;
-        }
+        // this.myItems = [];
+        // this.counter = 0;
+        // for (var i = 0; i < 50; i++) {
+        //     this.myItems.push(new DataItem(i, "data item " + i));
+        //     this.counter = i;
+        // }
 
    }
 
@@ -69,10 +69,10 @@ export class firstPage{
     } 
 
     public loaded(){
-      console.log('fist.components loaded');
+    //   console.log('fist.components loaded');
       // var sourceFile = fs.File.fromPath("/storage/emulated/0/Download/");
-      let sourceFile = fs.Folder.fromPath("/storage/emulated/0/");
-      console.dump(sourceFile.parent);
+    //   let sourceFile = fs.Folder.fromPath("/storage/emulated/0/");
+    //   console.dump(sourceFile.parent);
       
       // console.log(sourceFile);
       // console.dump(sourceFile);
@@ -88,25 +88,25 @@ export class firstPage{
         this.paths = this.fileExplorer.explore()
 
 
-        this.paths.push('habib');
-        this.paths.push('rashid');
+        // this.paths.push('habib');
+        // this.paths.push('rashid');
 
-        console.log(this.paths);
-        let i = 0;
+        // console.log(this.paths);
+        // let i = 0;
         // setInterval(()=> {
         //     this.paths.push('goog');
         // }, 1000);
     }
 
     public unLoaded(){
-      console.log('firs.components unloaded');
-      this.paths.push('kazemi');
-      this.paths.push('kazemi2');
+    //   console.log('firs.components unloaded');
+    //   this.paths.push('kazemi');
+    //   this.paths.push('kazemi2');
     }
 
     public onItemTap(obj:any){
-        console.log(obj.index);
-        console.log(this.paths[obj.index]);
+        // console.log(obj.index);
+        // console.log(this.paths[obj.index]);
         this.path ='file://' +  this.paths[obj.index];
     }
 
