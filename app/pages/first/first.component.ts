@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {chroma,HW,VLCSettings} from "../../components/VLCSettings";
 
 import {FileExplorer} from "../../services/fileExplorer.service";
+import {Brightness} from '../../utils/brightness';
 
 
 @Component({
@@ -36,9 +37,7 @@ export class firstPage{
    }
 
     private revertBrightness(){
-      let lp = application.android.foregroundActivity.getWindow().getAttributes();
-      lp.screenBrightness = -1;
-      application.android.foregroundActivity.getWindow().setAttributes(lp);
+      Brightness.setBrightness(-1);
     }
 
     private getStatusBarHeight() {

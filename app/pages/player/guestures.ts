@@ -1,5 +1,5 @@
 import gestures = require("ui/gestures");
-import application = require("application");
+import {Brightness} from '../../utils/brightness';
 
 
 export enum Direction{
@@ -10,6 +10,7 @@ export enum Direction{
 export class Guestures{
 
     public currentVolume;
+    //CHECK:is this necessary?
     public currentBrightness = 0.5;
     private max;
 
@@ -106,14 +107,13 @@ export class Guestures{
 
     private setBrightness(value:number){
 
-        let lp = application.android.foregroundActivity.getWindow().getAttributes();
+        this.currentBrightness = Brightness.getBrightness();
 
-        this.currentBrightness =  Math.floor(lp.screenBrightness * 15) + value;
+        this.currentBrightness = Math.floor(this.currentBrightness * 15) + value;
         this.currentBrightness = Math.max(this.currentBrightness,0);
         this.currentBrightness = Math.min(this.currentBrightness,15);
 
-        lp.screenBrightness = this.currentBrightness/15;
-        application.android.foregroundActivity.getWindow().setAttributes(lp);
+        Brightness.setBrightness(this.currentBrightness / 15);
 
         console.log('birightness ' + Math.floor(this.currentBrightness));
     }
