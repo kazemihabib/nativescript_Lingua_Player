@@ -4,6 +4,7 @@ import {VLCComponent} from "../../components/vlc.component";
 import {ActivatedRoute} from "@angular/router";
 import appSettings = require("application-settings");
 import {registerElement} from "nativescript-angular/element-registry";
+import { RouterExtensions } from "nativescript-angular/router";
 let frame = require("ui/frame");
 import {Subtitle} from "../../services/subtitle.service";
 
@@ -42,6 +43,12 @@ export class playerPage implements OnInit{
     movieLength = 0;
     eventHardwareAccelerationError = function(){
         console.log("event: eventHardwareAccelerationError");
+    }
+    eventEndReached(){
+       console.log('eventEndReached');
+       this.position = 0;
+       this.save();
+       this.routerExtensions.back();
     }
     eventPlaying = function(){
         console.log('event : Playing');
@@ -101,7 +108,7 @@ export class playerPage implements OnInit{
         this.vlcAction.play();
       },0);
     }
-    constructor(private route: ActivatedRoute,private _ngZone: NgZone,private subtitle:Subtitle){}
+    constructor(private route: ActivatedRoute,private _ngZone: NgZone,private subtitle:Subtitle,private routerExtensions: RouterExtensions){}
 
     ngOnDestroy() {
       this.sub.unsubscribe();
