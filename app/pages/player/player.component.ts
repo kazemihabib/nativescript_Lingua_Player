@@ -211,12 +211,6 @@ export class playerPage implements OnInit{
     }
 
 
-    public reChange(){
-      let lp = application.android.foregroundActivity.getWindow().getAttributes();
-      lp.screenBrightness = 254 / 255;
-      application.android.foregroundActivity.getWindow().setAttributes(lp);
-    }
-
      public addSub(){
       this.subtitle.loadSubtitle('sdcard/Download/han.srt');
       console.log('sub button')

@@ -33,9 +33,13 @@ export class firstPage{
     this.statusBarHeight= this.getStatusBarHeight(); 
     VLCSettings.hardwareAcceleration = HW.HW_ACCELERATION_DISABLED;
     VLCSettings.networkCachingValue = 3000;
-
    }
 
+    private revertBrightness(){
+      let lp = application.android.foregroundActivity.getWindow().getAttributes();
+      lp.screenBrightness = -1;
+      application.android.foregroundActivity.getWindow().setAttributes(lp);
+    }
 
     private getStatusBarHeight() {
       let result:number = 0;
@@ -48,6 +52,8 @@ export class firstPage{
     } 
 
     public loaded(){
+        this.revertBrightness();
+        this.paths = this.fileExplorer.explore()
     }
 
     public unLoaded(){
