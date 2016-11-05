@@ -2,6 +2,8 @@
 import { Injectable } from '@angular/core';
 import application = require("application");
 
+import { Observable as RxObservable } from 'rxjs/Observable';
+
 declare var android:any;
 
 export class FileExplorer{
@@ -43,6 +45,7 @@ export class FileExplorer{
 
         //getFrom database
 
+
     }
     public includePath(path){
         if(this.includedPaths.indexOf(path.trim()) < 0)
@@ -63,7 +66,10 @@ export class FileExplorer{
         //database
     }
     
+
+    
     public explore(){
+        
         
         let paths:string[]=new Array<string>();
         let MediaStore =  android.provider.MediaStore;
@@ -73,15 +79,21 @@ export class FileExplorer{
         let uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
         let projection = [MediaStore.Video.VideoColumns.DATA];
         let c = application.android.context.getContentResolver().query(uri, projection, null,null , null);
-        if (c != null) {
-            let temp;
-            while (temp = c.moveToNext()) {
-                let path:string = c.getString(0); // give path
-                paths.push(path);
+
+        return RxObservable.create(subscriber => {
+        
+            if (c != null) {
+                let temp;
+                while (temp = c.moveToNext()) {
+                    let path:string = c.getString(0); // give path
+                    paths.push(path);
+                    subscriber.next(paths);
+                }
+                c.close();
             }
-            c.close();
-            return paths;
-        }
+
+        });
+
     }
 
 }

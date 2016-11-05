@@ -50,9 +50,16 @@ export class firstPage{
       return result;
     } 
 
+    public source:any;
     public loaded(){
         this.revertBrightness();
-        this.paths = this.fileExplorer.explore()
+        this.source= this.fileExplorer.explore();
+        let subscription = this.source.subscribe(
+            (path)=>{
+                this.paths = path;
+            }
+                
+        )
     }
 
     public unLoaded(){
