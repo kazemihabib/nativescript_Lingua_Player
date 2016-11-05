@@ -58,10 +58,9 @@ export class playerPage implements OnInit{
     eventTimeChanged(){
 
       this.currentPosition = this.vlcAction.getPosition();
-      let text = this.subtitle.getText(this.currentPosition);
-      console.log('text ',text.text);
+      let wordList = this.subtitle.getText(this.currentPosition);
       this._ngZone.run(() => {
-        this.subText = text;
+        this.subText = wordList;
       });
 
     }
@@ -82,8 +81,6 @@ export class playerPage implements OnInit{
     }
 
 
-    //------------------
-    public op = 0.9;
     public label1GuestureHandler= null;
     public label2GuestureHandler = null;
 
@@ -173,8 +170,6 @@ export class playerPage implements OnInit{
           console.log('page'+ page);
 
           page.actionBarHidden = true;
-
-          console.log('op '+ this.op);
 
           this._ngZone.run(() => {
             this.visible = false;
