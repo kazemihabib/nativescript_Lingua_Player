@@ -6,26 +6,26 @@ let srtParser = require('subtitles-parser');
 import * as fs from 'file-system';
 import * as ISubWorker from './subworker.interface';
 
-
+let subData:any=[];
 global.myPostMessage = function(method:ISubWorker.functions,success:boolean,error:string,
-                                encodings:ISubWorker.IEncoding[], dialogWordList:ISubWorker.IDialogWord[]){
+                                encodings:ISubWorker.IEncoding[]){
     let data : ISubWorker.ISubWorkerResponse;
     data = {'function':method , 'success':success , 'error':error,
-                    'encodings':encodings , 'dialogWordList':dialogWordList}
+                    'encodings':encodings ,subData:subData}
 
     global.postMessage(data);
 
 }
 
 global.onmessage = (msg) => {
-        // console.log('onMessage in subtitle worker');
+        console.log('onMessage in subtitle worker');
         let request:ISubWorker.ISubWorkerRequest = msg.data;
 
         if(ISubWorker.functions.loadSubtitle == request.function){
             let error;
             subtitle.loadSubtitle(request.path,(e)=>{error = e},request.encoding);
 
-            global.myPostMessage(ISubWorker.functions.loadSubtitle,!error,error,undefined,undefined);
+            global.myPostMessage(ISubWorker.functions.loadSubtitle,!error,error,undefined);
         }        
         else if(ISubWorker.functions.detectEncoding == request.function){
             let error;
@@ -34,41 +34,42 @@ global.onmessage = (msg) => {
             global.myPostMessage(ISubWorker.functions.detectEncoding,!error,error,encodings,undefined);                        
 
         }
-        else if(ISubWorker.functions.getDialogWordList== request.function){
-            // console.log('subtitle.workers getDialogWordList request');
-            let dialogWordList = subtitle.getDialogWordList(request.time);
-            //TODO:change this succes in getDialogWordList function that if indx <0 or ... return success false
-            global.myPostMessage(ISubWorker.functions.getDialogWordList,true,undefined,undefined,dialogWordList); 
+        // else if(ISubWorker.functions.getDialogWordList== request.function){
+        //     // console.log('subtitle.workers getDialogWordList request');
+        //     let dialogWordList = subtitle.getDialogWordList(request.time);
+        //     //TODO:change this succes in getDialogWordList function that if indx <0 or ... return success false
+        //     global.myPostMessage(ISubWorker.functions.getDialogWordList,true,undefined,undefined,dialogWordList); 
 
 
-        }
+        // }
 
 }
 
 
 class Subtitle{
-    private subData:Array<Object>= []; 
+    // private subData:Array<Object>= []; 
     private encoding:string; 
 
     public loadSubtitle(path:string, errorCallback:(error : any) => any , encoding?:string,):void{
+        console.log('loadSubtitle');
         // console.log('loa')
         // if(!path)
-            let sourceFile ;// return -1;
-            let rawData;
+        let sourceFile ;// return -1;
+        let rawData;
         try{
             encoding = typeof encoding !== 'undefined' ? encoding : this.detectEncoding(path,e => {throw e})[0]["charsetName"]; 
             sourceFile = fs.File.fromPath(path);
             rawData = sourceFile.readTextSync(e => {throw e} ,encoding);
         }catch (e){
+           console.log('in catch');
            return errorCallback(e) 
         }
         //convert to json
         let tempSrtObject:{id:string,startTime:string,endTime:string,
                         text:string ,wordList?:{'text':string}[] } [] = srtParser.fromSrt(rawData ,true);
-                        
         tempSrtObject.forEach((item,i)=>{
             item.wordList= Tokenizer.splitWords(item.text).reverse();
-            this.subData.push(item);
+            subData.push(item);
         })
 
     }
@@ -93,22 +94,23 @@ class Subtitle{
         return encodings;
     }
 
-    public getDialogWordList(time:number) : ISubWorker.IDialogWord[]{
-        // console.log('subtitle.worker.ts getDialogWordList');
-        let index = _.sortedIndex(this.subData, {startTime: time}, function(sub){return sub.startTime});
-        index--;
-        if(index<0)
-            //return empty wordList
-            return [{'text':'','isWord':false}];
+    // public getDialogWordList(time:number) : ISubWorker.IDialogWord[]{
+    //     // console.log('subtitle.worker.ts getDialogWordList');
+    //     let index = _.sortedIndex(this.subData, {startTime: time}, function(sub){return sub.startTime});
+    //     index--;
+    //     if(index<0)
+    //         //return empty wordList
+    //         return [{'text':'','isWord':false}];
         
-        let obj:any = this.subData[index];
+    //     let obj:any = this.subData[index];
 
-        if(time > obj.endTime)
-            //return empty wordList
-            return [{'text':'','isWord':false}];
-        return obj.wordList;
-    } 
+    //     if(time > obj.endTime)
+    //         //return empty wordList
+    //         return [{'text':'','isWord':false}];
+    //     return obj.wordList;
+    // } 
 
 }
 
 let subtitle = new Subtitle();
+console.log('new Subtitle');

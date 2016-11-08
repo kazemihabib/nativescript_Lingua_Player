@@ -26,6 +26,8 @@ export class Subtitle{
             let response:ISubWorker.ISubWorkerResponse = msg.data;
 
             if(ISubWorker.functions.loadSubtitle == response.function){
+                // console.log('subData ',response.subData);
+                this.subData = response.subData;
                 console.log('success: ',response.success);                
                 console.log('error: ',response.error);
             }
@@ -34,10 +36,10 @@ export class Subtitle{
                 console.log('encodings ', response.encodings);
             }
 
-            else if(ISubWorker.functions.getDialogWordList == response.function){
-                //  console.log('wordList: ',response.dialogWordList);
-                 this.subWordListDownloader(response.dialogWordList);
-            }
+            // else if(ISubWorker.functions.getDialogWordList == response.function){
+            //     //  console.log('wordList: ',response.dialogWordList);
+            //      this.subWordListDownloader(response.dialogWordList);
+            // }
             
         }
 
@@ -52,8 +54,18 @@ export class Subtitle{
         this.myPostMessage(ISubWorker.functions.detectEncoding , path , undefined , undefined);
     }
     public getDialogWordList (time:number):any{
-        // console.log('service: ','getDialogWordList');
-        this.myPostMessage(ISubWorker.functions.getDialogWordList , undefined , undefined , time);
+        let index = _.sortedIndex(this.subData, {startTime: time}, function(sub){return sub.startTime});
+        index--;
+        if(index<0)
+            //return empty wordList
+            return [{'text':'','isWord':false}];
+        
+        let obj:any = this.subData[index];
+
+        if(time > obj.endTime)
+            //return empty wordList
+            return [{'text':'','isWord':false}];
+        return obj.wordList;
     } 
 
     public addSubWordListDownloader(downloader:Function){

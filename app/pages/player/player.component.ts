@@ -64,8 +64,10 @@ export class playerPage implements OnInit{
     eventTimeChanged(){
 
       this.currentPosition = this.vlcAction.getPosition();
-      // let wordList;
-      this.subtitle.getDialogWordList(this.currentPosition);
+      let wordList = this.subtitle.getDialogWordList(this.currentPosition);
+      this._ngZone.run(() => {
+          this.subText = wordList;
+      });
 
     }
 

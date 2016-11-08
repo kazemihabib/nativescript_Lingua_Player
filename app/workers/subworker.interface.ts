@@ -12,7 +12,8 @@ export interface ISubWorkerResponse{
     success:boolean,
     error:string,
     encodings:IEncoding[],
-    dialogWordList:IDialogWord[]
+    subData:any
+    // dialogWordList:IDialogWord[],
 }
 
 export interface IEncoding{
