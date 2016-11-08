@@ -39,6 +39,12 @@ export class playerPage implements OnInit{
 
     public visible:boolean = true;
 
+    public subWordListDownloader = (wordList) => {
+      this._ngZone.run(() => {
+          this.subText = wordList;
+      });
+    }
+
     public subText=[{'text':'','isWord':false}];
 
     currentPosition = 0; 
@@ -58,10 +64,8 @@ export class playerPage implements OnInit{
     eventTimeChanged(){
 
       this.currentPosition = this.vlcAction.getPosition();
-      let wordList = this.subtitle.getText(this.currentPosition);
-      this._ngZone.run(() => {
-        this.subText = wordList;
-      });
+      // let wordList;
+      this.subtitle.getDialogWordList(this.currentPosition);
 
     }
 
@@ -106,6 +110,8 @@ export class playerPage implements OnInit{
       timer.setTimeout(()=>{
         this.vlcAction.play();
       },0);
+
+      this.subtitle.addSubWordListDownloader(this.subWordListDownloader);
     }
     constructor(private route: ActivatedRoute,private _ngZone: NgZone,private subtitle:Subtitle,private routerExtensions: RouterExtensions){}
 
@@ -167,7 +173,7 @@ export class playerPage implements OnInit{
 
           frame.topmost().android.activity.getWindow().getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_FULLSCREEN);
           let page = frame.topmost().currentPage;
-          console.log('page'+ page);
+          // console.log('page'+ page);
 
           page.actionBarHidden = true;
 
@@ -186,7 +192,7 @@ export class playerPage implements OnInit{
       }
 
     this.sta=!this.sta;
-    console.log('sta' + this.sta);
+    // console.log('sta' + this.sta);
     }
 
     public save(){
