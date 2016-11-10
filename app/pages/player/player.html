@@ -1,7 +1,6 @@
-
- <GridLayout rows="*,auto" columns="*" [style.backgroundColor]="'black'" >
-  <ActionBar row="0" rowSpan="2" title="hello" style="opacity:0.5;background-color:black;color:white" [style.marginTop]="statusBarHeight" ></ActionBar> 
-  <GridLayout  row="0" rowSpan="2">
+<GridLayout rows="*,auto" columns="*" [style.backgroundColor]="'black'" >
+   <ActionBar row="0" rowSpan="2" title="hello" style="opacity:0.5;background-color:black;color:white" [style.marginTop]="statusBarHeight" ></ActionBar> 
+   <GridLayout  row="0" rowSpan="2">
     <vlc #vlcElement   horizontalAlignment="center" verticalAlignment="center" (loaded)="loaded()" (unloaded)="unLoaded()"
           [videoPath] = "path" [lastPosition]="position"
           [aspectRatio]="currentAspectRatio" [audioTrack]="currentAudioTrack"
@@ -12,21 +11,28 @@
           (eventTimeChanged) = "eventTimeChanged()"
           (eventEndReached) ="eventEndReached()"
           (tap)="status()"
-    >
-    </vlc>
-  </GridLayout>
+     >
+     </vlc>
+   </GridLayout>
 
- <GridLayout row="0" rowSpan="3" columns = "*,*">
-  <Label #myLabel1  row="0" col="0"   rowSpan="3" (loaded)="label1Loaded(myLabel1)" horizontalAlignment= "stretch" (tap)="hideBars()"></Label>
-  <Label  #myLabel2 row="0" rowSpan="3" col="1"  horizontalAlignment= "stretch" (loaded)="label2Loaded(myLabel2)" (tap)="hideBars()"></Label>
-</GridLayout >
-  <WrapLayout orientation="horizontal" horizontalAlignment="center" row="1"  verticalAlignment="bottom" opacity="1" marginBottom="30" [visibility] ="isSubEmpty ? 'collapse': 'visible' " style="background-color:black;" >
+  <GridLayout row="0" rowSpan="3" columns = "*,*">
+    <Label #myLabel1  row="0" col="0"   rowSpan="3" (loaded)="label1Loaded(myLabel1)" horizontalAlignment= "stretch" (tap)="hideBars()"></Label>
+    <Label  #myLabel2 row="0" rowSpan="3" col="1"  horizontalAlignment= "stretch" (loaded)="label2Loaded(myLabel2)" (tap)="hideBars()"></Label>
+  </GridLayout >
+
+  <StackLayout row="1" >
+  <!--Subtitle -->
+  <!--change marginBottom to handle position of subtitle in screen-->
+    <WrapLayout orientation="horizontal" horizontalAlignment="center" row="1"  verticalAlignment="bottom" opacity="1" marginBottom="5" [visibility] ="isSubEmpty ? 'collapse': 'visible' " style="background-color:black;" >
       <div  *ngFor="let item of subText" >
-          <Label *ngIf="item.isWord"  [text]="item.text" style="color:white;font-size:30" marginLeft="5" (tap)="subTapped(item)"> </Label>
-          <Label *ngIf="!item.isWord" [text]="item.text" style="color:white;font-size:30" marginLeft="5"></Label>
-    </div>
-  </WrapLayout>
-  <GridLayout row="1" rows="auto,auto" columns="auto, *, auto"  style="background-color:black;" [visibility] ="visible ? 'visible' : 'collapse' " >
+        <Label *ngIf="item.isWord"  [text]="item.text" style="color:white;font-size:30" marginLeft="5" (tap)="subTapped(item)"> </Label>
+        <Label *ngIf="!item.isWord" [text]="item.text" style="color:white;font-size:30" marginLeft="5"></Label>
+      </div>
+    </WrapLayout>
+  <!--Subtitle -->
+
+  <!--PlayerController-->
+    <GridLayout rows="auto,auto" columns="auto, *, auto"  style="background-color:black;" [visibility] ="visible ? 'visible' : 'collapse' " >
 
       <TNSSlider row= "0" col="0" colSpan="3" [value]="currentPosition" [maxValue]="movieLength" (dragged)="fromUser($event)"  ></TNSSlider>
 
@@ -41,10 +47,12 @@
 
 
       <StackLayout row="1" col="2" orientation="horizontal"  horizontalAlignment="center" verticalAlignment="center" >
-          <Label [text]="currentPosition" style="color:white;"></Label>
-          <Label text=" / " style="color:white;">></Label>
-          <Label [text]="movieLength" style="color:white;"></Label>
-          
+        <Label [text]="currentPosition" style="color:white;"></Label>
+        <Label text=" / " style="color:white;">></Label>
+        <Label [text]="movieLength" style="color:white;"></Label>
       </StackLayout>
-   </GridLayout>
-  </GridLayout>
+    </GridLayout>
+  <!--PlayerController-->
+  </StackLayout>
+
+</GridLayout>
