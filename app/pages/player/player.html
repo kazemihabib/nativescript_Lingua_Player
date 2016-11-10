@@ -20,7 +20,7 @@
   <Label #myLabel1  row="0" col="0"   rowSpan="3" (loaded)="label1Loaded(myLabel1)" horizontalAlignment= "stretch" (tap)="hideBars()"></Label>
   <Label  #myLabel2 row="0" rowSpan="3" col="1"  horizontalAlignment= "stretch" (loaded)="label2Loaded(myLabel2)" (tap)="hideBars()"></Label>
 </GridLayout >
-  <WrapLayout orientation="horizontal" horizontalAlignment="center" row="1"  verticalAlignment="bottom" opacity="1" marginBottom="30" >
+  <WrapLayout orientation="horizontal" horizontalAlignment="center" row="1"  verticalAlignment="bottom" opacity="1" marginBottom="30" [visibility] ="isSubEmpty ? 'collapse': 'visible' " style="background-color:black;" >
       <div  *ngFor="let item of subText" >
           <Label *ngIf="item.isWord"  [text]="item.text" style="color:white;font-size:30" marginLeft="5" (tap)="subTapped(item)"> </Label>
           <Label *ngIf="!item.isWord" [text]="item.text" style="color:white;font-size:30" marginLeft="5"></Label>

@@ -52,13 +52,13 @@ export class Subtitle{
         index--;
         if(index<0)
             //return empty wordList
-            return [{'text':'','isWord':false}];
+            return [];
         
         let obj:any = this.subData[index];
 
         if(time > obj.endTime)
             //return empty wordList
-            return [{'text':'','isWord':false}];
+            return [];
         return obj.wordList;
     } 
 

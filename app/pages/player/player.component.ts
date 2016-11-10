@@ -38,6 +38,8 @@ export class playerPage implements OnInit{
     public dd:any;
 
     public visible:boolean = true;
+    
+    public isSubEmpty:boolean = true;
 
     public subWordListDownloader = (wordList) => {
       this._ngZone.run(() => {
@@ -65,8 +67,12 @@ export class playerPage implements OnInit{
 
       this.currentPosition = this.vlcAction.getPosition();
       let wordList = this.subtitle.getDialogWordList(this.currentPosition);
+
+      this.isSubEmpty = wordList.length == 0;
+
       this._ngZone.run(() => {
-          this.subText = wordList;
+        if(!this.isSubEmpty)
+            this.subText = wordList;
       });
 
     }
