@@ -14,10 +14,9 @@ export class Subtitle{
     private worker:any;
     public subWordListDownloader:Function;
     private myPostMessage(method:ISubWorker.functions,path:string,encoding:string,time:number){
-        // console.log('service myPostMessage ');
 
         let data:ISubWorker.ISubWorkerRequest;
-        data = {'function':method , 'path':path , 'encoding':encoding , 'time':time};
+        data = {'function':method , 'path':path , 'encoding':encoding };
         this.worker.postMessage(data);
     }
     constructor(){
@@ -26,20 +25,14 @@ export class Subtitle{
             let response:ISubWorker.ISubWorkerResponse = msg.data;
 
             if(ISubWorker.functions.loadSubtitle == response.function){
-                // console.log('subData ',response.subData);
                 this.subData = response.subData;
                 console.log('success: ',response.success);                
-                console.log('error: ',response.error);
+                console.dump(response.error);
             }
 
             else if (ISubWorker.functions.detectEncoding == response.function){
                 console.log('encodings ', response.encodings);
             }
-
-            // else if(ISubWorker.functions.getDialogWordList == response.function){
-            //     //  console.log('wordList: ',response.dialogWordList);
-            //      this.subWordListDownloader(response.dialogWordList);
-            // }
             
         }
 
@@ -53,6 +46,7 @@ export class Subtitle{
     public detectEncoding(path:string){
         this.myPostMessage(ISubWorker.functions.detectEncoding , path , undefined , undefined);
     }
+
     public getDialogWordList (time:number):any{
         let index = _.sortedIndex(this.subData, {startTime: time}, function(sub){return sub.startTime});
         index--;

@@ -23,7 +23,7 @@
   <WrapLayout orientation="horizontal" horizontalAlignment="center" row="1"  verticalAlignment="bottom" opacity="1" marginBottom="30" >
       <div  *ngFor="let item of subText" >
           <Label *ngIf="item.isWord"  [text]="item.text" style="color:white;font-size:30" marginLeft="5" (tap)="subTapped(item)"> </Label>
-          <Label *ngIf="!item.isWord" [text]="item.text" style="color:white" marginLeft="5"></Label>
+          <Label *ngIf="!item.isWord" [text]="item.text" style="color:white;font-size:30" marginLeft="5"></Label>
     </div>
   </WrapLayout>
   <GridLayout row="1" rows="auto,auto" columns="auto, *, auto"  style="background-color:black;" [visibility] ="visible ? 'visible' : 'collapse' " >

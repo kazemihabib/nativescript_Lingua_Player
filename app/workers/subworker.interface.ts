@@ -1,10 +1,7 @@
-
-//CHECK:name
 export interface ISubWorkerRequest{
     function:functions,
     path:string,
     encoding:string,
-    time:number         
 }
 
 export interface ISubWorkerResponse{
@@ -12,8 +9,7 @@ export interface ISubWorkerResponse{
     success:boolean,
     error:string,
     encodings:IEncoding[],
-    subData:any
-    // dialogWordList:IDialogWord[],
+    subData:ISrtObject[]
 }
 
 export interface IEncoding{
@@ -22,14 +18,17 @@ export interface IEncoding{
      lang: string
 }
 
-export interface IDialogWord{
-    text:string,
-    isWord:boolean
-}
-
-//CHECK:name
 export enum functions{
     loadSubtitle,
     detectEncoding,
     getDialogWordList
+}
+
+
+export interface ISrtObject{
+     id:string,
+     startTime:string,
+     endTime:string,
+     text:string ,
+     wordList?:{'text':string}[]
 }

@@ -175,7 +175,6 @@ export class playerPage implements OnInit{
 
           frame.topmost().android.activity.getWindow().getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_FULLSCREEN);
           let page = frame.topmost().currentPage;
-          // console.log('page'+ page);
 
           page.actionBarHidden = true;
 
@@ -194,7 +193,6 @@ export class playerPage implements OnInit{
       }
 
     this.sta=!this.sta;
-    // console.log('sta' + this.sta);
     }
 
     public save(){
@@ -218,7 +216,6 @@ export class playerPage implements OnInit{
 
      public addSub(){
       this.subtitle.loadSubtitle('sdcard/Download/han.srt');
-      console.log('sub button')
     }
 
 }

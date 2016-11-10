@@ -32,7 +32,7 @@ export class firstPage{
    public ngOnInit(){
     
     this.statusBarHeight= this.getStatusBarHeight(); 
-    VLCSettings.hardwareAcceleration = HW.HW_ACCELERATION_DISABLED;
+    VLCSettings.hardwareAcceleration = HW.HW_ACCELERATION_FULL;
     VLCSettings.networkCachingValue = 3000;
    }
 
