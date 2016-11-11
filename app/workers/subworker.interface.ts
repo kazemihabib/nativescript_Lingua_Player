@@ -9,7 +9,8 @@ export interface ISubWorkerResponse{
     success:boolean,
     error:string,
     encodings:IEncoding[],
-    subData:ISrtObject[]
+    subData:ISrtObject[],
+    isRTL:boolean
 }
 
 export interface IEncoding{

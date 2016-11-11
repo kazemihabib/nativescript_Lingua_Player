@@ -3,15 +3,17 @@ import {Tokenizer} from "../services/tokenizer";
 let _ = require('underscore');
 let encodingDetector = require('charset-detector');
 let srtParser = require('subtitles-parser');
+let franc = require('franc');
+
 import * as fs from 'file-system';
 import * as ISubWorker from './subworker.interface';
 
 
 global.myPostMessage = function(method:ISubWorker.functions,success:boolean,error:string,
-                                encodings:ISubWorker.IEncoding[],subData:ISubWorker.ISrtObject[]){
+                                encodings:ISubWorker.IEncoding[],subData:ISubWorker.ISrtObject[],isRTL:boolean){
     let data : ISubWorker.ISubWorkerResponse;
     data = {'function':method , 'success':success , 'error':error,
-                    'encodings':encodings ,'subData':subData}
+                    'encodings':encodings ,'subData':subData,'isRTL':isRTL}
 
     global.postMessage(data);
 
@@ -22,9 +24,10 @@ global.onmessage = (msg) => {
 
         if(ISubWorker.functions.loadSubtitle == request.function){
             let error;
-            let subData:ISubWorker.ISrtObject[] = global.loadSubtitle(request.path,(e)=>{error = e},request.encoding);
+            let subData:ISubWorker.ISrtObject[],isRtl:boolean;
+            [subData,isRtl ] = global.loadSubtitle(request.path,(e)=>{error = e},request.encoding);
 
-            global.myPostMessage(ISubWorker.functions.loadSubtitle,!error,error,undefined,subData);
+            global.myPostMessage(ISubWorker.functions.loadSubtitle,!error,error,undefined,subData,isRtl);
         }        
         else if(ISubWorker.functions.detectEncoding == request.function){
             let error;
@@ -37,7 +40,7 @@ global.onmessage = (msg) => {
 
 
 
-global.loadSubtitle = (path:string, errorCallback:(error : any) => any , encoding?:string,): ISubWorker.ISrtObject[] => {
+global.loadSubtitle = (path:string, errorCallback:(error : any) => any , encoding?:string,): [ISubWorker.ISrtObject[],boolean] => {
         let sourceFile ;
         let rawData;
         let subData:Array<ISubWorker.ISrtObject>=[];
@@ -48,13 +51,16 @@ global.loadSubtitle = (path:string, errorCallback:(error : any) => any , encodin
         }catch (e){
            return errorCallback(e) 
         }
+        
+        let isRtl:boolean = global.isRTL(rawData)
+
         //convert to json
         let tempSrtObject:ISubWorker.ISrtObject[] = srtParser.fromSrt(rawData ,true);
         tempSrtObject.forEach((item,i)=>{
             item.wordList= Tokenizer.splitWords(item.text);
             subData.push(item);
         })
-        return subData;
+        return [subData,isRtl];
     }
 
 global.detectEncoding = (path:string, errorCallback:(error:any) => any) : ISubWorker.IEncoding[] => {
@@ -74,5 +80,21 @@ global.detectEncoding = (path:string, errorCallback:(error:any) => any) : ISubWo
         }
         
         let encodings= encodingDetector(jsArray);
+
         return encodings;
     }
+
+global.isRTL = (data:string)=>{
+        let lang = franc(data);
+        let languages: string[] = [
+            'arb', /* 'العربية', Arabic */
+            'aii', /* Aramaic */
+            'ckb', /* 'Soranî / کوردی', Sorani */
+            'pes', /* 'فارسی', Persian */
+            'heb', /* 'עברית', Hebrew */
+            'urd', /* 'اردو', Urdu */
+            'ydd' /* 'ייִדיש', Yiddish */
+        ];
+      return languages.indexOf(lang.toLowerCase()) >= 0 ? true : false;
+
+}

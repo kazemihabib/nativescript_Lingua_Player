@@ -10,6 +10,7 @@ import * as ISubWorker from '../workers/subworker.interface';
 export class Subtitle{
     private subData:Array<Object>= []; 
     private encoding:string; 
+    private isRTL:boolean;
 
     private worker:any;
     public subWordListDownloader:Function;
@@ -26,7 +27,10 @@ export class Subtitle{
 
             if(ISubWorker.functions.loadSubtitle == response.function){
                 this.subData = response.subData;
-                console.log('success: ',response.success);                
+                this.isRTL = response.isRTL; 
+                console.log('isRTL',this.isRTL);
+                console.log('sbutitle load success: ',response.success);                
+                console.log('subtitle load error: ')
                 console.dump(response.error);
             }
 
