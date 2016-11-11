@@ -64,21 +64,25 @@ export class playerPage implements OnInit{
         console.log('event : Playing');
     }
     eventTimeChanged(){
-
-      this.currentPosition = this.vlcAction.getPosition();
-      let wordList = this.subtitle.getDialogWordList(this.currentPosition);
-
-      this.isSubEmpty = wordList.length == 0;
-
-      this._ngZone.run(() => {
-        if(!this.isSubEmpty)
-            this.subText = wordList;
-      });
-
+      this.getSubtitleDialog();
     }
+
+    getSubtitleDialog(){
+
+		this.currentPosition = this.vlcAction.getPosition();
+		let wordList = this.subtitle.getDialogWordList(this.currentPosition);
+
+		this.isSubEmpty = wordList.length == 0;
+
+		this._ngZone.run(() => {
+			if(!this.isSubEmpty)
+				this.subText = wordList;
+		});
+    }   
 
     fromUser(args){
       this.vlcAction.seek(args.newValue);
+	  this.getSubtitleDialog();
     }
 
     eventParsedChanged = function(){
