@@ -51,6 +51,8 @@ export class playerPage implements OnInit{
     
     public isSubEmpty:boolean = true;
 
+    public isRTL:boolean = false;
+
     public subWordListDownloader = (wordList) => {
       this._ngZone.run(() => {
           this.subText = wordList;
@@ -236,7 +238,15 @@ export class playerPage implements OnInit{
 
 
      public addSub(){
-      this.subtitle.loadSubtitle('sdcard/Download/han.srt');
+      this.subtitle.loadSubtitle('sdcard/Download/han.srt',(isRTL:boolean, success:boolean, err:any)=>{
+          console.log('sub Load success: ',success);
+          console.log('sub err: ',err)
+          this.isRTL = isRTL;
+      });
+    }
+
+    public subTapped(item:{'text': '','isWord':false,'isNotWord':false,'isLine':false}){
+      console.log(item.text);
     }
 
 }

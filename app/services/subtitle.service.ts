@@ -10,7 +10,6 @@ import * as ISubWorker from '../workers/subworker.interface';
 export class Subtitle{
     private subData:Array<Object>= []; 
     private encoding:string; 
-    private isRTL:boolean;
 
     private worker:any;
     public subWordListDownloader:Function;
@@ -22,33 +21,35 @@ export class Subtitle{
     }
     constructor(){
         this.worker = new Worker('../workers/subtitle.worker');
+
+    }
+
+    
+    public loadSubtitle(path:string, callback:(isRTL:boolean, success:boolean, err:any)=>any, encoding?:string ){
+        this.myPostMessage(ISubWorker.functions.loadSubtitle , path , encoding , undefined);
+
         this.worker.onmessage = (msg)=>{
             let response:ISubWorker.ISubWorkerResponse = msg.data;
 
             if(ISubWorker.functions.loadSubtitle == response.function){
                 this.subData = response.subData;
-                this.isRTL = response.isRTL; 
-                console.log('isRTL',this.isRTL);
-                console.log('sbutitle load success: ',response.success);                
-                console.log('subtitle load error: ')
-                console.dump(response.error);
+                callback(response.isRTL, response.success, response.error);
+                
             }
 
-            else if (ISubWorker.functions.detectEncoding == response.function){
-                console.log('encodings ', response.encodings);
-            }
-            
         }
-
-    }
-
-    
-    public loadSubtitle(path:string,encoding?:string){
-        this.myPostMessage(ISubWorker.functions.loadSubtitle , path , encoding , undefined);
     }
 
     public detectEncoding(path:string){
         this.myPostMessage(ISubWorker.functions.detectEncoding , path , undefined , undefined);
+        this.worker.onmessage = (msg)=>{
+            let response:ISubWorker.ISubWorkerResponse = msg.data;
+
+            if (ISubWorker.functions.detectEncoding == response.function){
+                console.log('encodings ', response.encodings);
+            }
+            
+        }
     }
 
     public getDialogWordList (time:number):any{

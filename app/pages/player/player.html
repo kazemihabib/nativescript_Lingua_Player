@@ -23,7 +23,7 @@
   <StackLayout row="1" >
   <!--Subtitle -->
   <!--change marginBottom to handle position of subtitle in screen-->
-    <FlexBoxLayout flexDirection="row-reverse" justifyContent="center" marginBottom="5" flexWrap="wrap" [visibility] ="isSubEmpty ? 'collapse': 'visible' " >
+    <FlexBoxLayout [flexDirection]="isRTL ? 'row-reverse': 'row'" justifyContent="center" marginBottom="5" flexWrap="wrap" [visibility] ="isSubEmpty ? 'collapse': 'visible' " >
       <div  *ngFor="let item of subText" >
         <Label *ngIf="item.isWord"  [text]="item.text" style="color:white;font-size:30" marginLeft="5" (tap)="subTapped(item)"> </Label>
         <Label *ngIf="item.isNotWord" [text]="item.text" style="color:white;font-size:30" marginLeft="5"></Label>
