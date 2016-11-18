@@ -1,4 +1,14 @@
 ﻿import {Component,OnInit,NgZone} from "@angular/core";
+import {
+    FlexboxLayout,
+    FlexDirection,
+    FlexWrap,
+    JustifyContent,
+    AlignItems,
+    AlignContent,
+    AlignSelf
+} from "ui/layouts/flexbox-layout";
+
 import application = require("application");
 import {VLCComponent} from "../../components/vlc.component";
 import {ActivatedRoute} from "@angular/router";
@@ -77,6 +87,7 @@ export class playerPage implements OnInit{
 		this._ngZone.run(() => {
 			if(!this.isSubEmpty)
 				this.subText = wordList;
+
 		});
     }   
 
