@@ -68,3 +68,5 @@ src/node_modules
 !preparepublish.js
 !preparedevelope.js
 platforms
+
+!support/postinstall.js
