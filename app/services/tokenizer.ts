@@ -31,7 +31,6 @@ export class Tokenizer{
 
             /* if current and previous letter has not same type */
             if (currentLetterType != prevLetterType){
-                console.log('currentLetter ',currentLetter);
 
                 ret.push({'text': '','isWord':false,'isNotWord':false,'isLine':false});
                     if ( currentLetterType == ILetterType.line)
