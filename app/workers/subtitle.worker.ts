@@ -1,5 +1,5 @@
 require("globals");
-import {Tokenizer} from "../services/tokenizer";
+import {Tokenizer} from "../utils/tokenizer";
 let _ = require('underscore');
 let encodingDetector = require('charset-detector');
 let srtParser = require('subtitles-parser');

@@ -17,6 +17,7 @@ import {registerElement} from "nativescript-angular/element-registry";
 import { RouterExtensions } from "nativescript-angular/router";
 let frame = require("ui/frame");
 import {Subtitle} from "../../services/subtitle.service";
+import {IGuestureEventCallbacks} from "./guesture.interface"; 
 
 registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown);
 registerElement("TNSSlider", () => require("nativescript-slider").Slider);
@@ -30,7 +31,7 @@ declare var android:any;
 
 @Component({
     selector: "player",
-    templateUrl: "pages/player/player.html",
+    templateUrl: "pages/player/player.component.html",
     providers:[Subtitle]
 })
 
@@ -76,26 +77,25 @@ export class playerPage implements OnInit{
         console.log('event : Playing');
     }
     eventTimeChanged(){
+      this.currentPosition = this.vlcAction.getPosition();
       this.getSubtitleDialog();
     }
 
     getSubtitleDialog(){
+      let wordList = this.subtitle.getDialogWordList(this.currentPosition);
 
-		this.currentPosition = this.vlcAction.getPosition();
-		let wordList = this.subtitle.getDialogWordList(this.currentPosition);
+      this.isSubEmpty = wordList.length == 0;
 
-		this.isSubEmpty = wordList.length == 0;
+      this._ngZone.run(() => {
+        if(!this.isSubEmpty)
+          this.subText = wordList;
 
-		this._ngZone.run(() => {
-			if(!this.isSubEmpty)
-				this.subText = wordList;
-
-		});
+      });
     }   
 
     fromUser(args){
       this.vlcAction.seek(args.newValue);
-	  this.getSubtitleDialog();
+      this.eventTimeChanged();
     }
 
     eventParsedChanged = function(){
@@ -116,14 +116,14 @@ export class playerPage implements OnInit{
     label2Loaded(lbl){
       this.label2GuestureHandler = lbl;
 
-      let guestures = new Guestures(this.vlcAction);
+      let guestures = new Guestures(this.vlcAction,this.guestureEventCallbacks);
       guestures.rightSideguestures(lbl);
     }
 
     label1Loaded(lbl){
       this.label1GuestureHandler = lbl;
 
-      let guestures = new Guestures(this.vlcAction);
+      let guestures = new Guestures(this.vlcAction, this.guestureEventCallbacks);
       guestures.leftSideguestures(lbl);
 
     }
@@ -247,6 +247,20 @@ export class playerPage implements OnInit{
 
     public subTapped(item:{'text': '','isWord':false,'isNotWord':false,'isLine':false}){
       console.log(item.text);
+    }
+
+    public guestureEventCallbacks : IGuestureEventCallbacks =  {
+      seekEventFired:()=>{
+        this.eventTimeChanged();
+        console.log('seekEventFired');
+      },
+      volumeEventFired:()=>{
+        console.log('volumeEventFired');
+      },
+      brightnessEventFired:()=>{
+        console.log('brightnessEventFired');
+      }
+
     }
 
 }

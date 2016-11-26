@@ -8,8 +8,8 @@ import {Brightness} from '../../utils/brightness';
 
 
 @Component({
-    selector: "first",
-    templateUrl: "pages/first/first.html",
+    selector: "home",
+    templateUrl: "pages/home/home.component.html",
     providers:[FileExplorer],
 })
 

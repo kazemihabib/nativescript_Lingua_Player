@@ -1,5 +1,6 @@
 import gestures = require("ui/gestures");
 import {Brightness} from '../../utils/brightness';
+import {IGuestureEventCallbacks} from "./guesture.interface";
 
 
 export enum Direction{
@@ -18,7 +19,7 @@ export class Guestures{
     public prevX:number = null;
     private direction = null;
 
-    constructor(private vlcAction){
+    constructor(private vlcAction, private eventCallbacks:IGuestureEventCallbacks){
         this.max = this.vlcAction.getVolume().maxVolume;
         console.log('max ' + this.max);
 
@@ -114,6 +115,7 @@ export class Guestures{
         this.currentBrightness = Math.min(this.currentBrightness,15);
 
         Brightness.setBrightness(this.currentBrightness / 15);
+        this.eventCallbacks.brightnessEventFired();
 
         console.log('birightness ' + Math.floor(this.currentBrightness));
     }
@@ -134,7 +136,7 @@ export class Guestures{
                 this.currentVolume = this.vlcAction.volumeDown().currentVolume;
             }
             // this.prevY = currentY;
-
+            this.eventCallbacks.volumeEventFired();
             console.log('currentVolume: ' + this.currentVolume);
             return currentY;
         }
@@ -168,6 +170,7 @@ export class Guestures{
 
                     console.log(deltaX);
                     this.vlcAction.seek(this.vlcAction.getPosition() + deltaX);
+                    this.eventCallbacks.seekEventFired();
                     console.log('deltaX ' + deltaX);
                     return currentX;
             }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Tokenizer} from "./tokenizer";
+import {Tokenizer} from "../utils/tokenizer";
 let _ = require('underscore');
 let encodingDetector = require('charset-detector');
 let srtParser = require('subtitles-parser');
