@@ -7,18 +7,18 @@ import { ListViewEventData, RadListView } from "nativescript-telerik-ui/listview
 import {FileExplorer} from "../../services/fileExplorer.service";
 import {Brightness} from '../../utils/brightness';
 
-
 @Component({
     selector: "home",
     templateUrl: "pages/home/home.component.html",
     providers:[FileExplorer],
 })
 
-export class firstPage{
+export class firstPage implements OnInit{
 
    private statusBarHeight = 0;
    
-   paths:Array<string> = [];
+//    paths:Array<string> = [];
+   paths:any = [];
    path:string = 'file:///sdcard/Download/hello/si.mkv';
 
     public counter:number;
@@ -35,6 +35,13 @@ export class firstPage{
     this.statusBarHeight= this.getStatusBarHeight(); 
     VLCSettings.hardwareAcceleration = HW.HW_ACCELERATION_FULL;
     VLCSettings.networkCachingValue = 3000;
+    this.source= this.fileExplorer.explore();
+    let subscription = this.source.subscribe(
+        (path)=>{
+            this.paths = path;
+        }
+            
+    )
    }
 
     private revertBrightness(){
@@ -54,13 +61,17 @@ export class firstPage{
     public source:any;
     public loaded(){
         this.revertBrightness();
-        this.source= this.fileExplorer.explore();
-        let subscription = this.source.subscribe(
-            (path)=>{
-                this.paths = path;
-            }
+
+        //moved to ngOnInit until use worker and database for this
+
+        // this.source= this.fileExplorer.explore();
+        // let subscription = this.source.subscribe(
+        //     (path)=>{
+        //         this.paths = path;
+        //     }
                 
-        )
+        // )
+
     }
 
     public unLoaded(){
@@ -70,7 +81,8 @@ export class firstPage{
         var listview = args.object as RadListView;
         var selectedItems = listview.getSelectedItems();
         // console.log('selected' , selectedItems);
-        this.path = 'file://'+ selectedItems[0];
+        this.path = 'file://'+ selectedItems[0]['path'];
+        this.play();
     }
 
 }
