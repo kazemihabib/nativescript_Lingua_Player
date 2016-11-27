@@ -6,6 +6,7 @@ import { AppComponent } from "./app.component";
 import {routes,navigatableComponents} from "./app.routing"
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 
+import { LISTVIEW_DIRECTIVES } from 'nativescript-telerik-ui/listview/angular';
 import {VLCComponent} from "./components/vlc.component"
 
 @NgModule({
@@ -17,6 +18,7 @@ import {VLCComponent} from "./components/vlc.component"
 
     ],
     declarations: [
+        LISTVIEW_DIRECTIVES,
         AppComponent,
         ...navigatableComponents,
         VLCComponent

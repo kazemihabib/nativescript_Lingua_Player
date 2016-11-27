@@ -2,6 +2,7 @@
 import application = require("application");
 import {Router} from "@angular/router";
 import {chroma,HW,VLCSettings} from "../../components/VLCSettings";
+import { ListViewEventData, RadListView } from "nativescript-telerik-ui/listview";
 
 import {FileExplorer} from "../../services/fileExplorer.service";
 import {Brightness} from '../../utils/brightness';
@@ -65,8 +66,11 @@ export class firstPage{
     public unLoaded(){
     }
 
-    public onItemTap(obj:any){
-        this.path ='file://' +  this.paths[obj.index];
+    public onItemTap(args:any){
+        var listview = args.object as RadListView;
+        var selectedItems = listview.getSelectedItems();
+        // console.log('selected' , selectedItems);
+        this.path = 'file://'+ selectedItems[0];
     }
 
 }

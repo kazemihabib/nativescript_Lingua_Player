@@ -1,14 +1,31 @@
- <StackLayout (loaded)="loaded()" (unloaded)="unLoaded()"> 
-  <ActionBar  title="hello" style="opacity:0.5;background-color:black;color:white" [style.marginTop]="statusBarHeight" ></ActionBar> 
-  <TextField hint="path" [(ngModel)]="path"></TextField>
-  <Button text="play" (tap)="play()"></Button>
-  <ListView [items]="paths" (itemTap)="onItemTap($event)">
+<StackLayout (loaded)="loaded()" (unloaded)="unLoaded()">
+    <ActionBar title="hello" style="opacity:0.5;background-color:black;color:white" [style.marginTop]="statusBarHeight"></ActionBar>
+    <TextField hint="path" [(ngModel)]="path"></TextField>
+    <Button text="play" (tap)="play()"></Button>
+    <!--<ListView [items]="paths" (itemTap)="onItemTap($event)">
       <template let-item="item" let-i="index" let-odd="odd" let-even="even">
           <StackLayout [class.odd]="odd" [class.even]="even">
               <Label [text]='item'></Label>
           </StackLayout>
       </template>
-  </ListView>
+  </ListView>-->
+
+
+    <GridLayout>
+        <RadListView [items]="paths" selectionBehavior="Press" (itemSelected)="onItemTap($event)" >
+            <template tkListItemTemplate let-item="item" let-i="index" let-odd="odd" let-even="even">
+                <StackLayout margin="10" [class.odd]="odd" [class.even]="even">
+                    <label [text]="item"></label>
+                    <label marginLeft="10" horizontalAlignment="left" [text]="'movie name'"></label>
+
+                    <StackLayout orientation="horizontal" margin="10">
+                        <!--<label verticalAlignment = "center" [text]="'srt'"></label>-->
+                        <label verticalAlignment="center" [text]="'3:40'"></label>
+                    </StackLayout>
+                </StackLayout>
+            </template>
+            <ListViewGridLayout tkListViewLayout scrollDirection="Vertical" itemHeight="20" spanCount="3"></ListViewGridLayout>
+        </RadListView>
+    </GridLayout>
+
 </StackLayout>
-
-
