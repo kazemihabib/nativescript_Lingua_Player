@@ -4,6 +4,7 @@ import application = require("application");
 
 import { Observable as RxObservable } from 'rxjs/Observable';
 var imageSource = require("image-source")
+var timer = require("timer");
 
 declare var android:any;
 
@@ -88,15 +89,28 @@ export class FileExplorer{
 
         return RxObservable.create(subscriber => {
         
+            var file_paths: string[] = [];
             if (c != null) {
                 let temp;
                 while (temp = c.moveToNext()) {
                     let path:string = c.getString(0); // give path
+                    file_paths.push(path);
+                    //let image = this.getThumbnail(path);
+                    //paths.push({'path' : path,'image':image});
+                    //subscriber.next(paths);
+                }
+                c.close();
+            }
+            if(file_paths.length) {
+                let generate_thumbnail = (inx) => {
+                    if(inx == file_paths.length) return;
+                    let path = file_paths[inx];
                     let image = this.getThumbnail(path);
                     paths.push({'path' : path,'image':image});
                     subscriber.next(paths);
+                    timer.setTimeout(() => generate_thumbnail(inx+1),30);
                 }
-                c.close();
+                generate_thumbnail(0);
             }
 
         });
@@ -126,7 +140,6 @@ export class FileExplorer{
         let img = imageSource.fromNativeSource(image); 
         // image = this.cropBorders(image, 160, 110);
 
-        console.log('image' ,img);
         return img;
     }
 
