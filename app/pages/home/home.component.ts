@@ -1,4 +1,4 @@
-﻿import {Component,OnInit} from "@angular/core";
+﻿import {Component,OnInit,AfterViewInit,NgZone} from "@angular/core";
 import application = require("application");
 import {Router} from "@angular/router";
 import {chroma,HW,VLCSettings} from "../../components/VLCSettings";
@@ -13,7 +13,7 @@ import {Brightness} from '../../utils/brightness';
     providers:[FileExplorer],
 })
 
-export class firstPage implements OnInit{
+export class firstPage implements OnInit, AfterViewInit{
 
    private statusBarHeight = 0;
    
@@ -23,25 +23,28 @@ export class firstPage implements OnInit{
 
     public counter:number;
     
-   constructor(private _router: Router,private fileExplorer:FileExplorer){
+   constructor(private _router: Router,private fileExplorer:FileExplorer, private _ngZone: NgZone){
    }
 
    public play(){
       this._router.navigate(["/player",{path:this.path}]);
    }
 
+   public ngAfterViewInit(){}
    public ngOnInit(){
     
     this.statusBarHeight= this.getStatusBarHeight(); 
     VLCSettings.hardwareAcceleration = HW.HW_ACCELERATION_FULL;
     VLCSettings.networkCachingValue = 3000;
-    this.source= this.fileExplorer.explore();
-    let subscription = this.source.subscribe(
-        (path)=>{
-            this.paths = path;
-        }
+    // this.source= this.fileExplorer.explore();
+    // let subscription = this.source.subscribe(
+    //     (path)=>{
+    //         this._ngZone.run(() => {
+    //                 this.paths = path;
+    //         });
+    //     }
             
-    )
+    // )
    }
 
     private revertBrightness(){
@@ -64,13 +67,13 @@ export class firstPage implements OnInit{
 
         //moved to ngOnInit until use worker and database for this
 
-        // this.source= this.fileExplorer.explore();
-        // let subscription = this.source.subscribe(
-        //     (path)=>{
-        //         this.paths = path;
-        //     }
+        this.source= this.fileExplorer.explore();
+        let subscription = this.source.subscribe(
+            (path)=>{
+                this.paths = path;
+            }
                 
-        // )
+        )
 
     }
 

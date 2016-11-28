@@ -1,19 +1,17 @@
 //If path is subPaht of another one app should not allow to add it and say it's subPath of another one
 import { Injectable } from '@angular/core';
 import application = require("application");
+// import {ThumbnailGenerator} from '../utils/thumbnailGenerator';
 
 import { Observable as RxObservable } from 'rxjs/Observable';
-var imageSource = require("image-source")
 var timer = require("timer");
+var imageSource = require("image-source");
 
 declare var android:any;
-
 declare var org:any;
-declare var android:any;
-declare var java:any;
+
 
 export class FileExplorer{
-    public defaultImage = imageSource.fromResource("logo");    
     //defaults
     private defaultExtensions:string[]=[
         'mkv','mp4'
@@ -87,9 +85,16 @@ export class FileExplorer{
         let projection = [MediaStore.Video.VideoColumns.DATA];
         let c = application.android.context.getContentResolver().query(uri, projection, null,null , null);
 
+    console.log('currentContext',application.android.currentContext);
+    console.log('is null ',org.videolan.vlc.util.VLCOptions.getLibOptions(application.android.currentContext));
+    let libOptions = org.videolan.vlc.util.VLCOptions.getLibOptions(application.android.currentContext);
+
         return RxObservable.create(subscriber => {
-        
-            var file_paths: string[] = [];
+            // let thumbnailGenerator = new ThumbnailGenerator();
+            let worker = new Worker('../workers/getThumbnail.worker');
+            // let generator = new ThumbnailGenerator();
+
+            let file_paths: string[] = [];
             if (c != null) {
                 let temp;
                 while (temp = c.moveToNext()) {
@@ -103,45 +108,31 @@ export class FileExplorer{
             }
             if(file_paths.length) {
                 let generate_thumbnail = (inx) => {
-                    if(inx == file_paths.length) return;
+                    if(inx == file_paths.length) return ;
                     let path = file_paths[inx];
-                    let image = this.getThumbnail(path);
-                    paths.push({'path' : path,'image':image});
-                    subscriber.next(paths);
-                    timer.setTimeout(() => generate_thumbnail(inx+1),30);
+                    // let image = generator.getThumbnail(path);
+                    worker.postMessage(path);
+
+                    worker.onmessage = (msg)=>{
+                        let image = msg.data;
+                        // console.log('img',image);
+
+                        // let img = imageSource.fromNativeSource('img');
+                        var img = imageSource.fromResource("logo");
+                        paths.push({'path' : path,'image':img});
+                        subscriber.next(paths);
+                        // generate_thumbnail(inx + 1);
+                        timer.setTimeout(() => generate_thumbnail(inx+1),30);
+                    }
                 }
                 generate_thumbnail(0);
             }
+            // subscriber.next(paths);
 
         });
 
     }
 
-    public getThumbnail(path) {
-        let bitmap = android.graphics.Bitmap
-        let Media = org.videolan.libvlc.Media
-        let VLCUtil = org.videolan.libvlc.util.VLCUtil;
-        let LibVLC = org.videolan.libvlc.LibVLC;
-
-        let libVlc = new LibVLC(org.videolan.vlc.util.VLCOptions.getLibOptions(application.android.currentContext));
-
-        let mMedia = new Media(libVlc, path);
-        mMedia.parse();
-
-        let image = null;
-        image = bitmap.createBitmap(160, 110, bitmap.Config.ARGB_8888);
-
-
-        let b: number[] = VLCUtil.getThumbnail(mMedia, 160, 110);
-        if (b == null) // We were not able to create a thumbnail for this item.
-            return this.defaultImage;
-
-        image.copyPixelsFromBuffer(java.nio.ByteBuffer.wrap(b));
-        let img = imageSource.fromNativeSource(image); 
-        // image = this.cropBorders(image, 160, 110);
-
-        return img;
-    }
 
     public cropBorders( bitmap:any,  width:number,  height:number)
     {
