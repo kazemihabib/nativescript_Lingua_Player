@@ -56,7 +56,7 @@ function updatePosition(path:string , position:string){
                    SET position = ?
                    WHERE PATH = ?;`;
                    
-   db.execSQL("command",[position, path], function(err,id){
+   db.execSQL(command,[position, path], function(err,id){
        console.log('update position ', id);
        if(err)
             console.log('error happend ',err);
@@ -69,7 +69,7 @@ function updateSubLocation(path:string ,subLocation:string){
                    SET  SUBLOCATION = ?
                    WHERE PATH = ?;`;
                    
-   db.execSQL("command",[subLocation, path], function(err,id){
+   db.execSQL(command,[subLocation, path], function(err,id){
        console.log('update subLocation ', id);
        if(err)
             console.log('error happend ',err);
