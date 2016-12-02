@@ -70,3 +70,4 @@ src/node_modules
 platforms
 
 !support/postinstall.js
+.vscode/*

@@ -9,8 +9,6 @@ function initDataBase() {
         }
         else{
             db = dbConnection;
-            console.log('db');
-            console.log(db);
             db.resultType(sqlite.RESULTSASOBJECT);
             createTable();
         }
@@ -25,12 +23,14 @@ function createTable() {
     db.version(function (err, ver) {
         console.log('version is ', ver);
         // if (ver <=3) {
-            db.execSQL(' DROP TABLE IF EXISTS Medias');
-            let command:string = `Create table Medias
+            // db.execSQL(' DROP TABLE IF EXISTS Medias');
+            let command:string = `Create TABLE IF NOT EXISTS Medias
                  (PATH varchar(500) UNIQUE,TITLE varchar(500), LENGTH varchar(30) ,POSITION varchar(30) , SUBLOCATION varchar(500), THUMBNAIL varchar(500) )`
             db.execSQL(command,function(err,id){
-                console.log('erro in create Table ' , err);
-                console.log('id of createTable ' , id);
+                if(err)
+                    console.log('erro in create Table ' , err);
+                if(id)
+                    console.log('id of createTable ' , id);
             });
             // db.version(4); // Sets the version to 1
         // }
@@ -41,7 +41,7 @@ function getMediaInfo(path: string, callback) {
     db.get('select * from Medias where PATH = ? ', [path], callback);
 }
 
-function insertMediaInfo(path: string, title: string, length: string, position: string, subLocation: string, thumbnail: any) {
+function insertMediaInfo(path: string, title: string, length: string, position: string, subLocation: string, thumbnail: string) {
     db.execSQL("insert into Medias (PATH, TITLE , LENGTH , POSITION , SUBLOCATION, THUMBNAIL) values (?,?,?,?,?,?)",
         [path, title, length, position, subLocation,thumbnail],
         function (err, id) {

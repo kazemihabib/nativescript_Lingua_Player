@@ -11,34 +11,30 @@ declare var LibVLC:any;
 declare var MediaPlayer:any;
 declare var java:any;
 
-
-
 var bitmap = android.graphics.Bitmap
 var Media = org.videolan.libvlc.Media
 var VLCUtil = org.videolan.libvlc.util.VLCUtil;
 var LibVLC = org.videolan.libvlc.LibVLC;
 var MediaPlayer = org.videolan.libvlc.MediaPlayer;
 
+var libVLC = new LibVLC();
 
 
 function setMediaInfo(path:string) {
 
     if (!database.isDatabaseReady()) {
-        console.log('init in setMediaInfo');
         database.initDataBase();
     }
 
-    var libVLC = new LibVLC();
     var mMedia = new Media(libVLC, path);
     mMedia.parse();
 
     var thumbnail = getThumbnail(mMedia, path);
-    console.log('thumbnail');
-    console.log(thumbnail);
     var title = getTitle(path);
     var length = mMedia.getDuration();
 
     database.insertMediaInfo(path, title, length, null, null, thumbnail);
+    return {PATH:path, TITLE: title , LENGTH: length ,POSITION: null , SUBLOCATION: null , thumbnail: thumbnail };  
 }
 
 function getThumbnail(mMedia:any, path:string) {
@@ -55,19 +51,15 @@ function getThumbnail(mMedia:any, path:string) {
     var folder = fs.knownFolders.documents();
     var javaString = new java.lang.String(path);
     var encodedString = android.util.Base64.encodeToString(javaString.getBytes(), android.util.Base64.URL_SAFE | android.util.Base64.NO_WRAP);
-    console.log('encodedString', encodedString)
     var savingPath:string = fs.path.join(folder.path, encodedString);
     var saved = img.saveToFile(savingPath,'png');
-    console.log('saved');
-    console.log(saved);
-    return savingPath;
+    if(saved)
+        return savingPath;
+    return null;
 }
 
 function getTitle(path:string) {
-    var file = fs.File.fromPath(path);
-    console.log('name');
-    console.log(file.name);
-    return file.name;
+    var file = fs.File.fromPath(path); return file.name;
 }
 
 module.exports = {

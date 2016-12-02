@@ -5,6 +5,7 @@ import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { AppComponent } from "./app.component";
 import {routes,navigatableComponents} from "./app.routing"
 import { NativeScriptRouterModule } from "nativescript-angular/router";
+import {DurationPipe} from "./pipes/duration.pipe";
 
 import { LISTVIEW_DIRECTIVES } from 'nativescript-telerik-ui/listview/angular';
 import {VLCComponent} from "./components/vlc.component"
@@ -21,7 +22,8 @@ import {VLCComponent} from "./components/vlc.component"
         LISTVIEW_DIRECTIVES,
         AppComponent,
         ...navigatableComponents,
-        VLCComponent
+        VLCComponent,
+        DurationPipe
     ],
     bootstrap: [
         AppComponent

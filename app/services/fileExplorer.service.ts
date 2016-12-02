@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import application = require("application");
 // import {ThumbnailGenerator} from '../utils/thumbnailGenerator';
+var fs = require("file-system");
 
 import { Observable as RxObservable } from 'rxjs/Observable';
 var timer = require("timer");
@@ -74,8 +75,6 @@ export class FileExplorer {
 
     public explore() {
 
-
-        // let paths:string[]=new Array<string>();
         let paths = [];
         let MediaStore = android.provider.MediaStore;
         let Uri = android.net.Uri;
@@ -85,14 +84,8 @@ export class FileExplorer {
         let projection = [MediaStore.Video.VideoColumns.DATA];
         let c = application.android.context.getContentResolver().query(uri, projection, null, null, null);
 
-        // console.log('currentContext',application.android.currentContext);
-        // console.log('is null ',org.videolan.vlc.util.VLCOptions.getLibOptions(application.android.currentContext));
-        // let libOptions = org.videolan.vlc.util.VLCOptions.getLibOptions(application.android.currentContext);
-
         return RxObservable.create(subscriber => {
-            // let thumbnailGenerator = new ThumbnailGenerator();
             let worker = new Worker('../workers/setMediaInfo.worker');
-            // let generator = new ThumbnailGenerator();
 
             let file_paths: string[] = [];
             if (c != null) {
@@ -100,75 +93,53 @@ export class FileExplorer {
                 while (temp = c.moveToNext()) {
                     let path: string = c.getString(0); // give path
                     file_paths.push(path);
-                    //let image = this.getThumbnail(path);
-                    //paths.push({'path' : path,'image':image});
-                    //subscriber.next(paths);
                 }
                 c.close();
             }
 
-            console.log('file_path length', file_paths.length);
             if (file_paths.length) {
 
                 if (!database.isDatabaseReady()) {
                     database.initDataBase();
                 }
 
+                let addToListView = (mediaInfo: any) => {
+                    let exists = fs.File.exists(mediaInfo.PATH);
+                    if (exists) {
+                        paths.push(mediaInfo);
+                        subscriber.next(paths);
+                    }
+                }
+
+
                 let generate_thumbnail = (inx) => {
-                    console.log('generate_thumbnail');
                     if (inx == file_paths.length) return;
-                    console.log('line 120');
                     let path = file_paths[inx];
-                    console.log('line 122');
-                    // let image = generator.getThumbnail(path);
+
                     database.getMediaInfo(path, (err, row) => {
-                        if(err){
-                            console.log('error in line 124');
+                        if (err) {
                             console.log(err);
                         }
                         if (row) {
-                            console.dump(row);
-                        
-                            // paths.push({'path' :row.PATH ,'image':imageSource.fromNativeSource(row.THUMBNAIL)});
-                            // let img = row.THUMBNAIL ? imageSource.fromNativeSource(row.THUMBNAIL) : null;
-                            // console.log(img);
-                            paths.push({'path' :row.PATH ,'image':row.THUMBNAIL});
-                            // paths.push({'path' :row.PATH ,'image':null});
-                            subscriber.next(paths);
 
-                            timer.setTimeout(function() { generate_thumbnail(inx + 1)} ,0);
+                            addToListView(row);
+                            timer.setTimeout(function () { generate_thumbnail(inx + 1) }, 0);
 
                         }
                         else {
-                            console.log('line 137');
                             worker.postMessage(path);
-                            console.log('line 139');
 
                             worker.onmessage = (msg) => {
-                                let image = msg.data;
-                                database.getMediaInfo(path, (err, row) => {
-
-                                    console.log('error in line 142');
-                                    console.log(err);
-                                    console.dump(row);
-                                    // let img = row.THUMBNAIL ? imageSource.fromNativeSource(row.THUMBNAIL) : null;
-                                    // console.log(img);
-                                    paths.push({'path' :row.PATH ,'image':row.THUMBNAIL});
-                                    // paths.push({'path' :row.PATH ,'image':img });
-                                    // paths.push({'path' :row.PATH ,'image':null});
-                                    subscriber.next(paths);
-                                });
-                                // generate_thumbnail(inx + 1);
-                                timer.setTimeout(function() { generate_thumbnail(inx + 1)} ,0);
+                                let mediaInfo = msg.data;
+                                addToListView(mediaInfo);
+                                timer.setTimeout(function () { generate_thumbnail(inx + 1) }, 0);
                             }
                         }
                     });
 
-
                 }
                 generate_thumbnail(0);
             }
-            // subscriber.next(paths);
 
         });
 
