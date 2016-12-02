@@ -6,6 +6,7 @@ import { ListViewEventData, RadListView } from "nativescript-telerik-ui/listview
 
 import {FileExplorer} from "../../services/fileExplorer.service";
 import {Brightness} from '../../utils/brightness';
+// let database = require('../../utils/media.database');
 
 @Component({
     selector: "home",
@@ -45,6 +46,8 @@ export class firstPage implements OnInit, AfterViewInit{
     //     }
             
     // )
+
+    // database.initDataBase();
    }
 
     private revertBrightness(){

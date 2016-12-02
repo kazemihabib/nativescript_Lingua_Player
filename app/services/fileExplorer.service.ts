@@ -6,99 +6,99 @@ import application = require("application");
 import { Observable as RxObservable } from 'rxjs/Observable';
 var timer = require("timer");
 var imageSource = require("image-source");
+var database = require('../utils/media.database');
 
-declare var android:any;
-declare var org:any;
+declare var android: any;
+declare var org: any;
 
 
-export class FileExplorer{
+export class FileExplorer {
     //defaults
-    private defaultExtensions:string[]=[
-        'mkv','mp4'
+    private defaultExtensions: string[] = [
+        'mkv', 'mp4'
     ]
 
-    private defaultIncludedPaths:string[]=[
+    private defaultIncludedPaths: string[] = [
         '/habib/folder1',
         '/habib/folder1/folder2',
         '/habib/folder2/folder3'
     ]
 
-    private defaultExcludedPaths:string[]=[
-       '/habib/folder1/shouldExclude' 
+    private defaultExcludedPaths: string[] = [
+        '/habib/folder1/shouldExclude'
     ]
 
     //user
-    private extensions:string[]=[
+    private extensions: string[] = [
     ]
 
-    private includedPaths:string[]=[
+    private includedPaths: string[] = [
     ]
 
-    private excludedPaths:string[]=[
+    private excludedPaths: string[] = [
     ]
 
 
-    public refresh(){
-        
+    public refresh() {
+
     }
 
-    constructor(){
+    constructor() {
         this.extensions = this.defaultExtensions.slice();
         this.includedPaths = this.defaultIncludedPaths.slice();
         this.excludedPaths = this.defaultExcludedPaths.slice();
 
         //getFrom database
 
-
     }
-    public includePath(path){
-        if(this.includedPaths.indexOf(path.trim()) < 0)
+    public includePath(path) {
+        if (this.includedPaths.indexOf(path.trim()) < 0)
             this.includedPaths.push(path);
         //database
     }
-    public exludePath(path){
-        if(this.excludedPaths.indexOf(path.trim()) < 0)
+    public exludePath(path) {
+        if (this.excludedPaths.indexOf(path.trim()) < 0)
             this.excludedPaths.push(path);
-        
+
         //database
     }
 
-    public addExtension(extension:string){
-         if(this.extensions.indexOf(extension.toLowerCase().trim()) < 0)
+    public addExtension(extension: string) {
+        if (this.extensions.indexOf(extension.toLowerCase().trim()) < 0)
             this.excludedPaths.push(extension.toLowerCase().trim());
 
         //database
     }
-    
 
-    
-    public explore(){
-        
-        
+
+
+    public explore() {
+
+
         // let paths:string[]=new Array<string>();
         let paths = [];
-        let MediaStore =  android.provider.MediaStore;
+        let MediaStore = android.provider.MediaStore;
         let Uri = android.net.Uri;
         let Cursor = android.content.Context;
-        
+
         let uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
         let projection = [MediaStore.Video.VideoColumns.DATA];
-        let c = application.android.context.getContentResolver().query(uri, projection, null,null , null);
+        let c = application.android.context.getContentResolver().query(uri, projection, null, null, null);
 
-    console.log('currentContext',application.android.currentContext);
-    console.log('is null ',org.videolan.vlc.util.VLCOptions.getLibOptions(application.android.currentContext));
-    let libOptions = org.videolan.vlc.util.VLCOptions.getLibOptions(application.android.currentContext);
+        // console.log('currentContext',application.android.currentContext);
+        // console.log('is null ',org.videolan.vlc.util.VLCOptions.getLibOptions(application.android.currentContext));
+        // let libOptions = org.videolan.vlc.util.VLCOptions.getLibOptions(application.android.currentContext);
 
         return RxObservable.create(subscriber => {
             // let thumbnailGenerator = new ThumbnailGenerator();
-            let worker = new Worker('../workers/getThumbnail.worker');
+            let worker = new Worker('../workers/setMediaInfo.worker');
             // let generator = new ThumbnailGenerator();
 
             let file_paths: string[] = [];
             if (c != null) {
                 let temp;
                 while (temp = c.moveToNext()) {
-                    let path:string = c.getString(0); // give path
+                    let path: string = c.getString(0); // give path
                     file_paths.push(path);
                     //let image = this.getThumbnail(path);
                     //paths.push({'path' : path,'image':image});
@@ -106,24 +106,65 @@ export class FileExplorer{
                 }
                 c.close();
             }
-            if(file_paths.length) {
+
+            console.log('file_path length', file_paths.length);
+            if (file_paths.length) {
+
+                if (!database.isDatabaseReady()) {
+                    database.initDataBase();
+                }
+
                 let generate_thumbnail = (inx) => {
-                    if(inx == file_paths.length) return ;
+                    console.log('generate_thumbnail');
+                    if (inx == file_paths.length) return;
+                    console.log('line 120');
                     let path = file_paths[inx];
+                    console.log('line 122');
                     // let image = generator.getThumbnail(path);
-                    worker.postMessage(path);
+                    database.getMediaInfo(path, (err, row) => {
+                        if(err){
+                            console.log('error in line 124');
+                            console.log(err);
+                        }
+                        if (row) {
+                            console.dump(row);
+                        
+                            // paths.push({'path' :row.PATH ,'image':imageSource.fromNativeSource(row.THUMBNAIL)});
+                            // let img = row.THUMBNAIL ? imageSource.fromNativeSource(row.THUMBNAIL) : null;
+                            // console.log(img);
+                            paths.push({'path' :row.PATH ,'image':row.THUMBNAIL});
+                            // paths.push({'path' :row.PATH ,'image':null});
+                            subscriber.next(paths);
 
-                    worker.onmessage = (msg)=>{
-                        let image = msg.data;
-                        // console.log('img',image);
+                            timer.setTimeout(function() { generate_thumbnail(inx + 1)} ,0);
 
-                        // let img = imageSource.fromNativeSource('img');
-                        var img = imageSource.fromResource("logo");
-                        paths.push({'path' : path,'image':img});
-                        subscriber.next(paths);
-                        // generate_thumbnail(inx + 1);
-                        timer.setTimeout(() => generate_thumbnail(inx+1),30);
-                    }
+                        }
+                        else {
+                            console.log('line 137');
+                            worker.postMessage(path);
+                            console.log('line 139');
+
+                            worker.onmessage = (msg) => {
+                                let image = msg.data;
+                                database.getMediaInfo(path, (err, row) => {
+
+                                    console.log('error in line 142');
+                                    console.log(err);
+                                    console.dump(row);
+                                    // let img = row.THUMBNAIL ? imageSource.fromNativeSource(row.THUMBNAIL) : null;
+                                    // console.log(img);
+                                    paths.push({'path' :row.PATH ,'image':row.THUMBNAIL});
+                                    // paths.push({'path' :row.PATH ,'image':img });
+                                    // paths.push({'path' :row.PATH ,'image':null});
+                                    subscriber.next(paths);
+                                });
+                                // generate_thumbnail(inx + 1);
+                                timer.setTimeout(function() { generate_thumbnail(inx + 1)} ,0);
+                            }
+                        }
+                    });
+
+
                 }
                 generate_thumbnail(0);
             }
@@ -131,42 +172,5 @@ export class FileExplorer{
 
         });
 
-    }
-
-
-    public cropBorders( bitmap:any,  width:number,  height:number)
-    {
-
-        let Bitmap = android.graphics.Bitmap
-        let top:number = 0;
-        for (let i = 0; i < height / 2; i++) {
-            let pixel1 = bitmap.getPixel(width / 2, i);
-            let pixel2 = bitmap.getPixel(width / 2, height - i - 1);
-            if ((pixel1 == 0 || pixel1 == -16777216) &&
-                (pixel2 == 0 || pixel2 == -16777216)) {
-                top = i;
-            } else {
-                break;
-            }
-        }
-
-        let left = 0;
-        for (let i = 0; i < width / 2; i++) {
-            let pixel1 = bitmap.getPixel(i, height / 2);
-            let pixel2 = bitmap.getPixel(width - i - 1, height / 2);
-            if ((pixel1 == 0 || pixel1 == -16777216) &&
-                (pixel2 == 0 || pixel2 == -16777216)) {
-                left = i;
-            } else {
-                break;
-            }
-        }
-
-        if (left >= width / 2 - 10 || top >= height / 2 - 10)
-            return bitmap;
-
-        // Cut off the transparency on the borders
-        return Bitmap.createBitmap(bitmap, left, top,
-                (width - (2 * left)), (height - (2 * top)));
     }
 }

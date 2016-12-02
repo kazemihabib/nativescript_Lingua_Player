@@ -8,7 +8,7 @@
             <template tkListItemTemplate let-item="item" let-i="index" let-odd="odd" let-even="even">
                 <StackLayout margin="10" [class.odd]="odd" [class.even]="even" backgroundColor='#ffffff'>
                     <StackLayout backgroundColor='black'>
-                        <Image [imageSource] ="item.image" width="160" height="110" stretch="aspectFill" ></Image> 
+                        <Image [src] ="item.image" width="160" height="110" stretch="aspectFill" ></Image> 
                     </StackLayout>
                     <label marginLeft="10" horizontalAlignment="left" [text]="item.path"></label>
 
