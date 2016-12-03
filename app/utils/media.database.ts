@@ -76,6 +76,14 @@ function updateSubLocation(path:string ,subLocation:string){
    })                
 }
 
+function deleteRow(path:string, callback){
+    console.log('deleteRow');
+    let command = `DELETE FROM MEDIAS 
+                    WHERE PATH = ? ;`;
+
+    db.execSQL(command,[path],callback);
+}
+
 module.exports = {
     'initDataBase':initDataBase,
     'createTable':createTable,
@@ -83,5 +91,6 @@ module.exports = {
     'insertMediaInfo':insertMediaInfo,
     'updatePosition':updatePosition,
     'updateSubLocation':updateSubLocation,
-    'isDatabaseReady':isDatabaseReady 
+    'isDatabaseReady':isDatabaseReady,
+    'deleteRow':deleteRow
 }

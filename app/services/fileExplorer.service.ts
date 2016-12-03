@@ -109,6 +109,14 @@ export class FileExplorer {
                         paths.push(mediaInfo);
                         subscriber.next(paths);
                     }
+                    else{
+                        database.deleteRow(mediaInfo.PATH,(err,id)=>{
+                            if(err)
+                                console.log(err);
+                            if(id)
+                                console.log(id);
+                        })
+                    }
                 }
 
 
