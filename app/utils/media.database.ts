@@ -23,7 +23,7 @@ function createTable() {
     db.version(function (err, ver) {
         console.log('version is ', ver);
         // if (ver <=3) {
-            db.execSQL(' DROP TABLE IF EXISTS Medias');
+            // db.execSQL(' DROP TABLE IF EXISTS Medias');
             let command:string = `Create TABLE IF NOT EXISTS Medias
                  (PATH varchar(500) UNIQUE,TITLE varchar(500), LENGTH int ,POSITION int , SUBLOCATION varchar(500), THUMBNAIL varchar(500) )`
             db.execSQL(command,function(err,id){
