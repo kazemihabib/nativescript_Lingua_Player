@@ -28,9 +28,6 @@ export class firstPage implements OnInit, AfterViewInit {
     }
 
     public play(path:string, position:number) {
-        console.log('in play ',position);
-        console.log('in play int ',position);
-        console.log(typeof position);
         this._router.navigate(["/player", { path: path, position: position}]);
     }
 
@@ -80,17 +77,12 @@ export class firstPage implements OnInit, AfterViewInit {
         let path = selectedItems[0]['PATH'];
         let URIPath = 'file://' + path;
 
-        console.log('onItemTap ',path);
-
         if (!database.isDatabaseReady()) {
-            console.log('database is not ready');
             database.initDataBase();
         }
         database.getMediaInfo(path, (err,row)=>{
             if(row){
                let position = row.POSITION; 
-               console.log('type of position in home - > getMediaInfo');
-               console.log(typeof position);
                this.play(URIPath, position);
             }
             if(err){

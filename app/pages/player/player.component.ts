@@ -147,17 +147,10 @@ export class playerPage implements OnInit{
     
      this.statusBarHeight= this.getStatusBarHeight(); 
      this.sub = this.route.params.subscribe(params => {
-       let id = +params['id'];
        this.path = params['path'];
-       console.log('path in player ',this.path);
        this.position = parseInt(params['position']);
-      //  this.position = 0;
-       console.log('in ngOnInit ');
-       console.log(typeof this.position);
-       console.log(this.position);
      });
 
-    //  this.position = appSettings.getNumber(this.path,0);
 
       application.android.off(application.AndroidApplication.activityPausedEvent)
       application.android.on(application.AndroidApplication.activityPausedEvent,
@@ -225,9 +218,6 @@ export class playerPage implements OnInit{
     }
 
     public save(){
-      // appSettings.setNumber(this.path, this.position);
-      // let stringPosition = this.position.toString();
-      // console.log('before save ',stringPosition);
       database.updatePosition(this.path.replace('file://',''), this.position);
     }
 
