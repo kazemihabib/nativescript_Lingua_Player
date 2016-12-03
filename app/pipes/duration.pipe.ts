@@ -2,14 +2,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({ name: 'DurationPipe' })
 export class DurationPipe implements PipeTransform {
-    transform(value: string, args: string[]): any {
+    transform(value: number, args: string[]): any {
         if (!value) return value;
-
-        let intValue = parseInt(value);
 
         let totalHours, totalMinutes, totalSeconds, hours, minutes, seconds, result = '';
 
-        totalSeconds = intValue / 1000;
+        totalSeconds = value / 1000;
         totalMinutes = totalSeconds / 60;
         totalHours = totalMinutes / 60;
 

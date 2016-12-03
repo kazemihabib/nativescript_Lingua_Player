@@ -33,8 +33,8 @@ function setMediaInfo(path:string) {
     var title = getTitle(path);
     var length = mMedia.getDuration();
 
-    database.insertMediaInfo(path, title, length, null, null, thumbnail);
-    return {PATH:path, TITLE: title , LENGTH: length ,POSITION: null , SUBLOCATION: null , thumbnail: thumbnail };  
+    database.insertMediaInfo(path, title, length, 0, null, thumbnail);
+    return {PATH:path, TITLE: title , LENGTH: length ,POSITION: 0 , SUBLOCATION: null , THUMBNAIL: thumbnail };  
 }
 
 function getThumbnail(mMedia:any, path:string) {
@@ -59,7 +59,8 @@ function getThumbnail(mMedia:any, path:string) {
 }
 
 function getTitle(path:string) {
-    var file = fs.File.fromPath(path); return file.name;
+    var file = fs.File.fromPath(path);
+    return file.name;
 }
 
 module.exports = {

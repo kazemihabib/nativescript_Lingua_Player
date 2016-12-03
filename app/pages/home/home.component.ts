@@ -7,6 +7,8 @@ import { ListViewEventData, RadListView } from "nativescript-telerik-ui/listview
 import { FileExplorer } from "../../services/fileExplorer.service";
 import { Brightness } from '../../utils/brightness';
 
+var database = require('../../utils/media.database');
+
 @Component({
     selector: "home",
     templateUrl: "pages/home/home.component.html",
@@ -25,8 +27,11 @@ export class firstPage implements OnInit, AfterViewInit {
     constructor(private _router: Router, private fileExplorer: FileExplorer, private _ngZone: NgZone) {
     }
 
-    public play() {
-        this._router.navigate(["/player", { path: this.path }]);
+    public play(path:string, position:number) {
+        console.log('in play ',position);
+        console.log('in play int ',position);
+        console.log(typeof position);
+        this._router.navigate(["/player", { path: path, position: position}]);
     }
 
     public ngAfterViewInit() { }
@@ -72,8 +77,26 @@ export class firstPage implements OnInit, AfterViewInit {
     public onItemTap(args: any) {
         var listview = args.object as RadListView;
         var selectedItems = listview.getSelectedItems();
-        this.path = 'file://' + selectedItems[0]['PATH'];
-        this.play();
+        let path = selectedItems[0]['PATH'];
+        let URIPath = 'file://' + path;
+
+        console.log('onItemTap ',path);
+
+        if (!database.isDatabaseReady()) {
+            console.log('database is not ready');
+            database.initDataBase();
+        }
+        database.getMediaInfo(path, (err,row)=>{
+            if(row){
+               let position = row.POSITION; 
+               console.log('type of position in home - > getMediaInfo');
+               console.log(typeof position);
+               this.play(URIPath, position);
+            }
+            if(err){
+               this.play(URIPath, 0);
+            }
+        });
     }
 
 }
