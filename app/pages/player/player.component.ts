@@ -18,7 +18,9 @@ import { RouterExtensions } from "nativescript-angular/router";
 let frame = require("ui/frame");
 import {Subtitle} from "../../services/subtitle.service";
 import {IGuestureEventCallbacks} from "./guesture.interface"; 
+import dialogs = require("ui/dialogs");
 var database = require('../../utils/media.database');
+import fs = require("file-system");
 
 registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown);
 registerElement("TNSSlider", () => require("nativescript-slider").Slider);
@@ -129,12 +131,38 @@ export class playerPage implements OnInit{
     }
 
     //TODO:change this method name
-    onLoaded(vlc){
+    onLoaded(vlc) {
+
+      let videoTitle = fs.File.fromPath(this.path.replace('file://','')).name;
+
+      let play = ()=>{
+        timer.setTimeout(() => {
+          this.vlcAction.play();
+        }, 0);
+      }
+
       this.vlc = vlc;
       this.vlcAction = this.vlc.getVLCAction();
-      timer.setTimeout(()=>{
-        this.vlcAction.play();
-      },0);
+      if (this.position == 0)
+      {
+        play();
+      }
+
+      else {
+        dialogs.confirm({
+          title: videoTitle,
+          message: "Do you wish to resume from where you stopped?",
+          okButtonText: "RESUME",
+          cancelButtonText: "START OVER",
+        }).then(result => {
+          if (result)
+            play();
+          else {
+            this.position = 0;
+            play();
+          }
+        });
+      }
 
       this.subtitle.addSubWordListDownloader(this.subWordListDownloader);
     }
