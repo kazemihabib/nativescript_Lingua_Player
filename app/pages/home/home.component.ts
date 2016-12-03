@@ -3,6 +3,7 @@ import application = require("application");
 import { Router } from "@angular/router";
 import { chroma, HW, VLCSettings } from "../../components/VLCSettings";
 import { ListViewEventData, RadListView } from "nativescript-telerik-ui/listview";
+let frame = require("ui/frame");
 
 import { FileExplorer } from "../../services/fileExplorer.service";
 import { Brightness } from '../../utils/brightness';
@@ -66,6 +67,7 @@ export class firstPage implements OnInit, AfterViewInit {
     public source: any;
     public loaded() {
         this.revertBrightness();
+        frame.topmost().android.activity.getWindow().getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_VISIBLE );
     }
 
     public unLoaded() {
