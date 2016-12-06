@@ -3,9 +3,17 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({ name: 'DurationPipe' })
 export class DurationPipe implements PipeTransform {
     transform(value: number, args: string[]): any {
-        if (!value) return value;
+        if (value == null) return value;
+
 
         let totalHours, totalMinutes, totalSeconds, hours, minutes, seconds, result = '';
+
+        if(value<0)
+        {
+            result+='-';
+            value =-1 * value;
+        }
+
 
         totalSeconds = value / 1000;
         totalMinutes = totalSeconds / 60;
