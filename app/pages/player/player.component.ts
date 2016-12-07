@@ -56,6 +56,7 @@ export class playerPage implements OnInit{
 
     public isRTL:boolean = false;
 
+    private dialogIsOpen:boolean;
     public subWordListDownloader = (wordList) => {
       this._ngZone.run(() => {
           this.subText = wordList;
@@ -63,7 +64,6 @@ export class playerPage implements OnInit{
     }
 
     public subText=[{'text':'','isWord':false}];
-
     currentPosition = 0; 
     movieLength = 0;
     eventHardwareAccelerationError = function(){
@@ -79,7 +79,10 @@ export class playerPage implements OnInit{
         console.log('event : Playing');
     }
     eventTimeChanged(){
-      this.currentPosition = this.vlcAction.getPosition();
+
+      this._ngZone.run(() => {
+        this.currentPosition = this.vlcAction.getPosition();
+      });
       this.getSubtitleDialog();
     }
 
@@ -100,11 +103,12 @@ export class playerPage implements OnInit{
       this.eventTimeChanged();
     }
 
-    eventParsedChanged = function(){
-     {
-
-      this.movieLength = this.vlcAction.getLength();
-    }
+    eventParsedChanged = function () {
+      {
+        this._ngZone.run(() => {
+          this.movieLength = this.vlcAction.getLength();
+        });
+      }
   }
 
     dropDownLoaded(dd){
@@ -143,25 +147,33 @@ export class playerPage implements OnInit{
 
       this.vlc = vlc;
       this.vlcAction = this.vlc.getVLCAction();
+      this.vlcAction.seek(this.position - 5000);
       if (this.position == 0)
       {
+        this.dialogIsOpen = false;
         play();
       }
 
       else {
-        dialogs.confirm({
+        let confirmDilaogOptions = {
           title: videoTitle,
           message: "Do you wish to resume from where you stopped?",
           okButtonText: "RESUME",
-          cancelButtonText: "START OVER",
-        }).then(result => {
-          if (result)
-            play();
-          else {
-            this.position = 0;
-            play();
-          }
-        });
+          cancelButtonText: "START OVER"
+        };
+        if (!this.dialogIsOpen) {
+          //prevent to reopen dialog if the user press home and back again to app.
+          this.dialogIsOpen = true;
+          dialogs.confirm(confirmDilaogOptions).then(result => {
+            this.dialogIsOpen = false;
+            if (result)
+              play();
+            else {
+              this.position = 0;
+              play();
+            }
+          });
+        }
       }
 
       this.subtitle.addSubWordListDownloader(this.subWordListDownloader);
