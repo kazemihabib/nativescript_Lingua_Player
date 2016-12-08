@@ -10,12 +10,16 @@ import {DurationPipe} from "./pipes/duration.pipe";
 import { LISTVIEW_DIRECTIVES } from 'nativescript-telerik-ui/listview/angular';
 import {VLCComponent} from "./components/vlc.component"
 
+import { TNSFontIconModule} from 'nativescript-ng2-fonticon';
 @NgModule({
     imports: [
         NativeScriptModule,
         NativeScriptRouterModule,
         NativeScriptFormsModule,
-        NativeScriptRouterModule.forRoot(routes)
+        NativeScriptRouterModule.forRoot(routes),
+        TNSFontIconModule.forRoot({
+            'mdi': 'material-design-icons.css'
+        })
 
     ],
     declarations: [

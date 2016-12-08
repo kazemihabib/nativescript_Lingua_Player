@@ -1,1 +1,15 @@
-@import 'nativescript-theme-core/css/core.light.css';
+/*@import 'nativescript-theme-core/css/core.light.css';*/
+.mdi {
+  font-family: "Material Icons", "MaterialIcons-Regular";
+}
+
+
+.font-icon{
+    background-color:transparent;
+    color:white;
+    font-size:40;
+}
+
+.font-icon:highlighted {
+    background-color: blue;
+}

@@ -10,6 +10,8 @@
           (eventParsedChanged) = "eventParsedChanged()"
           (eventTimeChanged) = "eventTimeChanged()"
           (eventEndReached) ="eventEndReached()"
+          (eventPausd) = "eventPausd()",
+          (eventStopped) = "eventStopped()"
           (tap)="status()"
      >
      </vlc>
@@ -33,23 +35,24 @@
   <!--Subtitle -->
 
   <!--PlayerController-->
-    <GridLayout rows="auto,auto" columns="auto, *, auto"  style="background-color:black;" [visibility] ="visible ? 'visible' : 'collapse' " >
+    <GridLayout rows="auto,auto"  backgroundColor="black" opacity=".5" [visibility] ="visible ? 'visible' : 'collapse' " >
 
-      <TNSSlider row= "0" col="0" colSpan="3" [value]="currentPosition" [maxValue]="movieLength" (dragged)="fromUser($event)"  ></TNSSlider>
+      <FlexBoxLayout row="0" flexDirection="row" justifyContent="space-between">
+        <Label [text]="currentPosition  | DurationPipe " style="color:white;margin:7" width="40" ></Label>
+        <TNSSlider flexGrow="1" [value]="currentPosition" [maxValue]="movieLength" (dragged)="fromUser($event)"  ></TNSSlider>
+        <Label [text]="currentPosition - movieLength | DurationPipe " style="color:white;margin:7" width="40"></Label>
+      </FlexBoxLayout>
 
-      <StackLayout row="1" col="0" orientation="horizontal">
-        <Button text="play" (tap)="vlcAction.play()" ></Button>
-        <Button text="pause" (tap)="vlcAction.pause()"></Button>
-        <Button text="aspectRatio" (tap)="changeAspectRatio()" ></Button>
-        <Button text="SUB" (tap)="addSub()" ></Button>
-      </StackLayout>
+      <FlexBoxLayout row="1" flexDirection="row" justifyContent="center" opacity="1">
+        <Button class="mdi font-icon"  [text]="'mdi-lock' | fonticon"></Button>
+        <Button class="mdi font-icon" [text]="'mdi-subtitles' | fonticon"></Button>
+        <!--I can not use fontIcon here because of ternary \ue034 is pause icon and \ue037 is play arrow icon-->
+        <Button class="mdi font-icon" [text]="isPlaying ? '\ue034' : '\ue037'" (tap)="isPlaying ? vlcAction.pause() : vlcAction.play()" ></Button>
+        <Button class="mdi font-icon" [text]="'mdi-more-horiz' | fonticon"></Button>
+        <Button class="mdi font-icon" [text]="'mdi-aspect-ratio' | fonticon" (tap)="changeAspectRatio()" ></Button>
+        <!--<Button text="SUB" (tap)="addSub()" ></Button>-->
+      </FlexBoxLayout>
 
-
-      <StackLayout row="1" col="2" orientation="horizontal"  horizontalAlignment="center" verticalAlignment="center" >
-        <Label [text]="currentPosition" style="color:white;"></Label>
-        <Label text=" / " style="color:white;">></Label>
-        <Label [text]="movieLength" style="color:white;"></Label>
-      </StackLayout>
     </GridLayout>
   <!--PlayerController-->
   </StackLayout>

@@ -66,6 +66,8 @@ export class playerPage implements OnInit{
     public subText=[{'text':'','isWord':false}];
     currentPosition = 0; 
     movieLength = 0;
+
+    private isPlaying:boolean = false;
     eventHardwareAccelerationError = function(){
         console.log("event: eventHardwareAccelerationError");
     }
@@ -76,7 +78,14 @@ export class playerPage implements OnInit{
        this.routerExtensions.back();
     }
     eventPlaying = function(){
-        console.log('event : Playing');
+        this.isPlaying = true;
+    }
+    private eventStopped (){
+      this.isPlaying = false; 
+    }
+
+    private eventPausd (){
+      this.isPlaying = false; 
     }
     eventTimeChanged(){
 
