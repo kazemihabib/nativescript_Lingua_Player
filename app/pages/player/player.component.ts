@@ -238,12 +238,33 @@ export class playerPage implements OnInit{
       }
       return result;
     } 
-    //TODO:change this member name
-    public sta=true;
+    private barsAreShowing: boolean =true;
+    private isLocked:boolean = false;
+    private lockIconVisible:boolean = false;
 
-    public hideBars(){
-      if(this.sta){
+    private lockScreen(){
+      this.isLocked = true;
+      this.hideBars();
+    }
 
+    private unLockScreen(){
+      this.isLocked = false;
+      this.lockIconVisible = false;
+      this.showBars();
+    }
+
+    private showBars(){
+          this.barsAreShowing = true;
+          frame.topmost().android.activity.getWindow().getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_VISIBLE );
+          let page = frame.topmost().currentPage;
+          page.actionBarHidden = false;
+          this._ngZone.run(() => {
+            this.visible = true;
+          });
+    }
+
+    private hideBars(){
+          this.barsAreShowing = false;
           frame.topmost().android.activity.getWindow().getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_FULLSCREEN);
           let page = frame.topmost().currentPage;
 
@@ -252,18 +273,20 @@ export class playerPage implements OnInit{
           this._ngZone.run(() => {
             this.visible = false;
           });
-      }
-      else{
-
-          frame.topmost().android.activity.getWindow().getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_VISIBLE );
-          let page = frame.topmost().currentPage;
-          page.actionBarHidden = false;
-          this._ngZone.run(() => {
-            this.visible = true;
-          });
+    }
+    public toggleScreen(){
+      if(this.isLocked){
+        if(this.lockIconVisible)
+          this.lockIconVisible = false;
+        else
+          this.lockIconVisible = true;
       }
 
-    this.sta=!this.sta;
+      else if(this.barsAreShowing)
+        this.hideBars();
+
+      else if(!this.barsAreShowing)
+        this.showBars();
     }
 
     public save(){
@@ -276,11 +299,11 @@ export class playerPage implements OnInit{
       this.currentAspectRatio = (currentAspectRatio.value + 1) % 7;
     }
 
-
-
+    // function to prevent calling toggleScreen on tap
+    private tapPlayerController(){
+    }
     public loaded(){
     }
-
     public unLoaded(){
     }
 
@@ -310,5 +333,6 @@ export class playerPage implements OnInit{
       }
 
     }
+
 
 }
