@@ -71,3 +71,4 @@ platforms
 
 !support/postinstall.js
 .vscode/*
+build.gradle

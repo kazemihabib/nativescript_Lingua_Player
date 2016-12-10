@@ -68,6 +68,8 @@ export class playerPage implements OnInit{
     movieLength = 0;
 
     private isPlaying:boolean = false;
+
+    private videoTitle: string="";
     eventHardwareAccelerationError = function(){
         console.log("event: eventHardwareAccelerationError");
     }
@@ -146,7 +148,7 @@ export class playerPage implements OnInit{
     //TODO:change this method name
     onLoaded(vlc) {
 
-      let videoTitle = fs.File.fromPath(this.path.replace('file://','')).name;
+      this.videoTitle = fs.File.fromPath(this.path.replace('file://','')).name;
 
       let play = ()=>{
         timer.setTimeout(() => {
@@ -165,7 +167,7 @@ export class playerPage implements OnInit{
 
       else {
         let confirmDilaogOptions = {
-          title: videoTitle,
+          title: this.videoTitle,
           message: "Do you wish to resume from where you stopped?",
           okButtonText: "RESUME",
           cancelButtonText: "START OVER"
