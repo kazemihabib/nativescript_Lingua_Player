@@ -29,6 +29,7 @@ import  timer = require("timer")
 import {Guestures} from './guestures'
 
 declare var android:any;
+declare var com:any;
 
 
 @Component({
@@ -46,9 +47,9 @@ export class playerPage implements OnInit{
     public path:string;
     public position:number = 0;
     public currentAspectRatio = 0;
-    public currentAudioTrack = -1;
-    public audioTracks = new Array<{id:number,name:string}>();
-    public dd:any;
+    public currentAudioTrack = 0;
+    // public audioTracks = new Array<{id:number,name:string}>();
+    // public dd:any;
 
     public visible:boolean = true;
     
@@ -77,6 +78,7 @@ export class playerPage implements OnInit{
        console.log('eventEndReached');
        this.position = 0;
        this.save();
+       this.clearUI();
        this.routerExtensions.back();
     }
     eventPlaying = function(){
@@ -122,9 +124,9 @@ export class playerPage implements OnInit{
       }
   }
 
-    dropDownLoaded(dd){
-      this.dd = dd;
-    }
+    // dropDownLoaded(dd){
+    //   this.dd = dd;
+    // }
 
 
     public label1GuestureHandler= null;
@@ -209,6 +211,7 @@ export class playerPage implements OnInit{
           this.vlc.stopPlayback();
           this.position = this.vlc.lastPosition;
           this.save();
+		  this.clearUI();
           this.label2GuestureHandler.off('touch',function(args){});
           this.label1GuestureHandler.off('touch',function(args){});
       },this);
@@ -227,6 +230,7 @@ export class playerPage implements OnInit{
           this.vlc.stopPlayback();
           this.position = this.vlc.lastPosition;
           this.save();
+		  this.clearUI();
       },this);
     }
 
@@ -248,6 +252,7 @@ export class playerPage implements OnInit{
       this.isLocked = true;
       this.hideBars();
     }
+
 
     private unLockScreen(){
       this.isLocked = false;
@@ -333,6 +338,106 @@ export class playerPage implements OnInit{
       brightnessEventFired:()=>{
         console.log('brightnessEventFired');
       }
+
+    }
+
+
+    private shouldDismissTracksMenu:boolean = false; 
+    private shouldDismissMoreMenu:boolean = false; 
+
+    private tracksMenu: any;
+    private moreMenu: any;
+
+    public moreButtonLoaded(moreBtn) {
+
+      let btn = moreBtn._nativeView;
+
+      this.moreMenu = new android.widget.PopupMenu(application.android.foregroundActivity, btn);
+      this.moreMenu.getMenu().add("ACCELERATION");
+
+      this.moreMenu.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener({
+        onMenuItemClick: (item) => {
+          this.showAccelerationDialog();          
+          return false;
+        }
+      }));
+
+      btn.setOnClickListener(new android.view.View.OnClickListener({
+        onClick: () => {
+          this.moreMenu.show();
+        }
+      }));
+
+    }
+
+    
+    public tracksBtnLoaded(tracksBtn){
+      let btn = tracksBtn._nativeView;
+
+      this.tracksMenu = new android.widget.PopupMenu(application.android.foregroundActivity, btn);
+      let menu = this.tracksMenu.getMenu();
+      menu.add(0, 0, 0, "Audio Track");
+      menu.add(0, 1, 2, "Subtitles").setEnabled(false);
+      menu.add(0, 2, 1, "Select Subtitle file");
+
+      this.tracksMenu.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener({
+        onMenuItemClick: (item) => {
+          console.log(item.getItemId());
+          console.log(item.getTitle());
+          if(item.getItemId() == 0)
+            this.showAudioTracksDialog();
+          
+
+          return true;
+        }
+      }));
+
+      btn.setOnClickListener(new android.view.View.OnClickListener({
+        onClick: () => {
+          this.tracksMenu.show();
+        }
+      }));
+
+    }
+
+    private showAudioTracksDialog() {
+      let isPlaying = this.vlcAction.isPlaying();
+      this.vlcAction.pause();
+      let audioTracks = this.vlc.getAudioTracks();
+      let items = [];
+      audioTracks.forEach(
+        (element, index, array) => {
+          items.push(element.name);
+        })
+
+      dialogs.action("choose audio track", "Cancel", items).then(result => {
+        audioTracks.forEach(
+          (element, index, array) => {
+            if (result == element.name) {
+              this.currentAudioTrack = element.id;
+            }
+          });
+
+        if(isPlaying)
+          this.vlcAction.play();
+      });
+    }
+    private showAccelerationDialog(){
+      let isPlaying = this.vlcAction.isPlaying();
+      this.vlcAction.pause();
+      dialogs.action("choose Acceleration", "Cancel", ["HW ACCELERATION DISABLED", "HW ACCELERATION AUTOMATIC","HW ACCELERATION DECODING","HW ACCELERATION FULL"]).then(result => {
+        console.log("Dialog result: " + result)
+        if(isPlaying)
+          this.vlcAction.play();
+      });
+    }
+
+    clearUI(){
+
+      this.moreMenu.dismiss();
+      this.tracksMenu.dismiss();
+      this.moreMenu = null;
+      this.tracksMenu = null;
 
     }
 
