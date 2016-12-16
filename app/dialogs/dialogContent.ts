@@ -29,6 +29,8 @@ export class DialogContent {
 
     private onItemTap(args) {
         let item = this.listOfFilesAndFolders[args.index];
+        if(item.isBackButton)
+            return this.back();
         let path = item.path;
 
         if (!item.isFile) {
@@ -59,27 +61,42 @@ export class DialogContent {
     private refreshList(path: string) {
         this.currentDirectory = path;
         this.listOfFilesAndFolders = [];
+        let listOfFiles: fsData[] = [];
+        let listOfFolders: fsData[] = [];
         let filesAndFolders = fs.Folder.fromPath(path);
 
         filesAndFolders.eachEntity((entity) => {
             let file = new java.io.File(entity.path);
-            if (!file.canRead())
+            if (!file.canRead() || file.isHidden())
                 return true;
 
             let ent = new fsData();
 
             ent.name = entity.name;
             ent.path = entity.path;
+            ent.isBackButton = false;
 
-            if (file.isDirectory())
+            if (file.isDirectory()){
                 ent.isFile = false;
-            else
+                listOfFolders.push(ent);
+            }
+            else{
                 ent.isFile = true;
+                listOfFiles.push(ent);
+            }
 
-            this.listOfFilesAndFolders.push(ent);
 
             return true;
         });
+
+        let backButton = new fsData();
+        backButton.name="...";
+        backButton.isFile=false;
+        backButton.path=null;
+        backButton.isBackButton = true;
+
+        this.listOfFilesAndFolders = listOfFolders.concat(listOfFiles);
+        this.listOfFilesAndFolders.unshift(backButton);
     }
 
 }
@@ -88,5 +105,6 @@ class fsData {
     public name: string;
     public isFile: boolean;
     public path: string;
+    public isBackButton:boolean = false;
 
 }

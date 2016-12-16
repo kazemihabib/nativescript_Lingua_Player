@@ -1,15 +1,16 @@
 <StackLayout class="p-20" backgroundColor="white" [height]="'90%'">
-    <Label [text]="'Open subtitle file'" horizontalAlignment="center"></Label>
-    <Label [text]="currentDirectory" color="white"></Label>
+    <FlexboxLayout backgroundColor="#bdbdbd" height="60" opacity=".7" alignItems="center">
+        <Label [text]="currentDirectory" color="white"   marginLeft="20" fontSize="25"  ></Label>
+    </FlexboxLayout>
 
-    <Button text="(Folder up)" (tap)="back()"></Button>
 
-    <ListView [items]="listOfFilesAndFolders" (itemTap)="onItemTap($event)" color="black">
+
+<ListView [items]="listOfFilesAndFolders" (itemTap)="onItemTap($event)" color="black" borderWidth="0" separatorColor="white" rowHeight="60" marginLeft="20">
         <template let-item="item" let-i="index" let-odd="odd" let-even="even">
-            <FlexboxLayout flexDirection="row" width="300">
-                <Label [text]="item.isFile ? 'file: ' : 'Folder: ' "></Label>
-                <Label [textWrap]="'true'" [text]='item.name'></Label>
+            <FlexboxLayout flexDirection="row" >
+                <Label class="mdi" [text]="item.isFile ? '\ue24d' : '\ue2c7'" [color]="item.isFile ? '#ffee58' : '#26c6da'" fontSize="38" marginRight="10"></Label>
+                <Label [textWrap]="'true'" [text]='item.name' fontSize="25"  paddingRight="20"></Label>
             </FlexboxLayout>
         </template>
-    </ListView>
+</ListView>
 </StackLayout>
