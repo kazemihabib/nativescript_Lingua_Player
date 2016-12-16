@@ -1,0 +1,15 @@
+<StackLayout class="p-20" backgroundColor="white" [height]="'90%'">
+    <Label [text]="'Open subtitle file'" horizontalAlignment="center"></Label>
+    <Label [text]="currentDirectory" color="white"></Label>
+
+    <Button text="(Folder up)" (tap)="back()"></Button>
+
+    <ListView [items]="listOfFilesAndFolders" (itemTap)="onItemTap($event)" color="black">
+        <template let-item="item" let-i="index" let-odd="odd" let-even="even">
+            <FlexboxLayout flexDirection="row" width="300">
+                <Label [text]="item.isFile ? 'file: ' : 'Folder: ' "></Label>
+                <Label [textWrap]="'true'" [text]='item.name'></Label>
+            </FlexboxLayout>
+        </template>
+    </ListView>
+</StackLayout>

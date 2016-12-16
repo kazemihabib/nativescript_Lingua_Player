@@ -1,4 +1,6 @@
-﻿import {Component,OnInit,NgZone} from "@angular/core";
+﻿import {Component,OnInit,NgZone,ViewContainerRef} from "@angular/core";
+import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
+import {DialogContent} from "../../dialogs/dialogContent";
 import {
     FlexboxLayout,
     FlexDirection,
@@ -191,7 +193,8 @@ export class playerPage implements OnInit{
 
       this.subtitle.addSubWordListDownloader(this.subWordListDownloader);
     }
-    constructor(private route: ActivatedRoute,private _ngZone: NgZone,private subtitle:Subtitle,private routerExtensions: RouterExtensions){}
+    constructor(private modalService: ModalDialogService,
+      private viewContainerRef: ViewContainerRef, private route: ActivatedRoute, private _ngZone: NgZone, private subtitle: Subtitle, private routerExtensions: RouterExtensions) { }
 
     ngOnDestroy() {
       this.sub.unsubscribe();
@@ -384,11 +387,25 @@ export class playerPage implements OnInit{
         onMenuItemClick: (item) => {
           console.log(item.getItemId());
           console.log(item.getTitle());
-          if(item.getItemId() == 0)
+          if(item.getItemId() == 0){
             this.showAudioTracksDialog();
+            return true;
+          }
+
+          else if(item.getItemId() == 2){
+            let options: ModalDialogOptions = {
+              viewContainerRef: this.viewContainerRef
+            };
+
+            this.modalService.showModal(DialogContent, options).then((res: string) => {
+              // this.result = res || "empty result";
+              // console.log(this.result);
+              console.log(res);
+            });
+            return true;
+          }
           
 
-          return true;
         }
       }));
 
