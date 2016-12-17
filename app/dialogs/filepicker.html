@@ -5,11 +5,11 @@
 
 
 
-<ListView [items]="listOfFilesAndFolders" (itemTap)="onItemTap($event)" color="black" borderWidth="0" separatorColor="white" rowHeight="60" marginLeft="20">
+<ListView  [items]="listOfFilesAndFolders" (itemTap)="onItemTap($event)" color="black" borderWidth="0" separatorColor="white" rowHeight="60" marginLeft="20">
         <template let-item="item" let-i="index" let-odd="odd" let-even="even">
             <FlexboxLayout flexDirection="row" >
                 <Label class="mdi" [text]="item.isFile ? '\ue24d' : '\ue2c7'" [color]="item.isFile ? '#ffee58' : '#26c6da'" fontSize="38" marginRight="10"></Label>
-                <Label [textWrap]="'true'" [text]='item.name' fontSize="25"  paddingRight="20"></Label>
+                <Label [textWrap]="'true'" [text]='item.name' fontSize="25"   width="100%" ></Label>
             </FlexboxLayout>
         </template>
 </ListView>

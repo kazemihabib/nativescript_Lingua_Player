@@ -17,14 +17,15 @@ declare var java: any;
 
 @Component({
     selector: 'modal-content',
-    templateUrl: "dialogs/dialog.html",
+    templateUrl: "dialogs/filepicker.html",
 })
-export class DialogContent {
+export class filePicker {
 
     public listOfFilesAndFolders: fsData[] = [];
     public currentDirectory: string = '/sdcard';
-    public prompt: 'choose subtitle';
+    public startPath:string;
     constructor(private params: ModalDialogParams) {
+         this.startPath = params.context.startPath;
     }
 
     private onItemTap(args) {
@@ -44,7 +45,7 @@ export class DialogContent {
     }
 
     public ngOnInit() {
-        this.refreshList(this.currentDirectory);
+        this.refreshList(this.startPath);
     }
 
     private back() {

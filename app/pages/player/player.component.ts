@@ -1,6 +1,6 @@
 ﻿import {Component,OnInit,NgZone,ViewContainerRef} from "@angular/core";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
-import {DialogContent} from "../../dialogs/dialogContent";
+import {filePicker} from "../../dialogs/filePickerDialog";
 import {
     FlexboxLayout,
     FlexDirection,
@@ -318,8 +318,9 @@ export class playerPage implements OnInit{
     }
 
 
-     public addSub(){
-      this.subtitle.loadSubtitle('sdcard/Download/han.srt',(isRTL:boolean, success:boolean, err:any)=>{
+     public addSub(subPath: string){
+
+      this.subtitle.loadSubtitle(subPath ,(isRTL:boolean, success:boolean, err:any)=>{
           console.log('sub Load success: ',success);
           console.log('sub err: ',err)
           this.isRTL = isRTL;
@@ -393,14 +394,21 @@ export class playerPage implements OnInit{
           }
 
           else if(item.getItemId() == 2){
+            let startObject = fs.File.fromPath(this.path.replace('file://',''));
+            let startPath;
+            try{
+              startPath = startObject.parent.path;
+            }catch(e){
+              startPath = startObject.path;
+            }
+
             let options: ModalDialogOptions = {
+               context: { startPath: startPath },
               viewContainerRef: this.viewContainerRef
             };
 
-            this.modalService.showModal(DialogContent, options).then((res: string) => {
-              // this.result = res || "empty result";
-              // console.log(this.result);
-              console.log(res);
+            this.modalService.showModal(filePicker, options).then((res: string) => {
+              this.addSub(res);
             });
             return true;
           }
