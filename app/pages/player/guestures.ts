@@ -19,6 +19,8 @@ export class Guestures{
     public prevX:number = null;
     private direction = null;
 
+    public BrightnessVisible: boolean = false;
+
     constructor(private vlcAction, private eventCallbacks:IGuestureEventCallbacks){
         this.max = this.vlcAction.getVolume().maxVolume;
         console.log('max ' + this.max);
@@ -32,6 +34,7 @@ export class Guestures{
 
           if('up' === args.action){
 
+            that.eventCallbacks.volumeVisibilityEvent(false);
             that.prevX = that.seek(args.getX(),that.direction,that.prevX);
             that.prevY = 0;
             that.prevX = 0;
@@ -50,6 +53,7 @@ export class Guestures{
 
             if(Direction.vertical == that.direction)
             {
+              that.eventCallbacks.volumeVisibilityEvent(true);
               that.prevY = that.changeVolume(args.getY(),that.prevY);
             }
 
@@ -63,7 +67,8 @@ export class Guestures{
       lbl.on(gestures.GestureTypes.touch, function (args: gestures.TouchGestureEventData) {
 
           if('up' === args.action){
-            
+            that.eventCallbacks.brightnessVisibilityEvent(false);
+
             that.prevX = that.seek(args.getX(),that.direction,that.prevX);
             that.prevY = 0;
             that.prevX = 0;
@@ -82,6 +87,7 @@ export class Guestures{
 
             if(Direction.vertical == that.direction)
             {
+              that.eventCallbacks.brightnessVisibilityEvent(true);
               that.prevY = that.changeBrightness(args.getY(),that.prevY);
 
             }
@@ -115,7 +121,7 @@ export class Guestures{
         this.currentBrightness = Math.min(this.currentBrightness,15);
 
         Brightness.setBrightness(this.currentBrightness / 15);
-        this.eventCallbacks.brightnessEventFired();
+        this.eventCallbacks.brightnessEventFired(this.currentBrightness);
 
         console.log('birightness ' + Math.floor(this.currentBrightness));
     }
@@ -136,7 +142,7 @@ export class Guestures{
                 this.currentVolume = this.vlcAction.volumeDown().currentVolume;
             }
             // this.prevY = currentY;
-            this.eventCallbacks.volumeEventFired();
+            this.eventCallbacks.volumeEventFired(this.currentVolume);
             console.log('currentVolume: ' + this.currentVolume);
             return currentY;
         }

@@ -133,11 +133,14 @@ export class playerPage implements OnInit{
 
     public label1GuestureHandler= null;
     public label2GuestureHandler = null;
-
+    public volumeChartVisible :boolean = false;
+    public brightnessChartVisible :boolean = false;
+    public currentVolume = 1;
+    public currentBrightness = 1;
     label2Loaded(lbl){
       this.label2GuestureHandler = lbl;
 
-      let guestures = new Guestures(this.vlcAction,this.guestureEventCallbacks);
+      let guestures = new Guestures(this.vlcAction, this.guestureEventCallbacks);
       guestures.rightSideguestures(lbl);
     }
 
@@ -336,11 +339,17 @@ export class playerPage implements OnInit{
         this.eventTimeChanged();
         console.log('seekEventFired');
       },
-      volumeEventFired:()=>{
-        console.log('volumeEventFired');
+      volumeEventFired:(volume: number)=>{
+        this.currentVolume = volume;
       },
-      brightnessEventFired:()=>{
-        console.log('brightnessEventFired');
+      brightnessEventFired:(brightness: number)=>{
+        this.currentBrightness = brightness;
+      },
+      volumeVisibilityEvent: (visible: boolean) => {
+        this.volumeChartVisible = visible;
+      },
+      brightnessVisibilityEvent: (visible: boolean) =>{
+        this.brightnessChartVisible = visible;
       }
 
     }
