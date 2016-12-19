@@ -133,22 +133,24 @@ export class playerPage implements OnInit{
 
     public label1GuestureHandler= null;
     public label2GuestureHandler = null;
-    public volumeChartVisible :boolean = false;
-    public brightnessChartVisible :boolean = false;
-    public currentVolume = 1;
-    public currentBrightness = 1;
+    // public volumeChartVisible :boolean = false;
+    // public brightnessChartVisible :boolean = false;
+    // public currentVolume = 1;
+    // public currentBrightness = 1;
+    public rightSideGuestures = {currentBrightness:1, brightnessChartVisible:false, rightSideguestures:function(lbl){}};
+    public leftSideGuestures = {currentVolume:1 ,volumeChartVisible:false,leftSideguestures:function(lbl){}};
     label2Loaded(lbl){
       this.label2GuestureHandler = lbl;
 
-      let guestures = new Guestures(this.vlcAction, this.guestureEventCallbacks);
-      guestures.rightSideguestures(lbl);
+      this.rightSideGuestures = new Guestures(this.vlcAction, this.guestureEventCallbacks);
+      this.rightSideGuestures.rightSideguestures(lbl);
     }
 
     label1Loaded(lbl){
       this.label1GuestureHandler = lbl;
 
-      let guestures = new Guestures(this.vlcAction, this.guestureEventCallbacks);
-      guestures.leftSideguestures(lbl);
+      this.leftSideGuestures= new Guestures(this.vlcAction, this.guestureEventCallbacks);
+      this.leftSideGuestures.leftSideguestures(lbl);
 
     }
 
@@ -338,20 +340,7 @@ export class playerPage implements OnInit{
       seekEventFired:()=>{
         this.eventTimeChanged();
         console.log('seekEventFired');
-      },
-      volumeEventFired:(volume: number)=>{
-        this.currentVolume = volume;
-      },
-      brightnessEventFired:(brightness: number)=>{
-        this.currentBrightness = brightness;
-      },
-      volumeVisibilityEvent: (visible: boolean) => {
-        this.volumeChartVisible = visible;
-      },
-      brightnessVisibilityEvent: (visible: boolean) =>{
-        this.brightnessChartVisible = visible;
       }
-
     }
 
 

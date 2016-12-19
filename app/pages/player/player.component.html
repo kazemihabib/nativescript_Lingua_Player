@@ -18,20 +18,20 @@
    </GridLayout>
 
 <FlexBoxLayout row="0" [flexDirection]="'row'" justifyContent="space-between" width="90%">
-  <StackLayout orientation="horizontal" [opacity]="brightnessChartVisible ? 1 : 0 " >
+  <StackLayout orientation="horizontal" [opacity]="leftSideGuestures.brightnessChartVisible ? 1 : 0 " >
     <GridLayout rows="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*," height="150" borderColor="white" borderWidth="2" backgroundColor="black"
       width="25" opacity="0.6">
-      <Label *ngIf ="currentBrightness" [row]="15 - currentBrightness" [rowSpan]="currentBrightness == 0 ? 1 : currentBrightness" width="22" backgroundColor="yellow"></Label>
+      <Label *ngIf ="leftSideGuestures.currentBrightness" [row]="15 - leftSideGuestures.currentBrightness" [rowSpan]="leftSideGuestures.currentBrightness == 0 ? 1 : leftSideGuestures.currentBrightness" width="22" backgroundColor="yellow"></Label>
     </GridLayout>
 
   <Label [text]="'Brightness'" color="white"  verticalAlignment= "center" marginLeft ="10" > </Label>
   </StackLayout>
 
-  <StackLayout orientation="horizontal" [opacity]="volumeChartVisible ? 1 : 0" >
+  <StackLayout orientation="horizontal" [opacity]="rightSideGuestures.volumeChartVisible ? 1 : 0" >
     <Label [text]="'Volume'" color="white" verticalAlignment= "center" marginRight="10" > </Label>
     <GridLayout rows="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*," height="150" borderColor="white" borderWidth="2" backgroundColor="black"
       width="25" opacity="0.6">
-      <Label *ngIf="currentVolume" [row]="15 - currentVolume" [rowSpan]=" currentVolume == 0 ? 1 : currentVolume" width="22" backgroundColor="blue"></Label>
+      <Label *ngIf="rightSideGuestures.currentVolume" [row]="15 - rightSideGuestures.currentVolume" [rowSpan]=" rightSideGuestures.currentVolume == 0 ? 1 : rightSideGuestures.currentVolume" width="22" backgroundColor="blue"></Label>
     </GridLayout>
   </StackLayout>
 </FlexBoxLayout>
