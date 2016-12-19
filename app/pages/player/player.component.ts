@@ -133,25 +133,22 @@ export class playerPage implements OnInit{
 
     public label1GuestureHandler= null;
     public label2GuestureHandler = null;
-    // public volumeChartVisible :boolean = false;
-    // public brightnessChartVisible :boolean = false;
-    // public currentVolume = 1;
-    // public currentBrightness = 1;
-    public rightSideGuestures = {currentBrightness:1, brightnessChartVisible:false, rightSideguestures:function(lbl){}};
-    public leftSideGuestures = {currentVolume:1 ,volumeChartVisible:false,leftSideguestures:function(lbl){}};
+    public guestureHandler = { currentBrightness: 1, brightnessChartVisible: true, currentVolume: 1, volumeChartVisible: true, rightSideguestures: function (lbl) { }, leftSideguestures(lbl) { } };
+
+
+    guestueresAreLoaded(grd){
+      // loads after childs label2Loaded and label1Loaded
+      this.guestureHandler = new Guestures(this.vlcAction, this.guestureEventCallbacks);
+      this.guestureHandler.rightSideguestures(this.label2GuestureHandler);
+      this.guestureHandler.leftSideguestures(this.label1GuestureHandler);
+
+    }
     label2Loaded(lbl){
       this.label2GuestureHandler = lbl;
-
-      this.rightSideGuestures = new Guestures(this.vlcAction, this.guestureEventCallbacks);
-      this.rightSideGuestures.rightSideguestures(lbl);
     }
 
     label1Loaded(lbl){
       this.label1GuestureHandler = lbl;
-
-      this.leftSideGuestures= new Guestures(this.vlcAction, this.guestureEventCallbacks);
-      this.leftSideGuestures.leftSideguestures(lbl);
-
     }
 
     //TODO:change this method name

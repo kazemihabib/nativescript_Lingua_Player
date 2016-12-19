@@ -16,34 +16,40 @@
      >
      </vlc>
    </GridLayout>
-<StackLayout orientation="horizontal" verticalAlignment="center" horizontalAlignment="center" [visibility] =" leftSideGuestures.seekUiVisibile || rightSideGuestures.seekUiVisibile ? 'visible' : 'collapse'">
-  <Label *ngIf="leftSideGuestures.deltaSeek > 0" [text]="'[' + '+'+ (leftSideGuestures.deltaSeek + rightSideGuestures.deltaSeek | DurationPipe )+']'"  fontSize="30" color="white" widht="70"></Label>
-  <Label *ngIf="leftSideGuestures.deltaSeek < 0"[text]="'[' + (leftSideGuestures.deltaSeek | DurationPipe )+']'"  fontSize="30" color="white" widht="70" textAlignment ="center" ></Label>
-  <Label [text]="(currentPosition + leftSideGuestures.deltaSeek + rightSideGuestures.deltaSeek) | DurationPipe "  fontSize="30" color="white" width="100" textAlignment ="center"></Label>
-  <Label *ngIf=" rightSideGuestures.deltaSeek > 0" [text]="'[' + '+'+ ( rightSideGuestures.deltaSeek | DurationPipe )+']'"  fontSize="30" color="white" widht="70"></Label>
-  <Label *ngIf=" rightSideGuestures.deltaSeek < 0"[text]="'[' + ( rightSideGuestures.deltaSeek | DurationPipe )+']'"  fontSize="30" color="white" widht="70"></Label>
+<StackLayout orientation="vertical" verticalAlignment="center" horizontalAlignment="center" [visibility]=" guestureHandler.seekUiVisibile ? 'visible' : 'collapse'">
+  <Label *ngIf="(currentPosition +  guestureHandler.deltaSeek) <= movieLength && (currentPosition +  guestureHandler.deltaSeek) >=0"
+    [text]="(currentPosition +  guestureHandler.deltaSeek) | DurationPipe " fontSize="30" color="white" width="100" textAlignment="center"></Label>
+  <Label *ngIf="currentPosition +  guestureHandler.deltaSeek < 0" [text]="0 | DurationPipe " fontSize="30" color="white" width="100"
+    textAlignment="center"></Label>
+  <Label *ngIf="currentPosition +  guestureHandler.deltaSeek > movieLength" [text]="movieLength | DurationPipe " fontSize="30"
+    color="white" width="100" textAlignment="center"></Label>
+  <Label *ngIf=" guestureHandler.deltaSeek >= 0" [text]="'[' + '+'+ ( guestureHandler.deltaSeek | DurationPipe )+']'" fontSize="30"
+    color="white" widht="70"></Label>
+  <Label *ngIf=" guestureHandler.deltaSeek < 0" [text]="'[' + ( guestureHandler.deltaSeek | DurationPipe )+']'" fontSize="30"
+    color="white" widht="70"></Label>
 </StackLayout>
 
+
 <FlexBoxLayout row="0" [flexDirection]="'row'" justifyContent="space-between" width="90%" verticalAlignment= "center">
-  <StackLayout orientation="vertical" [opacity]="leftSideGuestures.brightnessChartVisible ? 1 : 0 " >
+  <StackLayout orientation="vertical" [opacity]="guestureHandler.brightnessChartVisible ? 1 : 0 " >
     <GridLayout rows="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*" height="150" borderColor="white" borderWidth="2" backgroundColor="black"
       width="20" opacity="0.6">
-      <Label *ngIf ="leftSideGuestures.currentBrightness" [row]="15 - leftSideGuestures.currentBrightness" [rowSpan]="leftSideGuestures.currentBrightness == 0 ? 1 : leftSideGuestures.currentBrightness" width="22" backgroundColor="yellow"></Label>
+      <Label *ngIf ="guestureHandler.currentBrightness" [row]="15 - guestureHandler.currentBrightness" [rowSpan]=" guestureHandler.currentBrightness == 0 ? 1 : guestureHandler.currentBrightness" width="22" backgroundColor="yellow"></Label>
     </GridLayout>
 
   <Label class="mdi" fontSize="20" [text]="'mdi-brightness-high' | fonticon" color="white"  marginTop="7"> </Label>
   </StackLayout>
 
-  <StackLayout orientation="vertical" [opacity]="rightSideGuestures.volumeChartVisible ? 1 : 0" verticalAlignment= "center">
+  <StackLayout orientation="vertical" [opacity]="guestureHandler.volumeChartVisible ? 1 : 0" verticalAlignment= "center">
     <GridLayout rows="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*," height="150" borderColor="white" borderWidth="2" backgroundColor="black"
       width="20" opacity="0.6">
-      <Label *ngIf="rightSideGuestures.currentVolume" [row]="15 - rightSideGuestures.currentVolume" [rowSpan]=" rightSideGuestures.currentVolume == 0 ? 1 : rightSideGuestures.currentVolume" width="22" backgroundColor="blue"></Label>
+      <Label *ngIf="guestureHandler.currentVolume" [row]="15 - guestureHandler.currentVolume" [rowSpan]=" guestureHandler.currentVolume == 0 ? 1 : guestureHandler.currentVolume" width="22" backgroundColor="blue"></Label>
     </GridLayout>
     <Label  class="mdi" fontSize="22" [text]="'mdi-volume-up' | fonticon" color="white"  marginTop="7"> </Label>
   </StackLayout>
 </FlexBoxLayout>
   
-  <GridLayout  row="0" rowSpan="3" columns = "*,*" >
+  <GridLayout  #guestures row="0" rowSpan="3" columns = "*,*" (loaded)="guestueresAreLoaded(guestures)">
     <Label  #myLabel1  row="0" col="0"   rowSpan="3" (loaded)="label1Loaded(myLabel1)" horizontalAlignment= "stretch" (tap)="toggleScreen()" ></Label>
     <Label  #myLabel2 row="0" rowSpan="3" col="1"  horizontalAlignment= "stretch" (loaded)="label2Loaded(myLabel2)" (tap)="toggleScreen()" ></Label>
   </GridLayout >

@@ -15,7 +15,7 @@ export class Guestures{
 
     public currentVolume;
     //CHECK:is this necessary?
-    public currentBrightness = 0.5;
+    public currentBrightness = 1;
     private max;
 
     public prevY:number = null;
@@ -26,19 +26,24 @@ export class Guestures{
     public seekCharVisible: boolean =false;
     public deltaSeek: number = 0;
 
+    private leftSideHandling:boolean = false;
+    private rightSideHandling:boolean = false;
     constructor(private vlcAction, private eventCallbacks:IGuestureEventCallbacks){
         this.max = this.vlcAction.getVolume().maxVolume;
         console.log('max ' + this.max);
 
     }
 
-
+    public rightLabel:any;
     public rightSideguestures(lbl:any){
       let that = this;
-      lbl.on(gestures.GestureTypes.touch, function (args: gestures.TouchGestureEventData) {
-
+      that.rightLabel = lbl;
+      that.rightLabel.on(gestures.GestureTypes.touch, function (args: gestures.TouchGestureEventData) {
+          if(that.leftSideHandling){
+              return
+          }
           if('up' === args.action){
-
+            that.rightSideHandling = false;
             that.volumeChartVisible = false;
             that.seekUiVisibile = false;
             that.prevX = that.seek(args.getX(),that.direction,that.prevX);
@@ -49,6 +54,7 @@ export class Guestures{
           }
 
           if('down' == args.action){
+            that.rightSideHandling = true;
             that.prevY = args.getY();
             that.prevX = args.getX();
           }
@@ -76,11 +82,17 @@ export class Guestures{
 
     }
 
+    public leftLabel:any;
     public leftSideguestures(lbl:any){
       let that = this;
-      lbl.on(gestures.GestureTypes.touch, function (args: gestures.TouchGestureEventData) {
-
+      that.leftLabel = lbl;
+      that.leftLabel.on(gestures.GestureTypes.touch, function (args: gestures.TouchGestureEventData) {
+          if(that.rightSideHandling)
+          {
+              return;
+          }
           if('up' === args.action){
+            that.leftSideHandling = false;
             that.brightnessChartVisible = false;
             that.seekUiVisibile = false;
             that.prevX = that.seek(args.getX(),that.direction,that.prevX);
@@ -91,6 +103,7 @@ export class Guestures{
           }
 
           if('down' == args.action){
+            that.leftSideHandling = true;
             that.prevY = args.getY();
             that.prevX = args.getX();
           }
