@@ -16,6 +16,13 @@
      >
      </vlc>
    </GridLayout>
+<StackLayout orientation="horizontal" verticalAlignment="center" horizontalAlignment="center" [visibility] =" leftSideGuestures.seekUiVisibile || rightSideGuestures.seekUiVisibile ? 'visible' : 'collapse'">
+  <Label *ngIf="leftSideGuestures.deltaSeek > 0" [text]="'[' + '+'+ (leftSideGuestures.deltaSeek + rightSideGuestures.deltaSeek | DurationPipe )+']'"  fontSize="30" color="white" widht="70"></Label>
+  <Label *ngIf="leftSideGuestures.deltaSeek < 0"[text]="'[' + (leftSideGuestures.deltaSeek | DurationPipe )+']'"  fontSize="30" color="white" widht="70" textAlignment ="center" ></Label>
+  <Label [text]="(currentPosition + leftSideGuestures.deltaSeek + rightSideGuestures.deltaSeek) | DurationPipe "  fontSize="30" color="white" width="100" textAlignment ="center"></Label>
+  <Label *ngIf=" rightSideGuestures.deltaSeek > 0" [text]="'[' + '+'+ ( rightSideGuestures.deltaSeek | DurationPipe )+']'"  fontSize="30" color="white" widht="70"></Label>
+  <Label *ngIf=" rightSideGuestures.deltaSeek < 0"[text]="'[' + ( rightSideGuestures.deltaSeek | DurationPipe )+']'"  fontSize="30" color="white" widht="70"></Label>
+</StackLayout>
 
 <FlexBoxLayout row="0" [flexDirection]="'row'" justifyContent="space-between" width="90%" verticalAlignment= "center">
   <StackLayout orientation="vertical" [opacity]="leftSideGuestures.brightnessChartVisible ? 1 : 0 " >
@@ -64,7 +71,7 @@
       <FlexBoxLayout row="0" flexDirection="row" justifyContent="space-between">
         <Label [text]="currentPosition  | DurationPipe " style="color:white;margin:7" width="40" ></Label>
         <TNSSlider flexGrow="1" [value]="currentPosition" [maxValue]="movieLength" (dragged)="fromUser($event)" ></TNSSlider>
-        <Label [text]="currentPosition - movieLength | DurationPipe " style="color:white;margin:7" width="40"></Label>
+        <Label [text]="currentPosition - movieLength | DurationPipe " style="color:white;margin:7" width="60"></Label>
       </FlexBoxLayout>
 
       <FlexBoxLayout row="1" flexDirection="row" justifyContent="center" opacity="1" marginBottom="10" (tap)="tapPlayerController" >

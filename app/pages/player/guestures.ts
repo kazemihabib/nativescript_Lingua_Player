@@ -9,9 +9,9 @@ export enum Direction{
 }
 
 export class Guestures{
-    public testText = "hello this is test Text";
     public volumeChartVisible = false;
     public brightnessChartVisible = false;
+    public seekUiVisibile = false;
 
     public currentVolume;
     //CHECK:is this necessary?
@@ -23,6 +23,8 @@ export class Guestures{
     private direction = null;
 
     public BrightnessVisible: boolean = false;
+    public seekCharVisible: boolean =false;
+    public deltaSeek: number = 0;
 
     constructor(private vlcAction, private eventCallbacks:IGuestureEventCallbacks){
         this.max = this.vlcAction.getVolume().maxVolume;
@@ -38,7 +40,9 @@ export class Guestures{
           if('up' === args.action){
 
             that.volumeChartVisible = false;
+            that.seekUiVisibile = false;
             that.prevX = that.seek(args.getX(),that.direction,that.prevX);
+            that.deltaSeek = 0;
             that.prevY = 0;
             that.prevX = 0;
             that.direction = null;
@@ -56,8 +60,15 @@ export class Guestures{
 
             if(Direction.vertical == that.direction)
             {
-              that.volumeChartVisible = true;
-              that.prevY = that.changeVolume(args.getY(),that.prevY);
+                    that.volumeChartVisible = true;
+                    that.prevY = that.changeVolume(args.getY(), that.prevY);
+            }
+
+            if(Direction.horizontal == that.direction)
+            {
+                    that.seekUiVisibile = true;
+                    that.deltaSeek = Math.floor(args.getX() - that.prevX)*100;
+                    that.seekCharVisible = true;
             }
 
           }
@@ -71,8 +82,9 @@ export class Guestures{
 
           if('up' === args.action){
             that.brightnessChartVisible = false;
-
+            that.seekUiVisibile = false;
             that.prevX = that.seek(args.getX(),that.direction,that.prevX);
+            that.deltaSeek = 0 ;
             that.prevY = 0;
             that.prevX = 0;
             that.direction = null;
@@ -88,11 +100,15 @@ export class Guestures{
 
             that.direction = that.detectDirection(that.direction,args.getY(),args.getX(),that.prevY,that.prevX);
 
-            if(Direction.vertical == that.direction)
+            if (Direction.vertical == that.direction) {
+                    that.brightnessChartVisible = true;
+                    that.prevY = that.changeBrightness(args.getY(), that.prevY);
+            }
+            if(Direction.horizontal == that.direction)
             {
-              that.brightnessChartVisible = true;
-              that.prevY = that.changeBrightness(args.getY(),that.prevY);
-
+                that.seekUiVisibile = true;
+                that.deltaSeek = Math.floor(args.getX() - that.prevX)*100;
+                that.seekCharVisible = true;
             }
 
           }
