@@ -17,22 +17,22 @@
      </vlc>
    </GridLayout>
 
-<FlexBoxLayout row="0" [flexDirection]="'row'" justifyContent="space-between" width="90%">
-  <StackLayout orientation="horizontal" [opacity]="leftSideGuestures.brightnessChartVisible ? 1 : 0 " >
-    <GridLayout rows="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*," height="150" borderColor="white" borderWidth="2" backgroundColor="black"
-      width="25" opacity="0.6">
+<FlexBoxLayout row="0" [flexDirection]="'row'" justifyContent="space-between" width="90%" verticalAlignment= "center">
+  <StackLayout orientation="vertical" [opacity]="leftSideGuestures.brightnessChartVisible ? 1 : 0 " >
+    <GridLayout rows="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*" height="150" borderColor="white" borderWidth="2" backgroundColor="black"
+      width="20" opacity="0.6">
       <Label *ngIf ="leftSideGuestures.currentBrightness" [row]="15 - leftSideGuestures.currentBrightness" [rowSpan]="leftSideGuestures.currentBrightness == 0 ? 1 : leftSideGuestures.currentBrightness" width="22" backgroundColor="yellow"></Label>
     </GridLayout>
 
-  <Label [text]="'Brightness'" color="white"  verticalAlignment= "center" marginLeft ="10" > </Label>
+  <Label class="mdi" fontSize="20" [text]="'mdi-brightness-high' | fonticon" color="white"  marginTop="7"> </Label>
   </StackLayout>
 
-  <StackLayout orientation="horizontal" [opacity]="rightSideGuestures.volumeChartVisible ? 1 : 0" >
-    <Label [text]="'Volume'" color="white" verticalAlignment= "center" marginRight="10" > </Label>
+  <StackLayout orientation="vertical" [opacity]="rightSideGuestures.volumeChartVisible ? 1 : 0" verticalAlignment= "center">
     <GridLayout rows="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*," height="150" borderColor="white" borderWidth="2" backgroundColor="black"
-      width="25" opacity="0.6">
+      width="20" opacity="0.6">
       <Label *ngIf="rightSideGuestures.currentVolume" [row]="15 - rightSideGuestures.currentVolume" [rowSpan]=" rightSideGuestures.currentVolume == 0 ? 1 : rightSideGuestures.currentVolume" width="22" backgroundColor="blue"></Label>
     </GridLayout>
+    <Label  class="mdi" fontSize="22" [text]="'mdi-volume-up' | fonticon" color="white"  marginTop="7"> </Label>
   </StackLayout>
 </FlexBoxLayout>
   
