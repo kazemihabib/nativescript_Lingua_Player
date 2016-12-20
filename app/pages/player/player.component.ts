@@ -216,7 +216,7 @@ export class playerPage implements OnInit{
           this.vlc.stopPlayback();
           this.position = this.vlc.lastPosition;
           this.save();
-		  this.clearUI();
+          this.clearUI();
           this.label2GuestureHandler.off('touch',function(args){});
           this.label1GuestureHandler.off('touch',function(args){});
       },this);
@@ -235,7 +235,7 @@ export class playerPage implements OnInit{
           this.vlc.stopPlayback();
           this.position = this.vlc.lastPosition;
           this.save();
-		  this.clearUI();
+          this.clearUI();
       },this);
     }
 
@@ -454,8 +454,10 @@ export class playerPage implements OnInit{
 
     clearUI(){
 
-      this.moreMenu.dismiss();
-      this.tracksMenu.dismiss();
+      if(this.moreMenu)
+        this.moreMenu.dismiss();
+      if(this.tracksMenu)
+        this.tracksMenu.dismiss();
       this.moreMenu = null;
       this.tracksMenu = null;
 
