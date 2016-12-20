@@ -476,26 +476,27 @@ export class VLCComponent implements OnInit{
 
 
     ngOnInit(){
-      this.init = true;
-      if (!this.VLCUtil.hasCompatibleCPU(this.activity.getBaseContext())) {
-          this.eventCompatibleCpuError.emit('');
-          return;
-      }
+        this.init = true;
+        if (!this.VLCUtil.hasCompatibleCPU(this.activity.getBaseContext())) {
+            this.eventCompatibleCpuError.emit('');
+            return;
+        }
 
-     this.LibVLC.setOnNativeCrashListener(new this.LibVLC.OnNativeCrashListener({
-          onNativeCrash :() =>{
-          //parameter is because of error:Supplied parameters do not match any signature of call target
-          this.eventNativeCrashError.emit('');
-          }
-      }))
 
-    this.libVLC = new this.LibVLC(org.videolan.vlc.util.VLCOptions.getLibOptions(application.android.currentContext));
+        this.libVLC = new this.LibVLC(org.videolan.vlc.util.VLCOptions.getLibOptions(application.android.currentContext));
 
-    this.audioManager =  this.activity.getSystemService(this.context.AUDIO_SERVICE);
-    this.maxVolume = this.audioManager.getStreamMaxVolume(this.AudioManager.STREAM_MUSIC);
-    this.activity.setVolumeControlStream(this.AudioManager.STREAM_MUSIC);
+        this.LibVLC.setOnNativeCrashListener(new this.LibVLC.OnNativeCrashListener({
+            onNativeCrash: () => {
+                //parameter is because of error:Supplied parameters do not match any signature of call target
+                this.eventNativeCrashError.emit('');
+            }
+        }))
 
-    this.aspectRatio = 0;
+        this.audioManager = this.activity.getSystemService(this.context.AUDIO_SERVICE);
+        this.maxVolume = this.audioManager.getStreamMaxVolume(this.AudioManager.STREAM_MUSIC);
+        this.activity.setVolumeControlStream(this.AudioManager.STREAM_MUSIC);
+
+        this.aspectRatio = 0;
     }
 
     // create SurfaceView
