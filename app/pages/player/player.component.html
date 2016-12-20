@@ -76,7 +76,7 @@
 
       <FlexBoxLayout row="0" flexDirection="row" justifyContent="space-between">
         <Label [text]="currentPosition  | DurationPipe " style="color:white;margin:7" width="40" ></Label>
-        <TNSSlider flexGrow="1" [value]="currentPosition" [maxValue]="movieLength" (dragged)="fromUser($event)" ></TNSSlider>
+        <TNSSlider flexGrow="1" [value]="currentPosition + guestureHandler.deltaSeek " [maxValue]="movieLength" (dragged)="fromUser($event)" ></TNSSlider>
         <Label [text]="currentPosition - movieLength | DurationPipe " style="color:white;margin:7" width="60"></Label>
       </FlexBoxLayout>
 

@@ -205,7 +205,14 @@ export class Guestures{
                     deltaX = Math.floor(currentX - prevX)*100;
 
                     console.log(deltaX);
-                    this.vlcAction.seek(this.vlcAction.getPosition() + deltaX);
+                    let movieLength = this.vlcAction.getLength();
+                    let position = this.vlcAction.getPosition() + deltaX;
+                    if(position < 0)
+                        position = 0;
+                    if(position > movieLength)
+                        position = movieLength;
+
+                    this.vlcAction.seek(position);
                     this.eventCallbacks.seekEventFired();
                     console.log('deltaX ' + deltaX);
                     return currentX;
