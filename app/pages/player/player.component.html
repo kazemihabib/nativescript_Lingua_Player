@@ -18,14 +18,14 @@
    </GridLayout>
 <StackLayout orientation="vertical" verticalAlignment="center" horizontalAlignment="center" [visibility]=" guestureHandler.seekUiVisibile ? 'visible' : 'collapse'">
   <Label *ngIf="(currentPosition +  guestureHandler.deltaSeek) <= movieLength && (currentPosition +  guestureHandler.deltaSeek) >=0"
-    [text]="(currentPosition +  guestureHandler.deltaSeek) | DurationPipe " fontSize="30" color="white" width="100" textAlignment="center"></Label>
-  <Label *ngIf="currentPosition +  guestureHandler.deltaSeek < 0" [text]="0 | DurationPipe " fontSize="30" color="white" width="100"
+    [text]="(currentPosition +  guestureHandler.deltaSeek) | DurationPipe " fontSize="40" color="white" width="100" textAlignment="center"></Label>
+  <Label *ngIf="currentPosition +  guestureHandler.deltaSeek < 0" [text]="0 | DurationPipe " fontSize="40" color="white" width="100"
     textAlignment="center"></Label>
-  <Label *ngIf="currentPosition +  guestureHandler.deltaSeek > movieLength" [text]="movieLength | DurationPipe " fontSize="30"
+  <Label *ngIf="currentPosition +  guestureHandler.deltaSeek > movieLength" [text]="movieLength | DurationPipe " fontSize="40"
     color="white" width="100" textAlignment="center"></Label>
-  <Label *ngIf=" guestureHandler.deltaSeek >= 0" [text]="'[' + '+'+ ( guestureHandler.deltaSeek | DurationPipe )+']'" fontSize="30"
+  <Label *ngIf=" guestureHandler.deltaSeek >= 0" [text]="'[ ' + '+'+ ( guestureHandler.deltaSeek | DurationPipe )+' ]'" fontSize="40"
     color="white" widht="70"></Label>
-  <Label *ngIf=" guestureHandler.deltaSeek < 0" [text]="'[' + ( guestureHandler.deltaSeek | DurationPipe )+']'" fontSize="30"
+  <Label *ngIf=" guestureHandler.deltaSeek < 0" [text]="'[ ' + ( guestureHandler.deltaSeek | DurationPipe )+' ]'" fontSize="40"
     color="white" widht="70"></Label>
 </StackLayout>
 
