@@ -1,6 +1,6 @@
 ﻿import {Component,OnInit,NgZone,ViewContainerRef} from "@angular/core";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
-import {filePicker} from "../../dialogs/file_picker/filePickerDialog";
+import {FilePicker} from "../../dialogs/file_picker/file_picker_dialog";
 import {AccelerationSelector} from "../../dialogs/acceleration_selector/acceleration_selector";
 import {AudioSelector} from "../../dialogs/audio_selector/audio_selector";
 import {ResumeConfirm} from "../../dialogs/resume_confirm/resume_confirm";
@@ -395,6 +395,9 @@ export class playerPage implements OnInit{
           }
 
           else if(item.getItemId() == 2){
+            let isPlaying = this.vlcAction.isPlaying();
+            this.vlcAction.pause();
+
             let startObject = fs.File.fromPath(this.path.replace('file://',''));
             let startPath;
             try{
@@ -408,8 +411,11 @@ export class playerPage implements OnInit{
               viewContainerRef: this.viewContainerRef
             };
 
-            this.modalService.showModal(filePicker, options).then((res: string) => {
+
+            this.modalService.showModal(FilePicker, options).then((res: string) => {
               this.addSub(res);
+              if(isPlaying)
+                this.vlcAction.play();
             });
             return true;
           }

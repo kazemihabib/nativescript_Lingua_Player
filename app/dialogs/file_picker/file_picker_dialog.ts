@@ -17,9 +17,10 @@ declare var java: any;
 
 @Component({
     selector: 'modal-content',
-    templateUrl: "dialogs/file_picker/filepicker.html",
+    templateUrl: "dialogs/file_picker/file_picker.html",
+    styleUrls: [ "dialogs/file_picker/file_picker.css"]
 })
-export class filePicker {
+export class FilePicker {
 
     public listOfFilesAndFolders: fsData[] = [];
     public currentDirectory: string = '/sdcard';
@@ -91,7 +92,7 @@ export class filePicker {
         });
 
         let backButton = new fsData();
-        backButton.name="...";
+        backButton.name="..";
         backButton.isFile=false;
         backButton.path=null;
         backButton.isBackButton = true;

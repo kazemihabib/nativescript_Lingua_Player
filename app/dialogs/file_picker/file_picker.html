@@ -1,0 +1,16 @@
+<StackLayout class="p-20" backgroundColor="white">
+    <FlexboxLayout id="header">
+        <Label [text]="currentDirectory" ></Label>
+    </FlexboxLayout>
+
+
+
+<ListView  [items]="listOfFilesAndFolders" (itemTap)="onItemTap($event)"  separatorColor="white" rowHeight="60">
+        <template let-item="item" let-i="index" let-odd="odd" let-even="even">
+            <FlexboxLayout flexDirection="row" >
+                <Label id="item-icon" class="mdi" [text]="item.isFile ? '\ue24d' : '\ue2c7'" [isFile]="item.isFile ? true : false" ></Label>
+                <Label id="item-name" [textWrap]="'true'" [text]='item.name' ></Label>
+            </FlexboxLayout>
+        </template>
+</ListView>
+</StackLayout>

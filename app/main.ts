@@ -9,7 +9,7 @@ import {DurationPipe} from "./pipes/duration.pipe";
 
 import { LISTVIEW_DIRECTIVES } from 'nativescript-telerik-ui/listview/angular';
 import {VLCComponent} from "./components/vlc.component"
-import {filePicker} from "./dialogs/file_picker/filePickerDialog";
+import {FilePicker} from "./dialogs/file_picker/file_picker_dialog";
 import {AccelerationSelector} from "./dialogs/acceleration_selector/acceleration_selector";
 import {AudioSelector} from "./dialogs/audio_selector/audio_selector";
 import {ResumeConfirm} from "./dialogs/resume_confirm/resume_confirm";
@@ -33,13 +33,13 @@ import { TNSFontIconModule} from 'nativescript-ng2-fonticon';
         ...navigatableComponents,
         VLCComponent,
         DurationPipe,
-        filePicker,
+        FilePicker,
         AccelerationSelector,
         AudioSelector,
         ResumeConfirm
 
     ],
-    entryComponents: [filePicker,AccelerationSelector,AudioSelector,ResumeConfirm],
+    entryComponents: [FilePicker,AccelerationSelector,AudioSelector,ResumeConfirm],
     bootstrap: [
         AppComponent
     ]
