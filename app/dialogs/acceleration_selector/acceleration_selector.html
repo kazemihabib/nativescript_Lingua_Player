@@ -1,0 +1,8 @@
+<StackLayout>
+    <FlexboxLayout>
+        <Label [text]="'Select Hardware Acceleration'"></Label>
+    </FlexboxLayout>
+
+    <Button *ngFor="let item of items" [text]="item.text" (tap)="onItemTap(item)" [selected]="item.acceleration == selectedAcceleration ? true : false"></Button>
+
+</StackLayout>

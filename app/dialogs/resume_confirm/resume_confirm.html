@@ -1,0 +1,13 @@
+<StackLayout>
+    <FlexboxLayout id="header">
+        <Label [text]="videoTitle"></Label>
+    </FlexboxLayout>
+
+    <Label id="question" [text]="'Do you wish to resume from where you stopped?'"></Label>
+
+    <FlexboxLayout id="choice">
+        <Button [text]="'START OVER'" (tap)="onItemTap(false)"></Button>
+        <Button [text]="'RESUME'" (tap)="onItemTap(true)"></Button>
+    </FlexboxLayout>
+
+</StackLayout>

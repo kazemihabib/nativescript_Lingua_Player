@@ -1,0 +1,8 @@
+<StackLayout>
+    <FlexboxLayout>
+        <Label [text]="'Select Hardware Acceleration'"></Label>
+    </FlexboxLayout>
+
+    <Button *ngFor="let item of items" [text]="item.name" (tap)="onItemTap(item)" [selected]="item.name == selectedAudioTrack ? true : false"></Button>
+
+</StackLayout>

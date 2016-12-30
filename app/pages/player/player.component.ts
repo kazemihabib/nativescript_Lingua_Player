@@ -1,6 +1,9 @@
 ﻿import {Component,OnInit,NgZone,ViewContainerRef} from "@angular/core";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
-import {filePicker} from "../../dialogs/filePickerDialog";
+import {filePicker} from "../../dialogs/file_picker/filePickerDialog";
+import {AccelerationSelector} from "../../dialogs/acceleration_selector/acceleration_selector";
+import {AudioSelector} from "../../dialogs/audio_selector/audio_selector";
+import {ResumeConfirm} from "../../dialogs/resume_confirm/resume_confirm";
 import {
     FlexboxLayout,
     FlexDirection,
@@ -172,24 +175,27 @@ export class playerPage implements OnInit{
       }
 
       else {
-        let confirmDilaogOptions = {
-          title: this.videoTitle,
-          message: "Do you wish to resume from where you stopped?",
-          okButtonText: "RESUME",
-          cancelButtonText: "START OVER"
-        };
+      let options: ModalDialogOptions = {
+		context: { videoTitle: this.videoTitle },
+        viewContainerRef: this.viewContainerRef
+      };
+
+
         if (!this.dialogIsOpen) {
-          //prevent to reopen dialog if the user press home and back again to app.
-          this.dialogIsOpen = true;
-          dialogs.confirm(confirmDilaogOptions).then(result => {
-            this.dialogIsOpen = false;
-            if (result)
-              play();
-            else {
-              this.position = 0;
-              play();
-            }
-          });
+			//prevent to reopen dialog if the user press home and back again to app.
+			this.dialogIsOpen = true;
+			this.modalService.showModal(ResumeConfirm, options).then((resumeIt: boolean) => {
+				this.dialogIsOpen = false;
+				if (resumeIt == undefined)
+					this.routerExtensions.back();
+				else if (resumeIt == true)
+					play();
+				else {
+					this.position = 0;
+					play();
+				}
+
+			});
         }
       }
 
@@ -424,32 +430,34 @@ export class playerPage implements OnInit{
       let isPlaying = this.vlcAction.isPlaying();
       this.vlcAction.pause();
       let audioTracks = this.vlc.getAudioTracks();
-      let items = [];
-      audioTracks.forEach(
-        (element, index, array) => {
-          items.push(element.name);
-        })
 
-      dialogs.action("choose audio track", "Cancel", items).then(result => {
-        audioTracks.forEach(
-          (element, index, array) => {
-            if (result == element.name) {
-              this.currentAudioTrack = element.id;
-            }
-          });
+      let options: ModalDialogOptions = {
+		  context: { audioTracks: audioTracks, currentAudioTrack: this.vlcAction.currentAudioTrack },
+		  viewContainerRef: this.viewContainerRef,
+      };
 
-        if(isPlaying)
-          this.vlcAction.play();
+      this.modalService.showModal(AudioSelector, options).then((audioTrackId: number) => {
+		  if(audioTrackId)
+			this.currentAudioTrack = audioTrackId;
+		  if(isPlaying)
+			this.vlcAction.play();
       });
     }
     private showAccelerationDialog(){
       let isPlaying = this.vlcAction.isPlaying();
       this.vlcAction.pause();
-      dialogs.action("choose Acceleration", "Cancel", ["HW ACCELERATION DISABLED", "HW ACCELERATION AUTOMATIC","HW ACCELERATION DECODING","HW ACCELERATION FULL"]).then(result => {
-        console.log("Dialog result: " + result)
-        if(isPlaying)
-          this.vlcAction.play();
+
+      let options: ModalDialogOptions = {
+        viewContainerRef: this.viewContainerRef
+      };
+
+      this.modalService.showModal(AccelerationSelector, options).then((hw: number) => {
+		  console.log(hw);
+		  if(isPlaying)
+			this.vlcAction.play();
       });
+
+
     }
 
     clearUI(){

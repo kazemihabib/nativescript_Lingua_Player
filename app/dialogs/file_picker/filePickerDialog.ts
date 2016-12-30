@@ -17,7 +17,7 @@ declare var java: any;
 
 @Component({
     selector: 'modal-content',
-    templateUrl: "dialogs/filepicker.html",
+    templateUrl: "dialogs/file_picker/filepicker.html",
 })
 export class filePicker {
 

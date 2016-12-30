@@ -1,0 +1,32 @@
+StackLayout{
+     background-color:white;
+     opacity:.8;
+}
+
+FlexboxLayout{
+    background-color:#283593;
+    height:60;
+    align-items:center;
+    padding-left:25;
+    padding-right:25;
+}
+
+FlexboxLayout Label{
+    color:white;
+    font-size:25;  
+}
+
+
+button { 
+    background-color: white;
+    padding-left:15;
+    padding-right:15;
+    text-align:left;
+    font-size:15;
+}
+
+
+button[selected = true]{ color: blue; }
+
+button:highlighted { background-color:#64b5f6;}
+
