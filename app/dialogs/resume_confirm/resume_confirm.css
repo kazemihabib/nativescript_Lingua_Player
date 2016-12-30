@@ -3,19 +3,6 @@ StackLayout{
      opacity:.8;
 }
 
-#header{
-    background-color:#283593;
-    height:60;
-    align-items:center;
-    padding-left:25;
-    padding-right:25;
-}
-
-#header Label{
-    color:white;
-    font-size:25;  
-}
-
 #question{
     padding: 25;
     font-size:20;  

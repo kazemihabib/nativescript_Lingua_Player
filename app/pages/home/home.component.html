@@ -1,5 +1,5 @@
 <StackLayout (unloaded)="unLoaded()">
-    <ActionBar title="myPlayer" style="opacity:0.5;background-color:black;color:white" [style.marginTop]="statusBarHeight"></ActionBar>
+    <ActionBar title="myPlayer" class="header" [style.marginTop]="statusBarHeight"></ActionBar>
 
     <GridLayout>
         <RadListView [items]="paths" selectionBehavior="Press" (itemSelected)="onItemTap($event)" backgroundColor='#eff0f2' (loaded)="loaded()" >
