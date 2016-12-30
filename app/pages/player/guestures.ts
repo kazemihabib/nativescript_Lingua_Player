@@ -46,8 +46,8 @@ export class Guestures{
             that.rightSideHandling = false;
             that.volumeChartVisible = false;
             that.seekUiVisibile = false;
-            that.prevX = that.seek(args.getX(),that.direction,that.prevX);
             that.deltaSeek = 0;
+            that.prevX = that.seek(args.getX(),that.direction,that.prevX);
             that.prevY = 0;
             that.prevX = 0;
             that.direction = null;
@@ -95,8 +95,8 @@ export class Guestures{
             that.leftSideHandling = false;
             that.brightnessChartVisible = false;
             that.seekUiVisibile = false;
-            that.prevX = that.seek(args.getX(),that.direction,that.prevX);
             that.deltaSeek = 0 ;
+            that.prevX = that.seek(args.getX(),that.direction,that.prevX);
             that.prevY = 0;
             that.prevX = 0;
             that.direction = null;
