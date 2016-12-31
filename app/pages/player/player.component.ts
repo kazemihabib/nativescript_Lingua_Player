@@ -4,6 +4,7 @@ import {FilePicker} from "../../dialogs/file_picker/file_picker_dialog";
 import {AccelerationSelector} from "../../dialogs/acceleration_selector/acceleration_selector";
 import {AudioSelector} from "../../dialogs/audio_selector/audio_selector";
 import {ResumeConfirm} from "../../dialogs/resume_confirm/resume_confirm";
+import { chroma, HW, VLCSettings } from "../../components/VLCSettings";
 import {
     FlexboxLayout,
     FlexDirection,
@@ -358,7 +359,7 @@ export class playerPage implements OnInit{
       let btn = moreBtn._nativeView;
 
       this.moreMenu = new android.widget.PopupMenu(application.android.foregroundActivity, btn);
-      this.moreMenu.getMenu().add("ACCELERATION");
+      this.moreMenu.getMenu().add("HW ACCELERATION");
 
       this.moreMenu.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener({
         onMenuItemClick: (item) => {
@@ -458,9 +459,16 @@ export class playerPage implements OnInit{
       };
 
       this.modalService.showModal(AccelerationSelector, options).then((hw: number) => {
+        if(hw != undefined){
+            // this.lockScreen();
+            this.vlc.stopPlayback();
+            VLCSettings.hardwareAcceleration = hw;
+            this.vlcAction.play();
+            // this.unLockScreen();
+        }
 		  console.log(hw);
-		  if(isPlaying)
-			this.vlcAction.play();
+        if(isPlaying)
+            this.vlcAction.play();
       });
 
 

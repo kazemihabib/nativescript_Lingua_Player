@@ -33,9 +33,11 @@ export class AccelerationSelector {
     }
 
     private onItemTap(item:AccelerationItem) {
-        this.selectedAcceleration = item.acceleration;
-        // console.log(index);
-        this.params.closeCallback(item.acceleration);
+        if(item.acceleration == this.selectedAcceleration){
+            this.params.closeCallback(undefined);
+        }
+        else
+            this.params.closeCallback(item.acceleration);
     }
 
 }

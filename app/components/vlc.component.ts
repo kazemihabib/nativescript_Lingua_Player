@@ -481,7 +481,15 @@ export class VLCComponent implements OnInit{
             this.eventCompatibleCpuError.emit('');
             return;
         }
+        this.initLibVLC();
+        this.audioManager = this.activity.getSystemService(this.context.AUDIO_SERVICE);
+        this.maxVolume = this.audioManager.getStreamMaxVolume(this.AudioManager.STREAM_MUSIC);
+        this.activity.setVolumeControlStream(this.AudioManager.STREAM_MUSIC);
 
+        this.aspectRatio = 0;
+    }
+
+    public initLibVLC(){
 
         this.libVLC = new this.LibVLC(org.videolan.vlc.util.VLCOptions.getLibOptions(application.android.currentContext));
 
@@ -491,12 +499,6 @@ export class VLCComponent implements OnInit{
                 this.eventNativeCrashError.emit('');
             }
         }))
-
-        this.audioManager = this.activity.getSystemService(this.context.AUDIO_SERVICE);
-        this.maxVolume = this.audioManager.getStreamMaxVolume(this.AudioManager.STREAM_MUSIC);
-        this.activity.setVolumeControlStream(this.AudioManager.STREAM_MUSIC);
-
-        this.aspectRatio = 0;
     }
 
     // create SurfaceView
