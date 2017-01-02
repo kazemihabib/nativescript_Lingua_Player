@@ -21,12 +21,12 @@ import {
 export class AccelerationSelector {
 
     selectedAcceleration:number = VLCSettings.hardwareAcceleration;
-    sw = new AccelerationItem(HW.HW_ACCELERATION_DISABLED, "HW ACCELERATION DISABLED");
-    hwAutomatic = new AccelerationItem(HW.HW_ACCELERATION_AUTOMATIC, "HW ACCELERATION AUTOMATIC");
-    hwFull = new AccelerationItem(HW.HW_ACCELERATION_FULL, "HW FULL");
-    hwDecoding = new AccelerationItem(HW.HW_ACCELERATION_DECODING, "HW DECODING");
+    sw = new AccelerationItem(HW.HW_ACCELERATION_DISABLED, "SW");
+    // hwAutomatic = new AccelerationItem(HW.HW_ACCELERATION_AUTOMATIC, "HW ACCELERATION AUTOMATIC");
+    hwFull = new AccelerationItem(HW.HW_ACCELERATION_FULL, "HW");
+    // hwDecoding = new AccelerationItem(HW.HW_ACCELERATION_DECODING, "HW DECODING");
 
-    items = [ this.sw , this.hwAutomatic , this.hwFull , this.hwDecoding ]
+    items = [ this.sw ,  this.hwFull ]
 
     constructor(private params: ModalDialogParams) {
         //  this.startPath = params.context.startPath;

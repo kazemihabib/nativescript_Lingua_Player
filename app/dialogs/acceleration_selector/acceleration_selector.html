@@ -1,6 +1,6 @@
 <StackLayout>
     <FlexboxLayout class="header">
-        <Label [text]="'Select Hardware Acceleration'"></Label>
+        <Label [text]="'Suggest decoder'"></Label>
     </FlexboxLayout>
 
     <Button *ngFor="let item of items" [text]="item.text" (tap)="onItemTap(item)" [selected]="item.acceleration == selectedAcceleration ? true : false"></Button>
