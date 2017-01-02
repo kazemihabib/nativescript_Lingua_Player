@@ -38,7 +38,7 @@ export class firstPage implements OnInit, AfterViewInit {
 
     public ngAfterViewInit() { }
     public ngOnInit() {
-        this.statusBarHeight = this.getStatusBarHeight();
+        // this.statusBarHeight = this.getStatusBarHeight();
         VLCSettings.hardwareAcceleration = HW.HW_ACCELERATION_FULL;
         VLCSettings.networkCachingValue = 3000;
         this.source = this.fileExplorer.explore();

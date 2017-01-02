@@ -209,8 +209,7 @@ export class playerPage implements OnInit{
       this.sub.unsubscribe();
     }
     ngOnInit(){
-    
-     this.statusBarHeight= this.getStatusBarHeight(); 
+    //  this.statusBarHeight= this.getStatusBarHeight(); 
      this.sub = this.route.params.subscribe(params => {
        this.path = params['path'];
        this.position = parseInt(params['position']);
@@ -359,7 +358,7 @@ export class playerPage implements OnInit{
       let btn = moreBtn._nativeView;
 
       this.moreMenu = new android.widget.PopupMenu(application.android.foregroundActivity, btn);
-      this.moreMenu.getMenu().add("HW ACCELERATION");
+      this.moreMenu.getMenu().add("decoder");
 
       this.moreMenu.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener({
         onMenuItemClick: (item) => {
