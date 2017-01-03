@@ -84,7 +84,7 @@ export class HomeComponent implements OnInit {
     private onItemTap(args: any) {
         var listview = args.object as RadListView;
         var selectedItems = listview.getSelectedItems();
-        let path = selectedItems[0]['PATH'];
+        let path = selectedItems[0]['path'];
         let exists = fs.File.exists(path);
 
         if (!database.isDatabaseReady()) {

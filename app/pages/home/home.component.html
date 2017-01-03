@@ -6,13 +6,13 @@
             <template tkListItemTemplate let-item="item">
                 <StackLayout id="thumb-container" >
                     <StackLayout id="thumb-image-container" >
-                        <Image  id="thumb-image" [src] ="item.THUMBNAIL ? item.THUMBNAIL : 'res://logo'"  ></Image> 
+                        <Image  id="thumb-image" [src] ="item.thumbnail ? item.thumbnail : 'res://logo'"  ></Image> 
                     </StackLayout>
-                    <label id="thumb-title" [text]="item.TITLE"></label>
+                    <label id="thumb-title" [text]="item.title"></label>
 
                     <StackLayout id="video-info">
                         <!--<label verticalAlignment = "center" [text]="'srt'"></label>-->
-                        <label id="video-length" [text]="item.LENGTH | DurationPipe"></label>
+                        <label id="video-length" [text]="item.length | DurationPipe"></label>
                     </StackLayout>
                 </StackLayout>
             </template>
