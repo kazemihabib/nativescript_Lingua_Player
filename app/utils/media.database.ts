@@ -2,7 +2,7 @@ let sqlite = require('nativescript-sqlite');
 let dbname = "medias.database";
 let db = null;
 
-function initDataBase() {
+export function initDataBase() {
     new sqlite(dbname, function (err, dbConnection) {
         if (err) {
             console.log(err);
@@ -15,11 +15,11 @@ function initDataBase() {
     });
 }
 
-function isDatabaseReady(){
+export function isDatabaseReady(){
     return db != null ? true : false;
 }
 
-function createTable() {
+export function createTable() {
     db.version(function (err, ver) {
         console.log('version is ', ver);
         // if (ver <=3) {
@@ -37,11 +37,11 @@ function createTable() {
     });
 }
 
-function getMediaInfo(path: string, callback) {
+export function getMediaInfo(path: string, callback) {
     db.get('select * from Medias where PATH = ? ', [path], callback);
 }
 
-function insertMediaInfo(path: string, title: string, length: number, position: number, subLocation: string, thumbnail: string) {
+export function insertMediaInfo(path: string, title: string, length: number, position: number, subLocation: string, thumbnail: string) {
     db.execSQL("insert into Medias (PATH, TITLE , LENGTH , POSITION , SUBLOCATION, THUMBNAIL) values (?,?,?,?,?,?)",
         [path, title, length, position, subLocation,thumbnail],
         function (err, id) {
@@ -51,7 +51,7 @@ function insertMediaInfo(path: string, title: string, length: number, position: 
         })
 }
 
-function updatePosition(path:string , position:number){
+export function updatePosition(path:string , position:number){
    let command = ` UPDATE Medias 
                    SET position = ?
                    WHERE PATH = ?;`;
@@ -63,7 +63,7 @@ function updatePosition(path:string , position:number){
    })                
 }
 
-function updateSubLocation(path:string ,subLocation:string){
+export function updateSubLocation(path:string ,subLocation:string){
 
    let command = ` UPDATE Medias 
                    SET  SUBLOCATION = ?
@@ -76,21 +76,10 @@ function updateSubLocation(path:string ,subLocation:string){
    })                
 }
 
-function deleteRow(path:string, callback){
+export function deleteRow(path:string, callback){
     console.log('deleteRow');
     let command = `DELETE FROM MEDIAS 
                     WHERE PATH = ? ;`;
 
     db.execSQL(command,[path],callback);
-}
-
-module.exports = {
-    'initDataBase':initDataBase,
-    'createTable':createTable,
-    'getMediaInfo':getMediaInfo,
-    'insertMediaInfo':insertMediaInfo,
-    'updatePosition':updatePosition,
-    'updateSubLocation':updateSubLocation,
-    'isDatabaseReady':isDatabaseReady,
-    'deleteRow':deleteRow
 }
