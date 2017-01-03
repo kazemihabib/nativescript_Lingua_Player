@@ -5,6 +5,7 @@ import {AccelerationSelector} from "../../dialogs/acceleration_selector/accelera
 import {AudioSelector} from "../../dialogs/audio_selector/audio_selector";
 import {ResumeConfirm} from "../../dialogs/resume_confirm/resume_confirm";
 import { chroma, HW, VLCSettings } from "../../components/VLCSettings";
+import {DictionaryDialog} from "../../dialogs/dictionary_dialog/dictionary_dialog";
 import {
     FlexboxLayout,
     FlexDirection,
@@ -335,8 +336,21 @@ export class playerPage implements OnInit{
       });
     }
 
-    public subTapped(item:{'text': '','isWord':false,'isNotWord':false,'isLine':false}){
-      console.log(item.text);
+    public showDictionary(item:{'text': '','isWord':false,'isNotWord':false,'isLine':false}){
+
+		let isPlaying = this.vlcAction.isPlaying();
+		this.vlcAction.pause();
+
+		let options: ModalDialogOptions = {
+			context: { item: item },
+			viewContainerRef: this.viewContainerRef
+		};
+
+		this.modalService.showModal(DictionaryDialog, options).then((audioTrackId: number) => {
+			if (isPlaying)
+				this.vlcAction.play();
+		})
+
     }
 
     public guestureEventCallbacks : IGuestureEventCallbacks =  {

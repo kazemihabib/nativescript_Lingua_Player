@@ -13,7 +13,7 @@ import {FilePicker} from "./dialogs/file_picker/file_picker_dialog";
 import {AccelerationSelector} from "./dialogs/acceleration_selector/acceleration_selector";
 import {AudioSelector} from "./dialogs/audio_selector/audio_selector";
 import {ResumeConfirm} from "./dialogs/resume_confirm/resume_confirm";
-
+import {DictionaryDialog} from "./dialogs/dictionary_dialog/dictionary_dialog";
 
 import { TNSFontIconModule} from 'nativescript-ng2-fonticon';
 @NgModule({
@@ -36,10 +36,11 @@ import { TNSFontIconModule} from 'nativescript-ng2-fonticon';
         FilePicker,
         AccelerationSelector,
         AudioSelector,
-        ResumeConfirm
+        ResumeConfirm,
+        DictionaryDialog
 
     ],
-    entryComponents: [FilePicker,AccelerationSelector,AudioSelector,ResumeConfirm],
+    entryComponents: [FilePicker,AccelerationSelector,AudioSelector,ResumeConfirm,DictionaryDialog],
     bootstrap: [
         AppComponent
     ]
