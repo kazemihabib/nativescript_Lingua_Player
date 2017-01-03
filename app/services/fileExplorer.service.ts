@@ -121,7 +121,7 @@ export class FileExplorer {
 
 
                 let generate_thumbnail = (inx) => {
-                    if (inx == file_paths.length) return;
+                    if (inx == file_paths.length) return subscriber.complete();
                     let path = file_paths[inx];
 
                     database.getMediaInfo(path, (err, row) => {

@@ -1,0 +1,32 @@
+RadListView{
+    background-color:#eff0f2
+}
+
+#thumb-container{
+    margin:10;
+    background-color:#ffffff
+}
+
+#thumb-image-container{
+    background-color:black;
+}
+
+#thumb-image{
+    width:160;
+    height:110;
+    stretch:aspectFill;
+}
+
+#thumb-title{
+    margin-left:10;
+    horizontal-alignment:left;
+}
+
+#video-info{
+    orientation:horizontal;
+    margin-left:10;
+}
+
+#video-length{
+    vertical-alignment:center;
+}

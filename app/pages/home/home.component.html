@@ -1,22 +1,22 @@
-<StackLayout (unloaded)="unLoaded()">
+<StackLayout >
     <ActionBar title="myPlayer" class="header" [style.marginTop]="statusBarHeight"></ActionBar>
 
     <GridLayout>
-        <RadListView [items]="paths" selectionBehavior="Press" (itemSelected)="onItemTap($event)" backgroundColor='#eff0f2' (loaded)="loaded()" >
-            <template tkListItemTemplate let-item="item" let-i="index" let-odd="odd" let-even="even">
-                <StackLayout margin="10" [class.odd]="odd" [class.even]="even" backgroundColor='#ffffff'>
-                    <StackLayout backgroundColor='black'>
-                        <Image [src] ="item.THUMBNAIL ? item.THUMBNAIL : 'res://logo'" width="160" height="110" stretch="aspectFill" ></Image> 
+        <RadListView [items]="paths" selectionBehavior="Press" (itemSelected)="onItemTap($event)"  (loaded)="loaded()" >
+            <template tkListItemTemplate let-item="item">
+                <StackLayout id="thumb-container" >
+                    <StackLayout id="thumb-image-container" >
+                        <Image  id="thumb-image" [src] ="item.THUMBNAIL ? item.THUMBNAIL : 'res://logo'"  ></Image> 
                     </StackLayout>
-                    <label marginLeft="10" horizontalAlignment="left" [text]="item.TITLE"></label>
+                    <label id="thumb-title" [text]="item.TITLE"></label>
 
-                    <StackLayout orientation="horizontal" marginLeft="10">
+                    <StackLayout id="video-info">
                         <!--<label verticalAlignment = "center" [text]="'srt'"></label>-->
-                        <label verticalAlignment="center" [text]="item.LENGTH | DurationPipe"></label>
+                        <label id="video-length" [text]="item.LENGTH | DurationPipe"></label>
                     </StackLayout>
                 </StackLayout>
             </template>
-            <ListViewGridLayout tkListViewLayout scrollDirection="Vertical" itemHeight="20" spanCount="4"></ListViewGridLayout>
+            <ListViewGridLayout tkListViewLayout scrollDirection="Vertical" spanCount="4"></ListViewGridLayout>
         </RadListView>
     </GridLayout>
 
