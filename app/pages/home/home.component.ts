@@ -13,6 +13,8 @@ import fs = require("file-system");
 import { FileExplorer } from "../../services/fileExplorer.service";
 import { Brightness } from '../../utils/brightness';
 
+import { VideoInfo } from "../../models/videoInfo.model";
+
 var database = require('../../utils/media.database');
 
 @Component({
@@ -26,9 +28,9 @@ export class HomeComponent implements OnInit {
 
     private statusBarHeight = 0;
 
-    private paths: ObservableArray<string>;
+    private paths: ObservableArray<VideoInfo>;
 
-    private source: RxObservable<string[]>;
+    private source: RxObservable<VideoInfo[]>;
 
 
     constructor(private _router: Router, private fileExplorer: FileExplorer, private _ngZone: NgZone) { }

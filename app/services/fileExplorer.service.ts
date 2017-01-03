@@ -9,7 +9,7 @@ import timer = require("timer");
 import imageSource = require("image-source");
 import database = require('../utils/media.database');
 
-import {VideoInfo} from "../models/videoInfo.model";
+import { VideoInfo } from "../models/videoInfo.model";
 
 declare var android: any;
 declare var org: any;
@@ -75,16 +75,62 @@ export class FileExplorer {
         //database
     }
 
+    private videoInformations: VideoInfo[] = [];
+    private subscriber: any;
+
+
+    private setDetailsOfVideoInformations(mediaRow: any, index: number) {
+        let videoInfo = this.videoInformations[index];
+
+        videoInfo.position = mediaRow.POSITION;
+        videoInfo.length = mediaRow.LENGTH;
+        videoInfo.subLocation = mediaRow.SUBLOCATION;
+        videoInfo.thumbnail = mediaRow.THUMBNAIL;
+
+    }
+
+
+    private getVideoInfo(inx) {
+        let that = this;
+
+        if (inx == this.videoInformations.length) {
+            this.worker.terminate();
+            return this.subscriber.complete();
+        }
+        let path = this.videoInformations[inx].path;
+
+        database.getMediaInfo(path, (err, row) => {
+            if (err) {
+                console.log(err);
+            }
+            if (row) {
+
+                this.setDetailsOfVideoInformations(row, inx);
+                timer.setTimeout(function () { that.getVideoInfo(inx + 1) }, 0);
+
+            }
+            else {
+                this.worker.postMessage(path);
+
+                this.worker.onmessage = (msg) => {
+                    let mediaInfo = msg.data;
+                    this.setDetailsOfVideoInformations(mediaInfo, inx);
+                    timer.setTimeout(function () { that.getVideoInfo(inx + 1) }, 0);
+                }
+            }
+        });
+
+    }
+
 
 
     public explore() {
 
-        let paths : VideoInfo[] = [];
         let MediaStore = android.provider.MediaStore;
         let Uri = android.net.Uri;
         let Cursor = android.content.Context;
 
-        let notExistVideos :string[] = []
+        let notExistVideos: string[] = []
 
         let uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
         let projection = [MediaStore.Video.VideoColumns.DATA];
@@ -94,83 +140,34 @@ export class FileExplorer {
             database.initDataBase();
         }
 
+
         return RxObservable.create(subscriber => {
+            this.subscriber = subscriber;
             this.worker = new Worker('../workers/setMediaInfo.worker');
 
-            let file_paths: VideoInfo[] = [];
             if (c != null) {
                 let temp;
                 while (temp = c.moveToNext()) {
                     let path: string = c.getString(0); // give path
                     let exists = fs.File.exists(path);
-                    if(exists)
-                        file_paths.push(new VideoInfo(path));
-                    else
-                        notExistVideos.push(path)
+                    if (exists) this.videoInformations.push(new VideoInfo(path));
+                    else notExistVideos.push(path)
                 }
                 c.close();
-                subscriber.next(file_paths);
+                subscriber.next(this.videoInformations);
             }
-            
-            if(notExistVideos.length){
+
+            if (notExistVideos.length) {
                 notExistVideos.forEach((path) => {
                     database.deleteRow(path, (err, id) => {
-                        if (err)
-                            console.log(err);
-                        if (id)
-                            console.log(id);
+                        if (err) console.log(err);
+                        if (id) console.log(id);
                     })
-
                 })
-
             }
 
-            if (file_paths.length) {
-
-
-
-                let addToListView = (mediaRow:any , index:number) => {
-                        let videoInfo = file_paths[index];
-
-                        videoInfo.position = mediaRow.POSITION;
-                        videoInfo.length = mediaRow.LENGTH;
-                        videoInfo.subLocation = mediaRow.SUBLOCATION;
-                        videoInfo.thumbnail = mediaRow.THUMBNAIL;
-
-                }
-
-
-                let generate_thumbnail = (inx) => {
-                    if (inx == file_paths.length){
-                        this.worker.terminate();
-                        return subscriber.complete();
-                    }
-                    let path = file_paths[inx].path;
-
-
-                    database.getMediaInfo(path, (err, row) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                        if (row) {
-                            
-                            addToListView(row,inx);
-                            timer.setTimeout(function () { generate_thumbnail(inx + 1) }, 0);
-
-                        }
-                        else {
-                            this.worker.postMessage(path);
-
-                            this.worker.onmessage = (msg) => {
-                                let mediaInfo = msg.data;
-                                addToListView(mediaInfo,inx);
-                                timer.setTimeout(function () { generate_thumbnail(inx + 1) }, 0);
-                            }
-                        }
-                    });
-
-                }
-                generate_thumbnail(0);
+            if (this.videoInformations.length) {
+                this.getVideoInfo(0);
             }
 
         });
