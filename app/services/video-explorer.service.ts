@@ -15,7 +15,7 @@ declare var android: any;
 declare var org: any;
 
 
-export class FileExplorer {
+export class VideoExplorer{
 
     private worker;
     //defaults

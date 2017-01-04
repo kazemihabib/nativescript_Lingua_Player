@@ -10,7 +10,7 @@ import dialogs = require("ui/dialogs");
 import frame = require("ui/frame");
 import fs = require("file-system");
 
-import { FileExplorer } from "../../services/fileExplorer.service";
+import { VideoExplorer } from "../../services/video-explorer.service";
 import { Brightness } from '../../utils/brightness';
 
 import { VideoInfo } from "../../models/videoInfo.model";
@@ -21,7 +21,7 @@ var database = require('../../utils/media.database');
     selector: "home",
     templateUrl: "pages/home/home.component.html",
     styleUrls: ["pages/home/home.component.css"],
-    providers: [FileExplorer],
+    providers: [VideoExplorer],
 })
 
 export class HomeComponent implements OnInit {
@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
     private source: RxObservable<VideoInfo[]>;
 
 
-    constructor(private _router: Router, private fileExplorer: FileExplorer, private _ngZone: NgZone) { }
+    constructor(private _router: Router, private videoExplorer: VideoExplorer, private _ngZone: NgZone) { }
 
     public play(path: string, position: number) {
         this._router.navigate(["/player", { path: path, position: position }]);
@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
         // this.statusBarHeight = this.getStatusBarHeight();
         VLCSettings.hardwareAcceleration = HW.HW_ACCELERATION_FULL;
         VLCSettings.networkCachingValue = 3000;
-        this.source = this.fileExplorer.explore();
+        this.source = this.videoExplorer.explore();
         let subscription = this.source.subscribe(
             (paths) => {
                 this._ngZone.run(() => {
@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit {
             },
 
             (error)=>{
-                console.log('error in fileExplorer subscribe');
+                console.log('error in videoExplorer subscribe');
             },
 
             ()=>{
