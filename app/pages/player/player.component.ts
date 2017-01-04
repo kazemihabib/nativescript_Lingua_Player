@@ -22,15 +22,16 @@ import {ActivatedRoute} from "@angular/router";
 import appSettings = require("application-settings");
 import {registerElement} from "nativescript-angular/element-registry";
 import { RouterExtensions } from "nativescript-angular/router";
-let frame = require("ui/frame");
+import frame = require("ui/frame");
 import {Subtitle} from "../../services/subtitle.service";
 import {IGuestureEventCallbacks} from "./guesture.interface"; 
 import dialogs = require("ui/dialogs");
-var database = require('../../utils/media.database');
+import database = require('../../utils/media.database');
 import fs = require("file-system");
 
-registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown);
+// registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown);
 registerElement("TNSSlider", () => require("nativescript-slider").Slider);
+
 import  timer = require("timer")
 
 import {Guestures} from './guestures'
@@ -42,6 +43,7 @@ declare var com:any;
 @Component({
     selector: "player",
     templateUrl: "pages/player/player.component.html",
+    styleUrls: ["pages/player/player.component.css"],
     providers:[Subtitle]
 })
 

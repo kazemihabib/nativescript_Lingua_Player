@@ -1,7 +1,7 @@
-<GridLayout rows="*,auto" columns="*" [style.backgroundColor]="'black'" >
-   <ActionBar row="0" rowSpan="2" [title]="videoTitle" class="header" [style.marginTop]="statusBarHeight" ></ActionBar> 
+<GridLayout id="root" rows="*,auto" columns="*">
+   <ActionBar row="0" rowSpan="2" [title]="videoTitle" class="header"></ActionBar> 
    <GridLayout  row="0" rowSpan="2">
-    <vlc #vlcElement   horizontalAlignment="center" verticalAlignment="center" (loaded)="loaded()" (unloaded)="unLoaded()"
+    <vlc #vlcElement   (loaded)="loaded()" (unloaded)="unLoaded()"
           [videoPath] = "path" [lastPosition]="position"
           [aspectRatio]="currentAspectRatio" [audioTrack]="currentAudioTrack"
           (loaded)="onLoaded(vlcElement)"
@@ -15,77 +15,71 @@
           (tap)="status()"
      >
      </vlc>
+
    </GridLayout>
-<StackLayout orientation="vertical" verticalAlignment="center" horizontalAlignment="center" [visibility]=" guestureHandler.seekUiVisibile ? 'visible' : 'collapse'">
-  <Label *ngIf="(currentPosition +  guestureHandler.deltaSeek) <= movieLength && (currentPosition +  guestureHandler.deltaSeek) >=0"
-    [text]="(currentPosition +  guestureHandler.deltaSeek) | DurationPipe " fontSize="40" color="white" width="100" textAlignment="center"></Label>
-  <Label *ngIf="currentPosition +  guestureHandler.deltaSeek < 0" [text]="0 | DurationPipe " fontSize="40" color="white" width="100"
-    textAlignment="center"></Label>
-  <Label *ngIf="currentPosition +  guestureHandler.deltaSeek > movieLength" [text]="movieLength | DurationPipe " fontSize="40"
-    color="white" width="100" textAlignment="center"></Label>
-  <Label *ngIf=" guestureHandler.deltaSeek >= 0" [text]="'[ ' + '+'+ ( guestureHandler.deltaSeek | DurationPipe )+' ]'" fontSize="40"
-    color="white" widht="70"></Label>
-  <Label *ngIf=" guestureHandler.deltaSeek < 0" [text]="'[ ' + ( guestureHandler.deltaSeek | DurationPipe )+' ]'" fontSize="40"
-    color="white" widht="70"></Label>
+<StackLayout id="seek-text-container" [visibility]=" guestureHandler.seekUiVisibile ? 'visible' : 'collapse'">
+  <Label class="seek-text" *ngIf="(currentPosition +  guestureHandler.deltaSeek) <= movieLength && (currentPosition +  guestureHandler.deltaSeek) >=0"
+    [text]="(currentPosition +  guestureHandler.deltaSeek) | DurationPipe " ></Label>
+  <Label class="seek-text" *ngIf="currentPosition +  guestureHandler.deltaSeek < 0" [text]="0 | DurationPipe " ></Label>
+  <Label class="seek-text" *ngIf="currentPosition +  guestureHandler.deltaSeek > movieLength" [text]="movieLength | DurationPipe " ></Label>
+  <Label class="seek-text" *ngIf=" guestureHandler.deltaSeek >= 0" [text]="'[ ' + '+'+ ( guestureHandler.deltaSeek | DurationPipe )+' ]'" ></Label>
+  <Label class="seek-text" *ngIf=" guestureHandler.deltaSeek < 0" [text]="'[ ' + ( guestureHandler.deltaSeek | DurationPipe )+' ]'" ></Label>
 </StackLayout>
 
 
-<FlexBoxLayout row="0" [flexDirection]="'row'" justifyContent="space-between" width="90%" verticalAlignment= "center">
+<FlexBoxLayout row="0" id="bright-volume-flexbox">
   <StackLayout orientation="vertical" [opacity]="guestureHandler.brightnessChartVisible ? 1 : 0 " >
-    <GridLayout rows="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*" height="150" borderColor="white" borderWidth="2" backgroundColor="black"
-      width="20" opacity="0.6">
-      <Label *ngIf ="guestureHandler.currentBrightness" [row]="15 - guestureHandler.currentBrightness" [rowSpan]=" guestureHandler.currentBrightness == 0 ? 1 : guestureHandler.currentBrightness" width="22" backgroundColor="yellow"></Label>
+    <GridLayout rows="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*" id="bar-chart">
+      <Label id="bright-chart-core" *ngIf ="guestureHandler.currentBrightness" [row]="15 - guestureHandler.currentBrightness" [rowSpan]=" guestureHandler.currentBrightness == 0 ? 1 : guestureHandler.currentBrightness" ></Label>
     </GridLayout>
-
-  <Label class="mdi" fontSize="20" [text]="'mdi-brightness-high' | fonticon" color="white"  marginTop="7"> </Label>
+    <Label id="bright-chart-icon" class="mdi"  [text]="'mdi-brightness-high' | fonticon"  > </Label>
   </StackLayout>
 
   <StackLayout orientation="vertical" [opacity]="guestureHandler.volumeChartVisible ? 1 : 0" verticalAlignment= "center">
-    <GridLayout rows="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*," height="150" borderColor="white" borderWidth="2" backgroundColor="black"
-      width="20" opacity="0.6">
-      <Label *ngIf="guestureHandler.currentVolume" [row]="15 - guestureHandler.currentVolume" [rowSpan]=" guestureHandler.currentVolume == 0 ? 1 : guestureHandler.currentVolume" width="22" backgroundColor="blue"></Label>
+    <GridLayout rows="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*," id="bar-chart">
+      <Label id="vol-chart-core" *ngIf="guestureHandler.currentVolume" [row]="15 - guestureHandler.currentVolume" [rowSpan]=" guestureHandler.currentVolume == 0 ? 1 : guestureHandler.currentVolume" ></Label>
     </GridLayout>
-    <Label  class="mdi" fontSize="22" [text]="'mdi-volume-up' | fonticon" color="white"  marginTop="7"> </Label>
+    <Label  id="vol-chart-icon" class="mdi"  [text]="'mdi-volume-up' | fonticon" > </Label>
   </StackLayout>
 </FlexBoxLayout>
   
   <GridLayout  #guestures row="0" rowSpan="3" columns = "*,*" (loaded)="guestueresAreLoaded(guestures)">
-    <Label  #myLabel1  row="0" col="0"   rowSpan="3" (loaded)="label1Loaded(myLabel1)" horizontalAlignment= "stretch" (tap)="toggleScreen()" ></Label>
-    <Label  #myLabel2 row="0" rowSpan="3" col="1"  horizontalAlignment= "stretch" (loaded)="label2Loaded(myLabel2)" (tap)="toggleScreen()" ></Label>
+    <Label  #leftGuestures   row="0"  col="0"   rowSpan="3" (loaded)="label1Loaded(leftGuestures )" horizontalAlignment= "stretch" (tap)="toggleScreen()" ></Label>
+    <Label  #rightGuestures  row="0"  col="1"   rowSpan="3" (loaded)="label2Loaded(rightGuestures)" horizontalAlignment= "stretch" (tap)="toggleScreen()" ></Label>
   </GridLayout >
 
   <!--To disable guestures when locked -->
   <GridLayout *ngIf="isLocked" (tap)="toggleScreen()" row="0" rowSpan="3"> </GridLayout>
   
   
-  <Button row="0" class="mdi font-icon" [text]="'mdi-lock' | fonticon" (tap)="unLockScreen()" horizontalAlignment="left" verticalAlignment="top" [visibility] =" lockIconVisible ? 'visible' : 'collapse'"></Button>
+  <Button id="unlock-button" row="0" class="mdi font-icon" [text]="'mdi-lock' | fonticon" (tap)="unLockScreen()" [visibility] =" lockIconVisible ? 'visible' : 'collapse'"></Button>
   <StackLayout row="1" >
   <!--Subtitle -->
   <!--change marginBottom to handle position of subtitle in screen-->
-    <FlexBoxLayout [flexDirection]="isRTL ? 'row-reverse': 'row'" justifyContent="center" marginBottom="5" flexWrap="wrap" [visibility] ="isSubEmpty ? 'collapse': 'visible' " >
+    <FlexBoxLayout id="subtitle-flex" [flexDirection]="isRTL ? 'row-reverse': 'row'"  [visibility] ="isSubEmpty ? 'collapse': 'visible' " >
       <div  *ngFor="let item of subText" >
-        <Label *ngIf="item.isWord"  [text]="item.text" style="color:white;font-size:30" marginLeft="5" (tap)="showDictionary(item)"> </Label>
-        <Label *ngIf="item.isNotWord" [text]="item.text" style="color:white;font-size:30" marginLeft="5"></Label>
-        <Label *ngIf="item.isLine" flexWrapBefore="true" [text]="''" style="color:white;font-size:30" marginLeft="5"></Label>
+        <Label *ngIf="item.isWord"  [text]="item.text"  (tap)="showDictionary(item)"> </Label>
+        <Label *ngIf="item.isNotWord" [text]="item.text" ></Label>
+        <Label *ngIf="item.isLine" flexWrapBefore="true" [text]="''" ></Label>
       </div>
     </FlexBoxLayout>
   <!--Subtitle -->
 
   <!--PlayerController-->
-    <GridLayout rows="auto,auto"  backgroundColor="black" opacity=".8" [visibility] ="visible ? 'visible' : 'collapse' " >
+    <GridLayout id="player-controller-container" rows="auto,auto"  [visibility] ="visible ? 'visible' : 'collapse' " >
 
-      <FlexBoxLayout row="0" flexDirection="row" justifyContent="space-between">
-        <Label [text]="currentPosition  | DurationPipe " style="color:white;margin:7" width="40" ></Label>
+      <FlexBoxLayout id="player-controller-slider" row="0" >
+        <Label id="current-position" [text]="currentPosition  | DurationPipe " ></Label>
         <TNSSlider flexGrow="1" [value]="currentPosition + guestureHandler.deltaSeek " [maxValue]="movieLength" (dragged)="fromUser($event)" ></TNSSlider>
-        <Label [text]="currentPosition - movieLength | DurationPipe " style="color:white;margin:7" width="60"></Label>
+        <Label id="remaining-time" [text]="currentPosition - movieLength | DurationPipe" ></Label>
       </FlexBoxLayout>
 
-      <FlexBoxLayout row="1" flexDirection="row" justifyContent="center" opacity="1" marginBottom="10" (tap)="tapPlayerController" >
+      <FlexBoxLayout id="player-controller-buttons" row="1" (tap)="tapPlayerController" >
         <Label  flexGrow="3"></Label>
         <Button class="mdi font-icon"  [text]="'mdi-lock' | fonticon" (tap)="lockScreen()"></Button>
         <Button #tracksBtn class="mdi font-icon" [text]="'mdi-subtitles' | fonticon" (loaded)="tracksBtnLoaded(tracksBtn)"></Button>
         <!--I can not use fontIcon pipe here because of ternary \ue034 is pause icon and \ue037 is play arrow icon-->
-        <Button class="mdi font-icon" [text]="isPlaying ? '\ue034' : '\ue037'" (tap)="isPlaying ? vlcAction.pause() : vlcAction.play()" ></Button>
+        <Button class="mdi font-icon" [text]="isPlaying ? ('mdi-pause' | fonticon) : ('mdi-play-arrow' | fonticon) " (tap)="isPlaying ? vlcAction.pause() : vlcAction.play()" ></Button>
         <Button #moreBtn class="mdi font-icon" [text]="'mdi-more-horiz' | fonticon" (loaded)="moreButtonLoaded(moreBtn)"></Button>
         <Button class="mdi font-icon" [text]="'mdi-aspect-ratio' | fonticon" (tap)="changeAspectRatio()" ></Button>
         <!--<Button text="SUB" (tap)="addSub()" ></Button>-->

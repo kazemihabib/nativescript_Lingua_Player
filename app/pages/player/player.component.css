@@ -1,0 +1,127 @@
+#root{
+    background-color:black
+}
+
+ActionBar{
+    margin-top : statusBarHeight
+}
+
+vlc {
+    horizontal-alignment:center;
+    vertical-alignment:center;
+}
+
+#seek-text-container{
+    orientation:vertical;
+    vertical-align:center;
+    horizontal-align:center;
+
+}
+
+.seek-text{
+    font-size:40;
+    color:white;
+    width:200;
+    text-align:center;
+
+}
+
+
+#bright-volume-flexbox{
+    flex-direction:row;
+    justify-content:space-between;
+    width:90%;
+    vertical-align:center;
+}
+
+#bar-chart{
+    height:150;
+    border-color:white;
+    border-width:2;
+    background-color:black;
+    width:20;
+    opacity:0.6;
+}
+
+#bright-chart-core{
+    width:22;
+    background-color:yellow;
+}
+
+#vol-chart-core{
+    width:22; 
+    background-color:blue;
+}
+
+
+#vol-chart-icon{
+    color:white;
+    margin-top:7;
+    font-size:22;
+
+}
+
+#bright-chart-icon{
+    color:white;
+    font-size:20;
+    margin-top:7;
+}
+
+#unlock-button{
+    horizontal-align:left;
+    vertical-align:top;
+}
+
+#subtitle-flex{
+    justify-content:center;
+    margin-bottom:5;
+    flex-wrap:wrap;
+}
+
+
+#subtitle-flex Label{
+  color:white;
+  font-size:30;
+  margin-left:5
+}
+
+#player-controller-container{
+    background-color:black;
+    opacity:.8;
+}
+
+#player-controller-slider{
+    flex-direction:row;
+    justify-content:space-between;
+}
+
+#current-position{
+    color:white;
+    margin:7;
+    width:40;
+}
+
+#remaining-time{
+    color:white;
+    margin:7;
+    width:60;
+}
+
+#player-controller-buttons{
+    flex-direction:row;
+    justify-content:center;
+    opacity:1;
+    margin-bottom:10;
+}
+
+
+.font-icon{
+    background-color:transparent;
+    color:white;
+    font-size:40;
+    flex-grow: 1;
+}
+
+.font-icon:highlighted {
+    background-color: blue;
+}

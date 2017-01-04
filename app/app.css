@@ -4,17 +4,6 @@
 }
 
 
-.font-icon{
-    background-color:transparent;
-    color:white;
-    font-size:40;
-    flex-grow: 1;
-}
-
-.font-icon:highlighted {
-    background-color: blue;
-}
-
 .header{
     background-color:#283593;
     height:60;
