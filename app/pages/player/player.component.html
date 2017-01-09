@@ -1,10 +1,9 @@
 <GridLayout id="root" rows="*,auto" columns="*">
    <ActionBar row="0" rowSpan="2" [title]="videoTitle" class="header"></ActionBar> 
    <GridLayout  row="0" rowSpan="2">
-    <vlc #vlcElement   (loaded)="loaded()" (unloaded)="unLoaded()"
+    <vlc #vlcElement (loaded)="VLCLoaded(vlcElement)"
           [videoPath] = "path" [lastPosition]="position"
           [aspectRatio]="currentAspectRatio" [audioTrack]="currentAudioTrack"
-          (loaded)="onLoaded(vlcElement)"
           (eventHardwareAccelerationError)="eventHardwareAccelerationError()"
           (eventPlaying) = "eventPlaying()"
           (eventParsedChanged) = "eventParsedChanged()"
