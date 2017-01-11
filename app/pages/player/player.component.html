@@ -2,7 +2,7 @@
    <ActionBar row="0" rowSpan="2" [title]="videoTitle" class="header"></ActionBar> 
    <GridLayout  row="0" rowSpan="2">
     <vlc #vlcElement (loaded)="VLCLoaded(vlcElement)"
-          [videoPath] = "path" [lastPosition]="position"
+          [videoPath] = "videoPath" [lastPosition]="position"
           [aspectRatio]="currentAspectRatio" [audioTrack]="currentAudioTrack"
           (eventHardwareAccelerationError)="eventHardwareAccelerationError()"
           (eventPlaying) = "eventPlaying()"
@@ -10,7 +10,8 @@
           (eventTimeChanged) = "eventTimeChanged()"
           (eventEndReached) ="eventEndReached()"
           (eventPausd) = "eventPausd()",
-          (eventStopped) = "eventStopped()"
+          (eventStopped) = "eventStopped()",
+          (eventNativeCrashError)="eventNativeCrashError()",
           (tap)="status()"
      >
      </vlc>

@@ -53,7 +53,7 @@ export class playerPage implements OnInit {
 	public vlc;
 	public vlcAction;
 	private pathSubscription: any;
-	public moviePath: string;
+	public videoPath: string;
 	//the position of movie that gotten from db and will use this property to save in db too.( positionInDb = lastpostion and save in db)
 	public positionInDb: number = 0;
 	public currentAspectRatio = 0;
@@ -65,7 +65,7 @@ export class playerPage implements OnInit {
 
 	public isRTL: boolean = false;
 
-	private dialogIsOpen: boolean;
+	private resumeDialogIsOpen: boolean;
 	public subWordListDownloader = (wordList) => {
 		this._ngZone.run(() => {
 			this.subText = wordList;
@@ -79,7 +79,13 @@ export class playerPage implements OnInit {
 	private isPlaying: boolean = false;
 
 	private videoTitle: string = "";
-	private eventHardwareAccelerationError = function () {
+
+
+	private eventNativeCrashError (){
+		console.log("event: eventNativeCrashError");
+	}
+
+	private eventHardwareAccelerationError (){
 		console.log("event: eventHardwareAccelerationError");
 	}
 	private eventEndReached() {
@@ -89,10 +95,10 @@ export class playerPage implements OnInit {
 		this.clearUI();
 		this.routerExtensions.back();
 	}
-	private eventPlaying = function () {
+	private eventPlaying () {
 		this.isPlaying = true;
 	}
-	private eventStopped() {
+	private eventStopped () {
 		this.isPlaying = false;
 	}
 
@@ -155,7 +161,7 @@ export class playerPage implements OnInit {
 
 	private VLCLoaded(vlc) {
 
-		this.videoTitle = fs.File.fromPath(this.moviePath.replace('file://', '')).name;
+		this.videoTitle = fs.File.fromPath(this.videoPath.replace('file://', '')).name;
 
 		let play = () => {
 			timer.setTimeout(() => {
@@ -167,7 +173,7 @@ export class playerPage implements OnInit {
 		this.vlcAction = this.vlc.getVLCAction();
 		this.vlcAction.seek(this.positionInDb - 5000);
 		if (this.positionInDb == 0) {
-			this.dialogIsOpen = false;
+			this.resumeDialogIsOpen = false;
 			play();
 		}
 
@@ -178,11 +184,11 @@ export class playerPage implements OnInit {
 			};
 
 
-			if (!this.dialogIsOpen) {
+			if (!this.resumeDialogIsOpen) {
 				//prevent to reopen dialog if the user press home and back again to app.
-				this.dialogIsOpen = true;
+				this.resumeDialogIsOpen = true;
 				this.modalService.showModal(ResumeConfirm, options).then((resumeIt: boolean) => {
-					this.dialogIsOpen = false;
+					this.resumeDialogIsOpen = false;
 					if (resumeIt == undefined)
 						this.routerExtensions.back();
 					else if (resumeIt == true)
@@ -207,7 +213,7 @@ export class playerPage implements OnInit {
 	ngOnInit() {
 		//  this.statusBarHeight= this.getStatusBarHeight(); 
 		this.pathSubscription = this.route.params.subscribe(params => {
-			this.moviePath = params['path'];
+			this.videoPath = params['path'];
 			this.positionInDb = parseInt(params['position']);
 		});
 
@@ -251,7 +257,6 @@ export class playerPage implements OnInit {
 		}
 		return result;
 	}
-	// private barsAreShowing: boolean = true;
 	private isLocked: boolean = false;
 	private lockIconVisible: boolean = false;
 
@@ -268,7 +273,6 @@ export class playerPage implements OnInit {
 	}
 
 	private showBars() {
-		// this.barsAreShowing = true;
 		frame.topmost().android.activity.getWindow().getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_VISIBLE);
 		let page = frame.topmost().currentPage;
 		page.actionBarHidden = false;
@@ -303,7 +307,7 @@ export class playerPage implements OnInit {
 	}
 
 	private save() {
-		database.updatePosition(this.moviePath.replace('file://', ''), this.positionInDb);
+		database.updatePosition(this.videoPath.replace('file://', ''), this.positionInDb);
 	}
 
 	private changeAspectRatio() {
@@ -402,7 +406,7 @@ export class playerPage implements OnInit {
 					let isPlaying = this.vlcAction.isPlaying();
 					this.vlcAction.pause();
 
-					let startObject = fs.File.fromPath(this.moviePath.replace('file://', ''));
+					let startObject = fs.File.fromPath(this.videoPath.replace('file://', ''));
 					let startPath;
 					try {
 						startPath = startObject.parent.path;
@@ -464,6 +468,7 @@ export class playerPage implements OnInit {
 		this.modalService.showModal(AccelerationSelector, options).then((hw: number) => {
 			if (hw != undefined) {
 				// this.lockScreen();
+				//vlc.component saves the last position before stopPlayback and when plays again in parsed event seeks the player. 
 				this.vlc.stopPlayback();
 				VLCSettings.hardwareAcceleration = hw;
 				this.vlcAction.play();
