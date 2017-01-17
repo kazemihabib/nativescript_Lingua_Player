@@ -12,7 +12,7 @@ export class Subtitle{
     private encoding:string; 
 
     private worker:any;
-    public subWordListDownloader:Function;
+    // public subWordListDownloader:Function;
     private myPostMessage(method:ISubWorker.functions,path:string,encoding:string,time:number){
 
         let data:ISubWorker.ISubWorkerRequest;
@@ -67,8 +67,8 @@ export class Subtitle{
         return obj.wordList;
     } 
 
-    public addSubWordListDownloader(downloader:Function){
-       this.subWordListDownloader = downloader;                
-    }
+    // public addSubWordListDownloader(downloader:Function){
+    //    this.subWordListDownloader = downloader;                
+    // }
 
 }

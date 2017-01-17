@@ -66,11 +66,11 @@ export class playerPage implements OnInit {
 	public isRTL: boolean = false;
 
 	private resumeDialogIsOpen: boolean;
-	public subWordListDownloader = (wordList) => {
-		this._ngZone.run(() => {
-			this.subText = wordList;
-		});
-	}
+	// public subWordListDownloader = (wordList) => {
+	// 	this._ngZone.run(() => {
+	// 		this.subText = wordList;
+	// 	});
+	// }
 
 	public subText = [{ 'text': '', 'isWord': false }];
 	currentPosition = 0;
@@ -202,7 +202,7 @@ export class playerPage implements OnInit {
 			}
 		}
 
-		this.subtitle.addSubWordListDownloader(this.subWordListDownloader);
+		// this.subtitle.addSubWordListDownloader(this.subWordListDownloader);
 	}
 	constructor(private modalService: ModalDialogService,
 		private viewContainerRef: ViewContainerRef, private route: ActivatedRoute, private _ngZone: NgZone, private subtitle: Subtitle, private routerExtensions: RouterExtensions) { }
