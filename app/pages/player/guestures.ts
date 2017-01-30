@@ -13,9 +13,10 @@ export class Guestures{
     public brightnessChartVisible = false;
     public seekUiVisibile = false;
 
+    //used in player.component.html dirctly
     public currentVolume;
-    //CHECK:is this necessary?
-    public currentBrightness = 1;
+    public currentBrightness;
+
     private max;
 
     public prevY:number = null;
