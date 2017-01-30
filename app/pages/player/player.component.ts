@@ -171,7 +171,8 @@ export class playerPage implements OnInit {
 
 		this.vlc = vlc;
 		this.vlcAction = this.vlc.getVLCAction();
-		this.vlcAction.seek(this.positionInDb - 5000);
+
+		this.positionInDb = this.positionInDb > 5000 ? this.positionInDb - 5000 : 0;	
 		if (this.positionInDb == 0) {
 			this.resumeDialogIsOpen = false;
 			play();

@@ -2,7 +2,7 @@
    <ActionBar row="0" rowSpan="2" [title]="videoTitle" class="header"></ActionBar> 
    <GridLayout  row="0" rowSpan="2">
     <vlc #vlcElement (loaded)="VLCLoaded(vlcElement)"
-          [videoPath] = "videoPath" [lastPosition]="position"
+          [videoPath] = "videoPath" [lastPosition]="positionInDb"
           [aspectRatio]="currentAspectRatio" [audioTrack]="currentAudioTrack"
           (eventHardwareAccelerationError)="eventHardwareAccelerationError()"
           (eventPlaying) = "eventPlaying()"
