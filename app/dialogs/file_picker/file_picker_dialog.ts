@@ -25,8 +25,18 @@ export class FilePicker {
     public listOfFilesAndFolders: fsData[] = [];
     public currentDirectory: string = '/sdcard';
     public startPath:string;
+    //extenstions priority is more than ignoreExtensions
+    //list of extensions we want to show
+
+    public extensions:[string];
+
+    //list of extensions we want to ignore
+    public ignoreExtensions:[string]
+
     constructor(private params: ModalDialogParams) {
          this.startPath = params.context.startPath;
+         this.extensions = params.context.extensions.map((value)=> value.toUpperCase());
+         this.ignoreExtensions = params.context.ignoreExtensions.map((value)=> value.toUpperCase());
     }
 
     private onItemTap(args) {
@@ -63,6 +73,7 @@ export class FilePicker {
     private refreshList(path: string) {
         this.currentDirectory = path;
         this.listOfFilesAndFolders = [];
+        //two lists for files and folders to show folders first then files
         let listOfFiles: fsData[] = [];
         let listOfFolders: fsData[] = [];
         let filesAndFolders = fs.Folder.fromPath(path);
@@ -72,20 +83,43 @@ export class FilePicker {
             if (!file.canRead() || file.isHidden())
                 return true;
 
-            let ent = new fsData();
+            
+            let ent;
+
+            if(file.isFile()){
+                let ext = entity.path.split('.').slice(-1)[0];
+                //If extensions property used
+                if(this.extensions.length > 0)
+                {
+                    //if not ext exist in extensions
+                    if(this.extensions.indexOf(ext.toUpperCase()) < 0)
+                        return true;
+                }
+
+                //If ignoreExtensions property used
+
+                else if(this.ignoreExtensions.length > 0)
+                {
+                    if(this.ignoreExtensions.indexOf(ext.toUpperCase()) >= 0)
+                    {
+                        return true;
+                    }
+                }
+
+                ent = new fsData();
+                ent.isFile = true;
+                listOfFiles.push(ent);
+            }
+            else{
+                ent = new fsData();
+                ent.isFile = false;
+                listOfFolders.push(ent);
+            }
 
             ent.name = entity.name;
             ent.path = entity.path;
             ent.isBackButton = false;
 
-            if (file.isDirectory()){
-                ent.isFile = false;
-                listOfFolders.push(ent);
-            }
-            else{
-                ent.isFile = true;
-                listOfFiles.push(ent);
-            }
 
 
             return true;

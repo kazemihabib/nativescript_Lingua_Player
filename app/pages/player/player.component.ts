@@ -416,7 +416,7 @@ export class playerPage implements OnInit {
 					}
 
 					let options: ModalDialogOptions = {
-						context: { startPath: startPath },
+						context: { startPath: startPath,extensions:['srt'],ignoreExtensions:[]},
 						viewContainerRef: this.viewContainerRef
 					};
 
