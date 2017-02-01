@@ -85,9 +85,8 @@ vlc {
   margin-left:5
 }
 
-#player-controller-container{
-    background-color:black;
-    opacity:.8;
+.player-controller-container-action-bar{
+    background-color:rgb(0, 0,0,.45);
 }
 
 #player-controller-slider{

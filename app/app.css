@@ -5,7 +5,8 @@
 
 
 .header{
-    background-color:#283593;
+    background-color:rgb(58,175,133);
+    opacity: 1;
     height:60;
     align-items:center;
     padding-left:25;

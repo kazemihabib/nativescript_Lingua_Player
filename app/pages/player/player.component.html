@@ -1,5 +1,5 @@
 <GridLayout id="root" rows="*,auto" columns="*">
-   <ActionBar row="0" rowSpan="2" [title]="videoTitle" class="header"></ActionBar> 
+   <ActionBar row="0" rowSpan="2" [title]="videoTitle" class="player-controller-container-action-bar" ></ActionBar> 
    <GridLayout  row="0" rowSpan="2">
     <vlc #vlcElement (loaded)="VLCLoaded(vlcElement)"
           [videoPath] = "videoPath" [lastPosition]="positionInDb"
@@ -68,7 +68,7 @@
 
   <!--PlayerController-->
     <GridLayout  rows="auto"  >
-      <GridLayout row="0" id="player-controller-container" rows="auto,auto"  [visibility] ="visible ? 'visible' : 'collapse' " >
+      <GridLayout row="0" class="player-controller-container-action-bar" rows="auto,auto"  [visibility] ="visible ? 'visible' : 'collapse' " >
 
         <FlexBoxLayout id="player-controller-slider" row="0" >
           <Label id="current-position" [text]="currentPosition  | DurationPipe " ></Label>
@@ -78,7 +78,7 @@
 
         <FlexBoxLayout id="player-controller-buttons" row="1" (tap)="tapPlayerController" >
           <Label  flexGrow="3"></Label>
-          <Button class="mdi font-icon"  [text]="'mdi-lock' | fonticon" (tap)="lockScreen()"></Button>
+          <Button class="mdi font-icon"  [text]="'mdi-lock' | fonticon" (tap)="lockScreen()" opacity="1"></Button>
           <Button #tracksBtn class="mdi font-icon" [text]="'mdi-subtitles' | fonticon" (loaded)="tracksBtnLoaded(tracksBtn)"></Button>
           <!--I can not use fontIcon pipe here because of ternary \ue034 is pause icon and \ue037 is play arrow icon-->
           <Button class="mdi font-icon" [text]="isPlaying ? ('mdi-pause' | fonticon) : ('mdi-play-arrow' | fonticon) " (tap)="isPlaying ? vlcAction.pause() : vlcAction.play()" ></Button>

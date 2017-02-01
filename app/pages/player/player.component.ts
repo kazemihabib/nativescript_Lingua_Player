@@ -426,7 +426,8 @@ export class playerPage implements OnInit {
 
 
 					this.modalService.showModal(FilePicker, options).then((res: string) => {
-						this.addSub(res);
+						if(res)
+							this.addSub(res);
 						if (isPlaying)
 							this.vlcAction.play();
 					});
