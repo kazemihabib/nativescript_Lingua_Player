@@ -9,11 +9,11 @@ import * as fs from 'file-system';
 import * as ISubWorker from './subworker.interface';
 
 
-global.myPostMessage = function(method:ISubWorker.functions,success:boolean,error:string,
-                                encodings:ISubWorker.IEncoding[],subData:ISubWorker.ISrtObject[],isRTL:boolean){
+global.sendResponseFromWorker = function(method:ISubWorker.functions,success:boolean,error:string,
+                                encodings:ISubWorker.IEncoding[],subData:ISubWorker.ISrtObject[],isRTL:boolean,path:string){
     let data : ISubWorker.ISubWorkerResponse;
     data = {'function':method , 'success':success , 'error':error,
-                    'encodings':encodings ,'subData':subData,'isRTL':isRTL}
+                    'encodings':encodings ,'subData':subData,'isRTL':isRTL,pathAsId:path};
 
     global.postMessage(data);
 
@@ -25,15 +25,17 @@ global.onmessage = (msg) => {
         if(ISubWorker.functions.loadSubtitle == request.function){
             let error;
             let subData:ISubWorker.ISrtObject[],isRtl:boolean;
-            [subData,isRtl ] = global.loadSubtitle(request.path,(e)=>{error = e},request.encoding);
+            let path:string;
+            [subData,isRtl] = global.loadSubtitle(request.path,(e)=>{error = e},request.encoding);
 
-            global.myPostMessage(ISubWorker.functions.loadSubtitle,!error,error,undefined,subData,isRtl);
+            global.sendResponseFromWorker(ISubWorker.functions.loadSubtitle,!error,error,undefined,subData,isRtl,path);
         }        
         else if(ISubWorker.functions.detectEncoding == request.function){
             let error;
+            let path:string;
             let encodings = global.detectEncoding(request.path,(e)=>{error = e});
 
-            global.myPostMessage(ISubWorker.functions.detectEncoding,!error,error,encodings,undefined);                        
+            global.sendResponseFromWorker(ISubWorker.functions.detectEncoding,!error,error,encodings,undefined,undefined,path);                        
 
         }
 }
@@ -41,6 +43,8 @@ global.onmessage = (msg) => {
 
 
 global.loadSubtitle = (path:string, errorCallback:(error : any) => any , encoding?:string,): [ISubWorker.ISrtObject[],boolean] => {
+        //TODO:detect file type with magic number , size  and ... to prevent loading not srt files with srt extenstion
+        //loading other files (not srt) can take too long and should warn fastly the user it's not a srt
         let sourceFile ;
         let rawData;
         let subData:Array<ISubWorker.ISrtObject>=[];
@@ -53,7 +57,6 @@ global.loadSubtitle = (path:string, errorCallback:(error : any) => any , encodin
         }
         
         let isRtl:boolean = global.isRTL(rawData)
-
         //convert to json
         let tempSrtObject:ISubWorker.ISrtObject[] = srtParser.fromSrt(rawData ,true);
         tempSrtObject.forEach((item,i)=>{

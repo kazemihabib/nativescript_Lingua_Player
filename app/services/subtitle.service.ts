@@ -10,10 +10,11 @@ import * as ISubWorker from '../workers/subworker.interface';
 export class Subtitle{
     private subData:Array<Object>= []; 
     private encoding:string; 
+    private lastUsedPathForLoading:string;
+    private lastUsedPathForDetectEncoding:string;
 
     private worker:any;
-    // public subWordListDownloader:Function;
-    private myPostMessage(method:ISubWorker.functions,path:string,encoding:string,time:number){
+    private sendToWorker(method:ISubWorker.functions,path:string,encoding:string){
 
         let data:ISubWorker.ISubWorkerRequest;
         data = {'function':method , 'path':path , 'encoding':encoding };
@@ -26,14 +27,16 @@ export class Subtitle{
 
     
     public loadSubtitle(path:string, callback:(isRTL:boolean, success:boolean, err:any)=>any, encoding?:string ){
-        this.myPostMessage(ISubWorker.functions.loadSubtitle , path , encoding , undefined);
+        this.sendToWorker(ISubWorker.functions.loadSubtitle , path , encoding);
 
         this.worker.onmessage = (msg)=>{
             let response:ISubWorker.ISubWorkerResponse = msg.data;
 
             if(ISubWorker.functions.loadSubtitle == response.function){
-                this.subData = response.subData;
-                callback(response.isRTL, response.success, response.error);
+                if(response.pathAsId == this.lastUsedPathForLoading){
+                    this.subData = response.subData;
+                    callback(response.isRTL, response.success, response.error);
+                }
                 
             }
 
@@ -41,12 +44,14 @@ export class Subtitle{
     }
 
     public detectEncoding(path:string){
-        this.myPostMessage(ISubWorker.functions.detectEncoding , path , undefined , undefined);
+        this.sendToWorker(ISubWorker.functions.detectEncoding , path , undefined );
         this.worker.onmessage = (msg)=>{
             let response:ISubWorker.ISubWorkerResponse = msg.data;
 
             if (ISubWorker.functions.detectEncoding == response.function){
-                console.log('encodings ', response.encodings);
+                if(response.pathAsId == this.lastUsedPathForDetectEncoding){
+                    console.log('encodings ', response.encodings);
+                }
             }
             
         }
@@ -67,8 +72,5 @@ export class Subtitle{
         return obj.wordList;
     } 
 
-    // public addSubWordListDownloader(downloader:Function){
-    //    this.subWordListDownloader = downloader;                
-    // }
 
 }
