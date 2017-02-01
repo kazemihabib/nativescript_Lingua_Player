@@ -65,29 +65,36 @@
     </FlexBoxLayout>
   <!--Subtitle -->
 
+
   <!--PlayerController-->
-    <GridLayout id="player-controller-container" rows="auto,auto"  [visibility] ="visible ? 'visible' : 'collapse' " >
+    <GridLayout  rows="auto"  >
+      <GridLayout row="0" id="player-controller-container" rows="auto,auto"  [visibility] ="visible ? 'visible' : 'collapse' " >
 
-      <FlexBoxLayout id="player-controller-slider" row="0" >
-        <Label id="current-position" [text]="currentPosition  | DurationPipe " ></Label>
-        <TNSSlider flexGrow="1" [value]="currentPosition + guestureHandler.deltaSeek " [maxValue]="movieLength" (dragged)="fromUser($event)" ></TNSSlider>
-        <Label id="remaining-time" [text]="currentPosition - movieLength | DurationPipe" ></Label>
-      </FlexBoxLayout>
+        <FlexBoxLayout id="player-controller-slider" row="0" >
+          <Label id="current-position" [text]="currentPosition  | DurationPipe " ></Label>
+          <TNSSlider flexGrow="1" [value]="currentPosition + guestureHandler.deltaSeek " [maxValue]="movieLength" (dragged)="fromUser($event)" ></TNSSlider>
+          <Label id="remaining-time" [text]="currentPosition - movieLength | DurationPipe" ></Label>
+        </FlexBoxLayout>
 
-      <FlexBoxLayout id="player-controller-buttons" row="1" (tap)="tapPlayerController" >
-        <Label  flexGrow="3"></Label>
-        <Button class="mdi font-icon"  [text]="'mdi-lock' | fonticon" (tap)="lockScreen()"></Button>
-        <Button #tracksBtn class="mdi font-icon" [text]="'mdi-subtitles' | fonticon" (loaded)="tracksBtnLoaded(tracksBtn)"></Button>
-        <!--I can not use fontIcon pipe here because of ternary \ue034 is pause icon and \ue037 is play arrow icon-->
-        <Button class="mdi font-icon" [text]="isPlaying ? ('mdi-pause' | fonticon) : ('mdi-play-arrow' | fonticon) " (tap)="isPlaying ? vlcAction.pause() : vlcAction.play()" ></Button>
-        <Button #moreBtn class="mdi font-icon" [text]="'mdi-more-horiz' | fonticon" (loaded)="moreButtonLoaded(moreBtn)"></Button>
-        <Button class="mdi font-icon" [text]="'mdi-aspect-ratio' | fonticon" (tap)="changeAspectRatio()" ></Button>
-        <!--<Button text="SUB" (tap)="addSub()" ></Button>-->
-        <Label  flexGrow="3"></Label>
-      </FlexBoxLayout>
+        <FlexBoxLayout id="player-controller-buttons" row="1" (tap)="tapPlayerController" >
+          <Label  flexGrow="3"></Label>
+          <Button class="mdi font-icon"  [text]="'mdi-lock' | fonticon" (tap)="lockScreen()"></Button>
+          <Button #tracksBtn class="mdi font-icon" [text]="'mdi-subtitles' | fonticon" (loaded)="tracksBtnLoaded(tracksBtn)"></Button>
+          <!--I can not use fontIcon pipe here because of ternary \ue034 is pause icon and \ue037 is play arrow icon-->
+          <Button class="mdi font-icon" [text]="isPlaying ? ('mdi-pause' | fonticon) : ('mdi-play-arrow' | fonticon) " (tap)="isPlaying ? vlcAction.pause() : vlcAction.play()" ></Button>
+          <Button #moreBtn class="mdi font-icon" [text]="'mdi-more-horiz' | fonticon" (loaded)="moreButtonLoaded(moreBtn)"></Button>
+          <Button class="mdi font-icon" [text]="'mdi-aspect-ratio' | fonticon" (tap)="changeAspectRatio()" ></Button>
+          <!--<Button text="SUB" (tap)="addSub()" ></Button>-->
+          <Label  flexGrow="3"></Label>
+        </FlexBoxLayout>
 
+      </GridLayout>
+
+      <Label row="0" id="subtitle-loading"  *ngIf="subtitleIsLoading" [text]="'Loading subtitle ... '" verticalAlignment="bottom" ></Label>
     </GridLayout>
+
   <!--PlayerController-->
+  <
   </StackLayout>
 
 </GridLayout>

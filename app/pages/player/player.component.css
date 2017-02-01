@@ -125,3 +125,7 @@ vlc {
 .font-icon:highlighted {
     background-color: blue;
 }
+
+#subtitle-loading{
+    color:red;
+}

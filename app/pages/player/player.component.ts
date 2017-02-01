@@ -80,6 +80,8 @@ export class playerPage implements OnInit {
 
 	private videoTitle: string = "";
 
+	private subtitleIsLoading: boolean = false;
+
 
 	private eventNativeCrashError (){
 		console.log("event: eventNativeCrashError");
@@ -324,10 +326,12 @@ export class playerPage implements OnInit {
 
 	public addSub(subPath: string) {
 
+		this.subtitleIsLoading = true;
 		this.subtitle.loadSubtitle(subPath, (isRTL: boolean, success: boolean, err: any) => {
 			console.log('sub Load success: ', success);
 			console.log('sub err: ', err)
 			this.isRTL = isRTL;
+			this.subtitleIsLoading = false;
 		});
 	}
 
