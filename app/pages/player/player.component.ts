@@ -98,17 +98,22 @@ export class playerPage implements OnInit {
 		this.routerExtensions.back();
 	}
 	private eventPlaying () {
-		this.isPlaying = true;
+		this._ngZone.run(() => {
+			this.isPlaying = true;
+		});
 	}
 	private eventStopped () {
-		this.isPlaying = false;
+		this._ngZone.run(() => {
+			this.isPlaying = false;
+		});
 	}
 
 	private eventPausd() {
-		this.isPlaying = false;
+		this._ngZone.run(() => {
+			this.isPlaying = false;
+		});
 	}
 	private eventTimeChanged() {
-
 		this._ngZone.run(() => {
 			this.currentPosition = this.vlcAction.getPosition();
 		});
@@ -375,7 +380,9 @@ export class playerPage implements OnInit {
 
 		this.moreMenu.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener({
 			onMenuItemClick: (item) => {
-				this.showAccelerationDialog();
+				this._ngZone.run(() => {
+					this.showAccelerationDialog();
+				});
 				return false;
 			}
 		}));
@@ -400,14 +407,34 @@ export class playerPage implements OnInit {
 
 		this.tracksMenu.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener({
 			onMenuItemClick: (item) => {
-				console.log(item.getItemId());
-				console.log(item.getTitle());
 				if (item.getItemId() == 0) {
-					this.showAudioTracksDialog();
+					
+					this._ngZone.run(() => {
+						this.showAudioTracksDialog();
+					});
 					return true;
 				}
 
 				else if (item.getItemId() == 2) {
+					this._ngZone.run(() => {
+						this.showFilePickerDialog();
+					});
+					return true;
+				}
+
+
+			}
+		}));
+
+		btn.setOnClickListener(new android.view.View.OnClickListener({
+			onClick: () => {
+				this.tracksMenu.show();
+			}
+		}));
+
+	}
+
+	private showFilePickerDialog(){
 					let isPlaying = this.vlcAction.isPlaying();
 					this.vlcAction.pause();
 
@@ -431,21 +458,8 @@ export class playerPage implements OnInit {
 						if (isPlaying)
 							this.vlcAction.play();
 					});
-					return true;
-				}
-
-
-			}
-		}));
-
-		btn.setOnClickListener(new android.view.View.OnClickListener({
-			onClick: () => {
-				this.tracksMenu.show();
-			}
-		}));
 
 	}
-
 	private showAudioTracksDialog() {
 		let isPlaying = this.vlcAction.isPlaying();
 		this.vlcAction.pause();
