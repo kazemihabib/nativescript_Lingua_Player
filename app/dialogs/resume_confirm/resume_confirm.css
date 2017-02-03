@@ -4,6 +4,7 @@ StackLayout{
 }
 
 #question{
+    color:black;
     padding: 25;
     font-size:20;  
 }
@@ -12,12 +13,13 @@ StackLayout{
     justify-content:space-around;
 }
 
+
 #choice button { 
+    color:black;
     background-color: white;
-    padding-left:15;
-    padding-right:15;
-    text-align:left;
+    text-align:center;
     font-size:15;
+    width:50%;
 }
 
 #choice button:highlighted { background-color:#64b5f6;}
