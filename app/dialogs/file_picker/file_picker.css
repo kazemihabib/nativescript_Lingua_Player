@@ -4,9 +4,6 @@ StackLayout{
      height:90%;
 }
 
-
-
-
 ListView{
     color : black;
     border-width:0;
@@ -29,4 +26,8 @@ ListView{
 #item-name{
     font-size:25;
     width:100%;
+}
+
+ListView FlexboxLayout{
+    align-items:center;
 }
