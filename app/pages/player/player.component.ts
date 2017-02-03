@@ -246,15 +246,21 @@ export class playerPage implements OnInit {
 			}, this);
 
 		application.android.off(application.AndroidApplication.activityBackPressedEvent);
-		application.android.on(application.AndroidApplication.activityBackPressedEvent,
-			function (args) {
-				this.vlc.stopPlayback();
-				this.positionInDb = this.vlc.lastPosition;
-				this.save();
-				this.clearUI();
-			}, this);
+		application.android.on(application.AndroidApplication.activityBackPressedEvent,this.prepareGoBack,this);
 	}
 
+	private prepareGoBack(){
+		this.vlc.stopPlayback();
+		this.positionInDb = this.vlc.lastPosition;
+		this.save();
+		this.clearUI();
+
+	}
+
+	private navigationButtonBack(){
+		this.prepareGoBack();
+		this.routerExtensions.back();
+	}
 	private statusBarHeight = 0;
 	private getStatusBarHeight() {
 		let result: number = 0;

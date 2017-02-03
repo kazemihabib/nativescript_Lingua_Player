@@ -1,5 +1,7 @@
 <GridLayout id="root" rows="*,auto" columns="*">
-   <ActionBar row="0" rowSpan="2" [title]="videoTitle" class="player-controller-container-action-bar" ></ActionBar> 
+   <ActionBar row="0" rowSpan="2" [title]="videoTitle" class="player-controller-container-action-bar">
+      <NavigationButton text="Go Back" android.systemIcon="ic_menu_back" color="#ffffff" (tap)="navigationButtonBack()"></NavigationButton>
+   </ActionBar> 
    <GridLayout  row="0" rowSpan="2">
     <vlc #vlcElement (loaded)="VLCLoaded(vlcElement)"
           [videoPath] = "videoPath" [lastPosition]="positionInDb"

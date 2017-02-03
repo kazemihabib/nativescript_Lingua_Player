@@ -2,9 +2,12 @@
     background-color:black
 }
 
-/*ActionBar{
-    margin-top : statusBarHeight
-}*/
+ActionBar{
+    /*margin-top : statusBarHeight*/
+    /*setting color in ActionBarClass not worked so I added here and also if I set there it will change 
+    color of thumb of slider*/
+    color:white;
+}
 
 vlc {
     horizontal-alignment:center;
