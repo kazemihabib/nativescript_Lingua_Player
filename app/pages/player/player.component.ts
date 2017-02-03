@@ -215,8 +215,10 @@ export class playerPage implements OnInit {
 	constructor(private modalService: ModalDialogService,
 		private viewContainerRef: ViewContainerRef, private route: ActivatedRoute, private _ngZone: NgZone, private subtitle: Subtitle, private routerExtensions: RouterExtensions) { }
 
+		private wakeLock;
 	ngOnDestroy() {
 		this.pathSubscription.unsubscribe();
+		this.wakeLock.release();
 	}
 	ngOnInit() {
 		//  this.statusBarHeight= this.getStatusBarHeight(); 
@@ -226,8 +228,8 @@ export class playerPage implements OnInit {
 		});
 
         let pm = application.android.context.getSystemService(android.content.Context.POWER_SERVICE);
-        let wl = pm.newWakeLock(android.os.PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
-        wl.acquire();
+        this.wakeLock = pm.newWakeLock(android.os.PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
+        this.wakeLock.acquire();
 
 		application.android.off(application.AndroidApplication.activityPausedEvent)
 		application.android.on(application.AndroidApplication.activityPausedEvent,
