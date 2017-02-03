@@ -29,7 +29,7 @@ export class Guestures{
 
     private leftSideHandling:boolean = false;
     private rightSideHandling:boolean = false;
-    constructor(private vlcAction, private eventCallbacks:IGuestureEventCallbacks){
+    constructor(private vlcAction, private eventCallbacks:IGuestureEventCallbacks,private _ngZone){
         this.max = this.vlcAction.getVolume().maxVolume;
         console.log('max ' + this.max);
 
@@ -45,9 +45,11 @@ export class Guestures{
           }
           if('up' === args.action){
             that.rightSideHandling = false;
-            that.volumeChartVisible = false;
-            that.seekUiVisibile = false;
-            that.deltaSeek = 0;
+            that._ngZone.run(() => {
+                that.volumeChartVisible = false;
+                that.seekUiVisibile = false;
+                that.deltaSeek = 0;
+            });
             that.prevX = that.seek(args.getX(),that.direction,that.prevX);
             that.prevY = 0;
             that.prevX = 0;
@@ -67,15 +69,19 @@ export class Guestures{
 
             if(Direction.vertical == that.direction)
             {
-                    that.volumeChartVisible = true;
+                    that._ngZone.run(() => {
+                        that.volumeChartVisible = true;
+                    });
                     that.prevY = that.changeVolume(args.getY(), that.prevY);
             }
 
             if(Direction.horizontal == that.direction)
             {
-                    that.seekUiVisibile = true;
-                    that.deltaSeek = Math.floor(args.getX() - that.prevX)*100;
-                    that.seekCharVisible = true;
+                    that._ngZone.run(() => {
+                        that.seekUiVisibile = true;
+                        that.deltaSeek = Math.floor(args.getX() - that.prevX)*100;
+                        that.seekCharVisible = true;
+                    });
             }
 
           }
@@ -94,9 +100,11 @@ export class Guestures{
           }
           if('up' === args.action){
             that.leftSideHandling = false;
-            that.brightnessChartVisible = false;
-            that.seekUiVisibile = false;
-            that.deltaSeek = 0 ;
+            that._ngZone.run(() => {
+                that.brightnessChartVisible = false;
+                that.seekUiVisibile = false;
+                that.deltaSeek = 0 ;
+            });
             that.prevX = that.seek(args.getX(),that.direction,that.prevX);
             that.prevY = 0;
             that.prevX = 0;
@@ -115,14 +123,18 @@ export class Guestures{
             that.direction = that.detectDirection(that.direction,args.getY(),args.getX(),that.prevY,that.prevX);
 
             if (Direction.vertical == that.direction) {
-                    that.brightnessChartVisible = true;
+                    that._ngZone.run(() => {
+                        that.brightnessChartVisible = true;
+                    });
                     that.prevY = that.changeBrightness(args.getY(), that.prevY);
             }
             if(Direction.horizontal == that.direction)
             {
-                that.seekUiVisibile = true;
-                that.deltaSeek = Math.floor(args.getX() - that.prevX)*100;
-                that.seekCharVisible = true;
+                that._ngZone.run(() => {
+                    that.seekUiVisibile = true;
+                    that.deltaSeek = Math.floor(args.getX() - that.prevX) * 100;
+                    that.seekCharVisible = true;
+                });
             }
 
           }
@@ -147,11 +159,13 @@ export class Guestures{
 
     private setBrightness(value:number){
 
-        this.currentBrightness = Brightness.getBrightness();
+        this._ngZone.run(() => {
+            this.currentBrightness = Brightness.getBrightness();
 
-        this.currentBrightness = Math.floor(this.currentBrightness * 15) + value;
-        this.currentBrightness = Math.max(this.currentBrightness,0);
-        this.currentBrightness = Math.min(this.currentBrightness,15);
+            this.currentBrightness = Math.floor(this.currentBrightness * 15) + value;
+            this.currentBrightness = Math.max(this.currentBrightness,0);
+            this.currentBrightness = Math.min(this.currentBrightness,15);
+        });
 
         Brightness.setBrightness(this.currentBrightness / 15);
 
@@ -168,10 +182,14 @@ export class Guestures{
 
             if(-deltaY > 0)
             {
-                this.currentVolume = this.vlcAction.volumeUp().currentVolume;
+                this._ngZone.run(() => {
+                    this.currentVolume = this.vlcAction.volumeUp().currentVolume;
+                });
             }
             else{
-                this.currentVolume = this.vlcAction.volumeDown().currentVolume;
+                this._ngZone.run(() => {
+                    this.currentVolume = this.vlcAction.volumeDown().currentVolume;
+                });
             }
             // this.prevY = currentY;
             console.log('currentVolume: ' + this.currentVolume);

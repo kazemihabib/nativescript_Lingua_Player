@@ -153,7 +153,7 @@ export class playerPage implements OnInit {
 
 	private guestueresAreLoaded(grd) {
 		// loads after childs label2Loaded and label1Loaded
-		this.guestureHandler = new Guestures(this.vlcAction, this.guestureEventCallbacks);
+		this.guestureHandler = new Guestures(this.vlcAction, this.guestureEventCallbacks,this._ngZone);
 		this.guestureHandler.rightSideguestures(this.label2GuestureHandler);
 		this.guestureHandler.leftSideguestures(this.label1GuestureHandler);
 
