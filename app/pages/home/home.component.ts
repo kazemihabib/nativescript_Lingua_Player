@@ -31,6 +31,8 @@ export class HomeComponent implements OnInit {
     private paths: ObservableArray<VideoInfo>;
 
     private source: RxObservable<VideoInfo[]>;
+    
+    private powerManager:any;
 
 
     constructor(private _router: Router, private videoExplorer: VideoExplorer, private _ngZone: NgZone) { }

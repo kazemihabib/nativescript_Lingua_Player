@@ -225,6 +225,9 @@ export class playerPage implements OnInit {
 			this.positionInDb = parseInt(params['position']);
 		});
 
+        let pm = application.android.context.getSystemService(android.content.Context.POWER_SERVICE);
+        let wl = pm.newWakeLock(android.os.PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
+        wl.acquire();
 
 		application.android.off(application.AndroidApplication.activityPausedEvent)
 		application.android.on(application.AndroidApplication.activityPausedEvent,
