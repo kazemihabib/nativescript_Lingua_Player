@@ -6,3 +6,18 @@ StackLayout {
 FlexboxLayout {
     border-color:black;
 }
+
+#container{
+   flex-direction:row; 
+
+}
+
+#word{
+       border-bottom-color: black;
+       border-bottom-width: .5;
+}
+
+#dictionaryContainer{
+       border-left-color: black;
+
+}

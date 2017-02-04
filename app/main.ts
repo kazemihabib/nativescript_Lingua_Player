@@ -14,6 +14,9 @@ import {AccelerationSelector} from "./dialogs/acceleration_selector/acceleration
 import {AudioSelector} from "./dialogs/audio_selector/audio_selector";
 import {ResumeConfirm} from "./dialogs/resume_confirm/resume_confirm";
 import {DictionaryDialog} from "./dialogs/dictionary_dialog/dictionary_dialog";
+import { registerElement } from "nativescript-angular/element-registry";
+
+registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown);
 
 import { TNSFontIconModule} from 'nativescript-ng2-fonticon';
 @NgModule({

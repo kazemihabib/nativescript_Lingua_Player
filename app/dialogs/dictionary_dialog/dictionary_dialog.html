@@ -1,20 +1,29 @@
-<StackLayout>
-    <FlexboxLayout>
-        <Label [text]="'English'"></Label>
-        <Label [text]="'book'"></Label>
+<FlexboxLayout id="container">
+
+    <StackLayout width="80%">
+        <DropDown #dd  [items]="languages" [selectedIndex]="1" (selectedIndexChanged)="onchange($event)" width="20%" horizontalAlignment="left" marginLeft="10"  fontSize="10"></DropDown>
+        <FlexboxLayout flexDirection="row" justifyContent = "space-between"  id="word">
+            <FlexboxLayout flexDirection="row" justifyContent = "space-around" >
+                <Label class="mdi" [text]="'mdi-volume-up' | fonticon" horizontalAlignment="left" marginLeft="10" fontSize="25"> </Label>
+                <Label [text]="word" fontSize="25" ></Label>
+            </FlexboxLayout >
+            <Label  class="mdi" [text]="'mdi-check-circle' | fonticon" horizontalAlignment="right" marginRight="10"> </Label>
+            
+        </FlexboxLayout>
+        <WebView  [src]="web1"></WebView>
+
+    </StackLayout>
+
+    <FlexboxLayout justifyContent="space-between" flexDirection="column" id="dictionaryContainer">
+        <ListView [items]="dictionaries" (itemTap)="onItemTap($event)">
+            <template let-item="item" let-i="index" let-odd="odd" let-even="even">
+                <StackLayout [class.odd]="odd" [class.even]="even" height="60">
+                    <Label [text]="item"></Label>
+                </StackLayout>
+            </template>
+        </ListView>
+
+        <Button [text]="'addMore'" marginLeft="0" verticalAlignment="bottom"></Button>
     </FlexboxLayout>
 
-    <FlexboxLayout>
-        <Label [text]="'Persian'"></Label>
-        <Label [text]="'کتاب'"></Label>
-    </FlexboxLayout>
-
-    <FlexboxLayout flexWrap="wrap" >
-        <Button [text]="'New Translation'"></Button>
-        <Button [text]="'Add'"></Button>
-        <Button [text]="'Translate Sentence'"></Button>
-        <Label id="item-icon" class="mdi" [text]="'\ue2c7'" ></Label>
-    </FlexboxLayout>
-
-
-</StackLayout>
+<FlexboxLayout>
