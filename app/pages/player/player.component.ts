@@ -342,12 +342,16 @@ export class playerPage implements OnInit {
 
 	public addSub(subPath: string) {
 
-		this.subtitleIsLoading = true;
+		this._ngZone.run(() => {
+			this.subtitleIsLoading = true;
+		});
 		this.subtitle.loadSubtitle(subPath, (isRTL: boolean, success: boolean, err: any) => {
 			console.log('sub Load success: ', success);
 			console.log('sub err: ', err)
 			this.isRTL = isRTL;
-			this.subtitleIsLoading = false;
+			this._ngZone.run(() => {
+				this.subtitleIsLoading = false;
+			});
 		});
 	}
 
