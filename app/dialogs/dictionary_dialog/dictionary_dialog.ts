@@ -1,7 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit,AfterViewInit,ViewChild,ElementRef } from "@angular/core";
 import { ModalDialogParams } from "nativescript-angular/modal-dialog";
 // import { SelectedIndexChangedEventData } from "nativescript-drop-down";
 // import dropDown = require("nativescript-drop-down");
+import {Dictionary} from "../../services/dictionary.service"
 
 import {
     FlexboxLayout,
@@ -17,30 +18,32 @@ import {
 @Component({
     selector: 'modal-content',
     templateUrl: "dialogs/dictionary_dialog/dictionary_dialog.html",
-    styleUrls: [ "dialogs/dictionary_dialog/dictionary_dialog.css"]
+    styleUrls: [ "dialogs/dictionary_dialog/dictionary_dialog.css"],
+    providers:[Dictionary]
 })
-export class DictionaryDialog  {
+export class DictionaryDialog implements AfterViewInit {
 
     private word:string;
     private languages = ["English","Farsi","Arabic","France"];
-    private dictionaries = ['oxford','hfarse','cmabridge','longman'];
+    // private dictionaries = ['oxford','hfarse','cmabridge','longman','oxford','hfarse','cmabridge','longman','oxford','hfarse','cmabridge','longman','oxford','hfarse','cmabridge','longman'];
+    private dictionaries = ['Oxford.png','azin.jpg','cambridge.jpg','longman.png','Oxford.png','azin.jpg','cambridge.jpg','longman.png'];
+    // private dictionaries = ['azin.jpg'];
 
-    private web1=`
-        Where does it come from?
+    @ViewChild("webView") webView:any ;
 
-        Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+    public ngAfterViewInit(){
+        if(this.webView.nativeElement.android) { // in IOS android will be undefined
+            this.webView.nativeElement.android.getSettings().setBuiltInZoomControls(false);
+        }
 
-        The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham. `
+    }
+    private web1;
 
-    private web2=`
-        Where does it come from?
-
-        Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-
-        The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham. `
-    constructor(private params: ModalDialogParams) {
+    constructor(private params: ModalDialogParams,private dictionary:Dictionary) {
         this.word = params.context.word;
         console.log('this.word',this.word);
+        this.web1 = this.dictionary.getMeaning(this.word);
+        console.log(this.web1);
 
     }
 
@@ -50,8 +53,15 @@ export class DictionaryDialog  {
 
 
 
-    private onItemTap(item: AudioTrack) {
+    private onItemTap(item: any) {
+        console.log(this.webView);
         console.log('item is',item);
+    }
+
+    private listViewLoadMoreItems(args){
+        // console.log('load more');
+        // console.log(args);
+        // this.dictionaries.push("Oxford.png");
     }
 
 }

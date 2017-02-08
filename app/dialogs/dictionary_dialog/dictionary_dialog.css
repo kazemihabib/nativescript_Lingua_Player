@@ -1,23 +1,59 @@
-StackLayout {
-     background-color:white;
-     opacity:.8;
-}
-
 FlexboxLayout {
     border-color:black;
 }
 
 #container{
-   flex-direction:row; 
+    background-color:white;
+    opacity:.8;
+    orientation:horizontal;
+    height:90%;
 
 }
 
-#word{
+#word-container{
+       height: 50;
        border-bottom-color: black;
        border-bottom-width: .5;
+       flex-direction: row;
+       justify-content: space-around;
+       font-size:25;
+       align-items:center;
 }
 
-#dictionaryContainer{
+#dictionary-list-container{
        border-left-color: black;
+       border-left-width: .5;
 
+}
+
+#dictionary-list-container ListView{
+        height: 80%;
+}
+
+#wordLabel{
+    color:black;
+}
+
+#left-side{
+    width:80%;
+}
+
+#word-volume{
+    width:70%
+}
+
+#volume-icon{
+    margin-right:10;
+}
+
+#dictionary-item{
+    text-align:center;
+    horizontal-align:center;
+    vertical-align:center;
+}
+
+Button{
+    font-size:50;
+    height:150;
+    background-color:transparent;
 }

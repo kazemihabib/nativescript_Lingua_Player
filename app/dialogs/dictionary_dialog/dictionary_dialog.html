@@ -1,29 +1,29 @@
-<FlexboxLayout id="container">
-
-    <StackLayout width="80%">
-        <DropDown #dd  [items]="languages" [selectedIndex]="1" (selectedIndexChanged)="onchange($event)" width="20%" horizontalAlignment="left" marginLeft="10"  fontSize="10"></DropDown>
-        <FlexboxLayout flexDirection="row" justifyContent = "space-between"  id="word">
-            <FlexboxLayout flexDirection="row" justifyContent = "space-around" >
-                <Label class="mdi" [text]="'mdi-volume-up' | fonticon" horizontalAlignment="left" marginLeft="10" fontSize="25"> </Label>
-                <Label [text]="word" fontSize="25" ></Label>
+<StackLayout id="container" >
+    <StackLayout id="left-side">
+        <!--<DropDown #dd  [items]="languages" [selectedIndex]="1" (selectedIndexChanged)="onchange($event)" width="20%" horizontalAlignment="left" marginLeft="10"></DropDown>-->
+        <FlexboxLayout id="word-container" >
+            <FlexboxLayout flexDirection="row" justifyContent = "flex-start" id="word-volume" alignItems="center" >
+                <Label class="mdi" [text]="'mdi-volume-up' | fonticon" id="volume-icon" > </Label>
+                <Label [text]="word"  id="wordLabel" ></Label>
             </FlexboxLayout >
-            <Label  class="mdi" [text]="'mdi-check-circle' | fonticon" horizontalAlignment="right" marginRight="10"> </Label>
+            <Label  class="mdi" [text]="'mdi-star' | fonticon" > </Label>
             
         </FlexboxLayout>
-        <WebView  [src]="web1"></WebView>
+
+        <WebView  [src]="web1" #webView ></WebView>
 
     </StackLayout>
 
-    <FlexboxLayout justifyContent="space-between" flexDirection="column" id="dictionaryContainer">
-        <ListView [items]="dictionaries" (itemTap)="onItemTap($event)">
+    <FlexboxLayout justifyContent="space-between" flexDirection="column" id="dictionary-list-container">
+        <ListView [items]="dictionaries" (itemTap)="onItemTap($event)" rowHeight="100" (loadMoreItems)="listViewLoadMoreItems(item)">
             <template let-item="item" let-i="index" let-odd="odd" let-even="even">
-                <StackLayout [class.odd]="odd" [class.even]="even" height="60">
-                    <Label [text]="item"></Label>
-                </StackLayout>
+                <GridLayout [class.odd]="odd" [class.even]="even">
+                    <Image  id="dictionary-item" [src] ="'~/images/'+item" stretch="fill" ></Image> 
+                </GridLayout>
             </template>
         </ListView>
 
-        <Button [text]="'addMore'" marginLeft="0" verticalAlignment="bottom"></Button>
+        <Button class="mdi" [text]="'mdi-settings' | fonticon" height="150" fontSize="50" backgroundColor="transparent"></Button>
     </FlexboxLayout>
 
-<FlexboxLayout>
+<StackLayout>
