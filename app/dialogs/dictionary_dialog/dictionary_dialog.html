@@ -1,10 +1,10 @@
-<StackLayout id="container" >
+<StackLayout id="container"  (tap)="toggle()" >
     <StackLayout id="left-side">
         <!--<DropDown #dd  [items]="languages" [selectedIndex]="1" (selectedIndexChanged)="onchange($event)" width="20%" horizontalAlignment="left" marginLeft="10"></DropDown>-->
         <FlexboxLayout id="word-container" >
             <FlexboxLayout flexDirection="row" justifyContent = "flex-start" id="word-volume" alignItems="center" >
                 <Label class="mdi" [text]="'mdi-volume-up' | fonticon" id="volume-icon" > </Label>
-                <Label [text]="word"  id="wordLabel" ></Label>
+                <TextView  [text]="word"  id="wordLabel" focus="true"></TextView>
             </FlexboxLayout >
             <Label  class="mdi" [text]="'mdi-star' | fonticon" > </Label>
             
@@ -23,7 +23,7 @@
             </template>
         </ListView>
 
-        <Button class="mdi" [text]="'mdi-settings' | fonticon" height="150" fontSize="50" backgroundColor="transparent"></Button>
+        <Button class="mdi" [text]="'mdi-settings' | fonticon" (tap)="download()" height="150" fontSize="50" backgroundColor="transparent" ></Button>
     </FlexboxLayout>
 
 <StackLayout>

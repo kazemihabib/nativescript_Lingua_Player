@@ -16,6 +16,8 @@ import {ResumeConfirm} from "./dialogs/resume_confirm/resume_confirm";
 import {DictionaryDialog} from "./dialogs/dictionary_dialog/dictionary_dialog";
 import { registerElement } from "nativescript-angular/element-registry";
 
+import {Dictionary} from "./services/dictionary.service"
+
 registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown);
 
 import { TNSFontIconModule} from 'nativescript-ng2-fonticon';
@@ -42,6 +44,9 @@ import { TNSFontIconModule} from 'nativescript-ng2-fonticon';
         ResumeConfirm,
         DictionaryDialog
 
+    ],
+    providers: [ // singleton services
+        Dictionary
     ],
     entryComponents: [FilePicker,AccelerationSelector,AudioSelector,ResumeConfirm,DictionaryDialog],
     bootstrap: [

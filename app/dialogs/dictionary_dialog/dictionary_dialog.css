@@ -32,6 +32,8 @@ FlexboxLayout {
 
 #wordLabel{
     color:black;
+    /*remove underbar*/
+    background-color: transparent;
 }
 
 #left-side{
