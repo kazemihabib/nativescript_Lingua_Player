@@ -458,7 +458,7 @@ export class playerPage implements OnInit {
 					try {
 						startPath = startObject.parent.path;
 					} catch (e) {
-						startPath = startObject.path;
+						startPath = "/";
 					}
 
 					let options: ModalDialogOptions = {
