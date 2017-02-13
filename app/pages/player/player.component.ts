@@ -66,6 +66,11 @@ export class playerPage implements OnInit {
 	public isRTL: boolean = false;
 
 	private resumeDialogIsOpen: boolean;
+
+	//property to prevent resume when modal is open and you turn of screen and turn it off
+	private modalIsOpen:boolean = false;
+	//property that prevent to show resume dialog when activity is just paused
+	private activityIsPaused:boolean = false;
 	// public subWordListDownloader = (wordList) => {
 	// 	this._ngZone.run(() => {
 	// 		this.subText = wordList;
@@ -171,15 +176,22 @@ export class playerPage implements OnInit {
 		this.videoTitle = fs.File.fromPath(this.videoPath.replace('file://', '')).name;
 
 		let play = () => {
-			timer.setTimeout(() => {
-				this.vlcAction.play();
-			}, 0);
+			if(!this.modalIsOpen)
+				timer.setTimeout(() => {
+					this.vlcAction.play();
+				}, 0);
 		}
 
 		this.vlc = vlc;
 		this.vlcAction = this.vlc.getVLCAction();
 
+		if(this.activityIsPaused)
+			//we don't need to get data from database,show resume dialog and .. .
+			//because acitivy is paused not destroyed and we have them already
+			return;
+
 		this.positionInDb = this.positionInDb > 5000 ? this.positionInDb - 5000 : 0;	
+		
 		if (this.positionInDb == 0) {
 			this.resumeDialogIsOpen = false;
 			play();
@@ -195,8 +207,10 @@ export class playerPage implements OnInit {
 			if (!this.resumeDialogIsOpen) {
 				//prevent to reopen dialog if the user press home and back again to app.
 				this.resumeDialogIsOpen = true;
+				this.modalIsOpen = true;
 				this.modalService.showModal(ResumeConfirm, options).then((resumeIt: boolean) => {
 					this.resumeDialogIsOpen = false;
+					this.modalIsOpen = false;
 					if (resumeIt == undefined)
 						this.routerExtensions.back();
 					else if (resumeIt == true)
@@ -234,6 +248,10 @@ export class playerPage implements OnInit {
 		application.android.off(application.AndroidApplication.activityPausedEvent)
 		application.android.on(application.AndroidApplication.activityPausedEvent,
 			function (args: application.AndroidActivityEventData) {
+				this.activityIsPaused = true;
+				//do what is need when player is paused (I tried vlcAction.pause() and thought it will below event will be fired 
+				//but that not happend so I called it directly )
+				this.eventPausd();
 				this.vlc.stopPlayback();
 				this.positionInDb = this.vlc.lastPosition;
 				this.save();
@@ -365,7 +383,9 @@ export class playerPage implements OnInit {
 			viewContainerRef: this.viewContainerRef
 		};
 
+		this.modalIsOpen = true;
 		this.modalService.showModal(DictionaryDialog, options).then((audioTrackId: number) => {
+			this.modalIsOpen = false;
 			if (isPlaying)
 				this.vlcAction.play();
 		})
@@ -467,7 +487,9 @@ export class playerPage implements OnInit {
 					};
 
 
+					this.modalIsOpen = true;
 					this.modalService.showModal(FilePicker, options).then((res: string) => {
+						this.modalIsOpen = false;
 						if(res)
 							this.addSub(res);
 						if (isPlaying)
@@ -485,7 +507,9 @@ export class playerPage implements OnInit {
 			viewContainerRef: this.viewContainerRef,
 		};
 
+		this.modalIsOpen = true;
 		this.modalService.showModal(AudioSelector, options).then((audioTrackId: number) => {
+			this.modalIsOpen = false;
 			if (audioTrackId)
 				this.currentAudioTrack = audioTrackId;
 			if (isPlaying)
@@ -500,7 +524,9 @@ export class playerPage implements OnInit {
 			viewContainerRef: this.viewContainerRef
 		};
 
+		this.modalIsOpen = true;
 		this.modalService.showModal(AccelerationSelector, options).then((hw: number) => {
+			this.modalIsOpen = false;
 			if (hw != undefined) {
 				// this.lockScreen();
 				//vlc.component saves the last position before stopPlayback and when plays again in parsed event seeks the player. 
