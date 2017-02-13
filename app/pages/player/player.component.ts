@@ -29,7 +29,6 @@ import dialogs = require("ui/dialogs");
 import database = require('../../utils/media.database');
 import fs = require("file-system");
 
-// registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown);
 registerElement("TNSSlider", () => require("nativescript-slider").Slider);
 
 import timer = require("timer")
