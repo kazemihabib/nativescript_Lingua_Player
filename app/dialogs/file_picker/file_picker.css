@@ -16,13 +16,6 @@ ListView{
     margin-right:10;
 }
 
-#item-icon[isFile = true]{
-    color:#ffee58;
-}
-
-#item-icon[isFile = false]{
-    color:#26c6da;
-}
 
 #item-name{
     font-size:25;

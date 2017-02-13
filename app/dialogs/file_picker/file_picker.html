@@ -12,7 +12,7 @@
             one of strange things happen when using FlexboxLayout)-->
             <GridLayout width="100%">
                 <FlexboxLayout flexDirection="row" width="100%">
-                        <Label id="item-icon" class="mdi" [text]="item.isFile ? '\ue24d' : '\ue2c7'" [isFile]="item.isFile ? true : false" ></Label>
+                        <Label id="item-icon" class="mdi" [text]="item.isFile ? '\ue24d' : '\ue2c7'" [style.color]="item.isFile ? '#ffee58' : '#26c6da'" ></Label>
                         <Label id="item-name" [textWrap]="'true'" [text]='item.name'  ></Label>
                 </FlexboxLayout>
             </GridLayout>
