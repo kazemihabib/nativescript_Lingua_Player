@@ -1,10 +1,11 @@
-﻿import { Component, OnInit, NgZone } from "@angular/core";
+﻿import { Component, OnInit, NgZone, ViewContainerRef } from "@angular/core";
 import application = require("application");
 import { Router } from "@angular/router";
 import { chroma, HW, VLCSettings } from "../../components/VLCSettings";
 import { ListViewEventData, RadListView } from "nativescript-telerik-ui/listview";
 import { ObservableArray } from "data/observable-array";
 import { Observable as RxObservable } from 'rxjs/Observable';
+import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 
 import dialogs = require("ui/dialogs");
 import frame = require("ui/frame");
@@ -14,6 +15,7 @@ import { VideoExplorer } from "../../services/video-explorer.service";
 import { Brightness } from '../../utils/brightness';
 
 import { VideoInfo } from "../../models/videoInfo.model";
+import {NotFound } from "../../dialogs/not_found/not_found";
 
 var database = require('../../utils/media.database');
 
@@ -35,7 +37,8 @@ export class HomeComponent implements OnInit {
     private powerManager:any;
 
 
-    constructor(private _router: Router, private videoExplorer: VideoExplorer, private _ngZone: NgZone) { }
+    constructor(private _router: Router, private videoExplorer: VideoExplorer, private _ngZone: NgZone,
+        private viewContainerRef: ViewContainerRef,private modalService: ModalDialogService) { }
 
     public play(path: string, position: number) {
         this._router.navigate(["/player", { path: path, position: position }]);
@@ -95,9 +98,15 @@ export class HomeComponent implements OnInit {
             database.initDataBase();
         }
         if (!exists) {
-            dialogs.alert("Video not found").then(() => {
-                console.log("Video not found");
-            });
+
+            let videoTitle = fs.File.fromPath(path.replace('file://', '')).name;
+            let options: ModalDialogOptions = {
+                context: {videoTitle:videoTitle},
+                viewContainerRef: this.viewContainerRef
+            };
+
+            this.modalService.showModal(NotFound, options).then((res: string) => { });
+
             //remove that path from paths and db
             let index = this.paths.lastIndexOf(selectedItems[0]);
             this.paths.splice(index, 1);

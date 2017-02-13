@@ -14,6 +14,7 @@ import {AccelerationSelector} from "./dialogs/acceleration_selector/acceleration
 import {AudioSelector} from "./dialogs/audio_selector/audio_selector";
 import {ResumeConfirm} from "./dialogs/resume_confirm/resume_confirm";
 import {DictionaryDialog} from "./dialogs/dictionary_dialog/dictionary_dialog";
+import {NotFound } from "./dialogs/not_found/not_found";
 
 import { TNSFontIconModule} from 'nativescript-ng2-fonticon';
 @NgModule({
@@ -37,10 +38,11 @@ import { TNSFontIconModule} from 'nativescript-ng2-fonticon';
         AccelerationSelector,
         AudioSelector,
         ResumeConfirm,
-        DictionaryDialog
+        DictionaryDialog,
+        NotFound
 
     ],
-    entryComponents: [FilePicker,AccelerationSelector,AudioSelector,ResumeConfirm,DictionaryDialog],
+    entryComponents: [FilePicker,AccelerationSelector,AudioSelector,ResumeConfirm,DictionaryDialog,NotFound],
     bootstrap: [
         AppComponent
     ]
