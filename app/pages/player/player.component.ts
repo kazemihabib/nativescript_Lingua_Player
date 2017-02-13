@@ -309,7 +309,9 @@ export class playerPage implements OnInit {
 	}
 
 	private showBars() {
-		frame.topmost().android.activity.getWindow().getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_VISIBLE);
+		//when I fix overlay of statusbar on actionbar --> status bar shifts activity down so I disabled showing status bar
+		// let show:number =  android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+		// frame.topmost().android.activity.getWindow().getDecorView().setSystemUiVisibility(show);
 		let page = frame.topmost().currentPage;
 		page.actionBarHidden = false;
 		this._ngZone.run(() => {
