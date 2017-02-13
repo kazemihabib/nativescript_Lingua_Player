@@ -531,7 +531,6 @@ export class playerPage implements OnInit {
 				//vlc.component saves the last position before stopPlayback and when plays again in parsed event seeks the player. 
 				this.vlc.stopPlayback();
 				VLCSettings.hardwareAcceleration = hw;
-				this.vlcAction.play();
 				// this.unLockScreen();
 			}
 			if (isPlaying)
