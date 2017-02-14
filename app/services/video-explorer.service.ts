@@ -86,7 +86,6 @@ export class VideoExplorer{
 
         let MediaStore = android.provider.MediaStore;
         let Uri = android.net.Uri;
-        let Cursor = android.content.Context;
 
         let notExistVideos: string[] = []
 
