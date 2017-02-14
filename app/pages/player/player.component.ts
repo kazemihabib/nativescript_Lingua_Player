@@ -523,4 +523,17 @@ export class playerPage implements OnInit {
 	}
 
 
+	/*App settings*/
+		/*subtitle setting*/
+			private subtitleMarginBottom:number = 30;
+			//use rgb color picker with out alpha parameter
+			private subtitleColor:string = "rgba(255, 255, 255, 1)";
+			//use rgb color selector for this with alpha for opacity of background
+			private subtitleBackgroundColor:string ="rgba(0, 0, 0, 0.09)";
+			//use slider for this
+			private subtitleSize:number = 30;
+			//use slider for this
+			private spaceBetweenWords:number = 5;
+
+
 }

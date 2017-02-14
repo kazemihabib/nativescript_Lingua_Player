@@ -77,16 +77,10 @@ vlc {
 
 #subtitle-flex{
     justify-content:center;
-    margin-bottom:5;
     flex-wrap:wrap;
 }
 
 
-#subtitle-flex Label{
-  color:white;
-  font-size:30;
-  margin-left:5
-}
 
 .player-controller-container-action-bar{
     background-color:rgb(0, 0,0,.45);

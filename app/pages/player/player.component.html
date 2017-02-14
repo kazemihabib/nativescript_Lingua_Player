@@ -58,12 +58,15 @@
   <StackLayout row="1" >
   <!--Subtitle -->
   <!--change marginBottom to handle position of subtitle in screen-->
-    <FlexBoxLayout id="subtitle-flex" [flexDirection]="isRTL ? 'row-reverse': 'row'"  [visibility] ="isSubEmpty ? 'collapse': 'visible' " >
-      <div  *ngFor="let item of subText" >
-        <Label *ngIf="item.isWord"  [text]="item.text"  (tap)="showDictionary(item)"> </Label>
-        <Label *ngIf="item.isNotWord" [text]="item.text" ></Label>
-        <Label *ngIf="item.isLine" flexWrapBefore="true" [text]="''" ></Label>
-      </div>
+    <FlexBoxLayout id="subtitle-flex" [flexDirection]="isRTL ? 'row-reverse': 'row'"  [visibility] ="isSubEmpty ? 'collapse': 'visible' " 
+      [marginBottom] ="subtitleMarginBottom"  >
+      <FlexBoxLayout  *ngFor="let item of subText" [backgroundColor]="subtitleBackgroundColor" 
+        [style.font-size]="subtitleSize" >
+        <Label *ngIf="item.isWord"  [text]="item.text"  (tap)="showDictionary(item)" [color]="subtitleColor" [marginLeft]="spaceBetweenWords" > </Label>
+        <Label *ngIf="item.isNotWord" [text]="item.text" [color]="subtitleColor" [marginLeft]="spaceBetweenWords" ></Label>
+        <Label *ngIf="item.isLine" flexWrapBefore="true" [text]="''" [color]="subtitleColor" [marginLeft]="spaceBetweenWords" ></Label>
+      </FlexBoxLayout>
+
     </FlexBoxLayout>
   <!--Subtitle -->
 
