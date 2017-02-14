@@ -1,4 +1,4 @@
-<GridLayout id="root" rows="*,auto" columns="*">
+<GridLayout id="root" rows="*,auto" columns="*" (loaded)="pageLoaded()">
    <ActionBar row="0" rowSpan="2" [title]="videoTitle" class="player-controller-container-action-bar">
       <NavigationButton text="Go Back" android.systemIcon="ic_menu_back" color="#ffffff" (tap)="navigationButtonBack()"></NavigationButton>
    </ActionBar> 

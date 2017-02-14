@@ -41,8 +41,6 @@ export class HomeComponent implements OnInit {
         private viewContainerRef: ViewContainerRef,private modalService: ModalDialogService) { }
 
     public play(path: string, position: number) {
-        //hide status bar befor navigate I Tried this in player component and it didn't work so I added here.
-        frame.topmost().android.activity.getWindow().getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_FULLSCREEN);
         this._router.navigate(["/player", { path: path, position: position }]);
     }
 

@@ -170,9 +170,12 @@ export class playerPage implements OnInit {
 	private label1Loaded(lbl) {
 		this.label1GuestureHandler = lbl;
 	}
+	private pageLoaded(){
+		//to hide the status bar when activity paused and resumed and navigate to this page
+		this.hideStatusBar();
 
+	}
 	private VLCLoaded(vlc) {
-
 		this.videoTitle = fs.File.fromPath(this.videoPath.replace('file://', '')).name;
 
 		let play = () => {
@@ -211,6 +214,7 @@ export class playerPage implements OnInit {
 				this.modalService.showModal(ResumeConfirm, options).then((resumeIt: boolean) => {
 					this.resumeDialogIsOpen = false;
 					this.modalIsOpen = false;
+					this.hideStatusBar();
 					if (resumeIt == undefined)
 						this.routerExtensions.back();
 					else if (resumeIt == true)
@@ -337,9 +341,11 @@ export class playerPage implements OnInit {
 
 	}
 
-	private hideBars() {
+	private hideStatusBar(){
 		frame.topmost().android.activity.getWindow().getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_FULLSCREEN);
-
+	}
+	private hideBars() {
+		this.hideStatusBar();
 		let page = frame.topmost().currentPage;
    	  	let playerController = this.playerController.nativeElement;
    	  	let actionBar = page.actionBar;
@@ -422,6 +428,7 @@ export class playerPage implements OnInit {
 		this.modalIsOpen = true;
 		this.modalService.showModal(DictionaryDialog, options).then((audioTrackId: number) => {
 			this.modalIsOpen = false;
+			this.hideStatusBar();
 			if (isPlaying)
 				this.vlcAction.play();
 		})
@@ -445,17 +452,31 @@ export class playerPage implements OnInit {
 	private moreButtonLoaded(moreBtn) {
 
 		let btn = moreBtn._nativeView;
+		let isSelected:boolean = false;
 
 		this.moreMenu = new android.widget.PopupMenu(application.android.foregroundActivity, btn);
 		this.moreMenu.getMenu().add("decoder");
 
 		this.moreMenu.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener({
 			onMenuItemClick: (item) => {
+				isSelected = true;
 				this._ngZone.run(() => {
 					this.showAccelerationDialog();
 				});
 				return false;
 			}
+		}));
+
+		this.moreMenu.setOnDismissListener(new android.widget.PopupMenu.OnDismissListener({
+			onDismiss:(menu)=>{
+				//opening menu automatically shows status bar 
+				//and dialog is also shows status bar so If I don't check
+				//if menu item is selected so it will hide status bar and dialog shows again
+				//so there is push down and push up happens for activity 
+				if(!isSelected)
+					this.hideStatusBar();
+				isSelected=false;
+			} 	
 		}));
 
 		btn.setOnClickListener(new android.view.View.OnClickListener({
@@ -469,7 +490,7 @@ export class playerPage implements OnInit {
 
 	private tracksBtnLoaded(tracksBtn) {
 		let btn = tracksBtn._nativeView;
-
+		let isSelected:boolean = false;
 		this.tracksMenu = new android.widget.PopupMenu(application.android.foregroundActivity, btn);
 		let menu = this.tracksMenu.getMenu();
 		menu.add(0, 0, 0, "Audio Track");
@@ -478,6 +499,7 @@ export class playerPage implements OnInit {
 
 		this.tracksMenu.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener({
 			onMenuItemClick: (item) => {
+				isSelected = true;
 				if (item.getItemId() == 0) {
 					
 					this._ngZone.run(() => {
@@ -492,9 +514,20 @@ export class playerPage implements OnInit {
 					});
 					return true;
 				}
-
-
 			}
+
+		}));
+
+		this.tracksMenu.setOnDismissListener(new android.widget.PopupMenu.OnDismissListener({
+			onDismiss:(menu)=>{
+				//opening menu automatically shows status bar 
+				//and dialog is also shows status bar so If I don't check
+				//if menu item is selected so it will hide status bar and dialog shows again
+				//so there is push down and push up happens for activity 
+				if(!isSelected)
+					this.hideStatusBar();
+				isSelected=false;
+			} 	
 		}));
 
 		btn.setOnClickListener(new android.view.View.OnClickListener({
@@ -525,6 +558,7 @@ export class playerPage implements OnInit {
 
 					this.modalIsOpen = true;
 					this.modalService.showModal(FilePicker, options).then((res: string) => {
+						this.hideStatusBar();
 						this.modalIsOpen = false;
 						if(res)
 							this.addSub(res);
@@ -545,6 +579,7 @@ export class playerPage implements OnInit {
 
 		this.modalIsOpen = true;
 		this.modalService.showModal(AudioSelector, options).then((audioTrackId: number) => {
+			this.hideStatusBar();
 			this.modalIsOpen = false;
 			if (audioTrackId)
 				this.currentAudioTrack = audioTrackId;
@@ -562,6 +597,7 @@ export class playerPage implements OnInit {
 
 		this.modalIsOpen = true;
 		this.modalService.showModal(AccelerationSelector, options).then((hw: number) => {
+			this.hideStatusBar();
 			this.modalIsOpen = false;
 			if (hw != undefined) {
 				// this.lockScreen();
