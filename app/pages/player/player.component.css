@@ -61,6 +61,7 @@ vlc {
     color:white;
     margin-top:7;
     font-size:22;
+    background-color: rgba(0, 0, 0, 0.09);
 
 }
 
@@ -68,11 +69,13 @@ vlc {
     color:white;
     font-size:20;
     margin-top:7;
+    background-color: rgba(0, 0, 0, 0.09);
 }
 
 #unlock-button{
     horizontal-align:left;
     vertical-align:top;
+    background-color: rgba(0, 0, 0, 0.09);
 }
 
 #subtitle-flex{
