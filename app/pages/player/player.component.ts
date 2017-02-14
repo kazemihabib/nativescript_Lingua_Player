@@ -372,6 +372,7 @@ export class playerPage implements OnInit {
 	}
 	public toggleScreen() {
 		if (this.isLocked) {
+			this.hideStatusBar();	
 			if (this.lockIconVisible)
 				this.lockIconVisible = false;
 			else
