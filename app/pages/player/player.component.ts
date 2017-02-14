@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, NgZone, ViewContainerRef } from "@angular/core";
+﻿import { Component, OnInit, NgZone, ViewContainerRef,ViewChild,ElementRef  } from "@angular/core";
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 import { FilePicker } from "../../dialogs/file_picker/file_picker_dialog";
 import { AccelerationSelector } from "../../dialogs/acceleration_selector/acceleration_selector";
@@ -86,6 +86,7 @@ export class playerPage implements OnInit {
 
 	private subtitleIsLoading: boolean = false;
 
+ 	@ViewChild("playerController") playerController:any ;
 
 	private eventNativeCrashError (){
 		console.log("event: eventNativeCrashError");
@@ -312,22 +313,56 @@ export class playerPage implements OnInit {
 		//when I fix overlay of statusbar on actionbar --> status bar shifts activity down so I disabled showing status bar
 		// let show:number =  android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
 		// frame.topmost().android.activity.getWindow().getDecorView().setSystemUiVisibility(show);
+
 		let page = frame.topmost().currentPage;
+   	  	let playerController = this.playerController.nativeElement;
+		//If I get the actionbar with childview and try to animate it I will get error I should get in this way
+   	  	let actionBar = page.actionBar;
+
+
 		page.actionBarHidden = false;
 		this._ngZone.run(() => {
 			this.visible = true;
 		});
+
+		actionBar.animate({
+				opacity: 1,
+				duration: 250
+		});
+
+		playerController.animate({
+				opacity: 1,
+				duration: 250
+		});
+
 	}
 
 	private hideBars() {
 		frame.topmost().android.activity.getWindow().getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_FULLSCREEN);
+
 		let page = frame.topmost().currentPage;
+   	  	let playerController = this.playerController.nativeElement;
+   	  	let actionBar = page.actionBar;
+			 
+		actionBar.animate({
+				opacity: 0,
+				duration: 250
+		}).then(()=>{
+			page.actionBarHidden = true;
+		} )
 
-		page.actionBarHidden = true;
 
-		this._ngZone.run(() => {
-			this.visible = false;
-		});
+		playerController.animate({
+				opacity: 0,
+				duration: 250
+		}).then(()=>{
+			this._ngZone.run(() => {
+				this.visible = false;
+			});
+		} )
+
+
+
 	}
 	public toggleScreen() {
 		if (this.isLocked) {
