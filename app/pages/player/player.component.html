@@ -19,7 +19,7 @@
      </vlc>
 
    </GridLayout>
-<StackLayout id="seek-text-container" [visibility]=" guestureHandler.seekUiVisibile ? 'visible' : 'collapse'">
+<StackLayout row="0" rowSpan="2" id="seek-text-container" [visibility]=" guestureHandler.seekUiVisibile ? 'visible' : 'collapse'">
   <Label class="seek-text" *ngIf="(currentPosition +  guestureHandler.deltaSeek) <= movieLength && (currentPosition +  guestureHandler.deltaSeek) >=0"
     [text]="(currentPosition +  guestureHandler.deltaSeek) | DurationPipe " ></Label>
   <Label class="seek-text" *ngIf="currentPosition +  guestureHandler.deltaSeek < 0" [text]="0 | DurationPipe " ></Label>
@@ -29,7 +29,7 @@
 </StackLayout>
 
 
-<FlexBoxLayout row="0" id="bright-volume-flexbox">
+<FlexBoxLayout row="0" rowSpan="2" id="bright-volume-flexbox">
   <StackLayout orientation="vertical" [opacity]="guestureHandler.brightnessChartVisible ? 1 : 0 " >
     <GridLayout rows="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*" id="bar-chart">
       <Label id="bright-chart-core" *ngIf ="guestureHandler.currentBrightness" [row]="15 - guestureHandler.currentBrightness" [rowSpan]=" guestureHandler.currentBrightness == 0 ? 1 : guestureHandler.currentBrightness" ></Label>
@@ -96,7 +96,6 @@
     </GridLayout>
 
   <!--PlayerController-->
-  <
   </StackLayout>
 
 </GridLayout>
