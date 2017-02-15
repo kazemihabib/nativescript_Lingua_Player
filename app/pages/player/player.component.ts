@@ -567,12 +567,14 @@ export class playerPage implements OnInit {
 				if(!isSelected)
 					this.hideStatusBar();
 				isSelected=false;
+				this.hideBars();
 			} 	
 		}));
 
 		btn.setOnClickListener(new android.view.View.OnClickListener({
 			onClick: () => {
 				this.moreMenu.show();
+				timer.clearTimeout(this.barsTimer);
 			}
 		}));
 
@@ -618,12 +620,14 @@ export class playerPage implements OnInit {
 				if(!isSelected)
 					this.hideStatusBar();
 				isSelected=false;
+				this.hideBars();
 			} 	
 		}));
 
 		btn.setOnClickListener(new android.view.View.OnClickListener({
 			onClick: () => {
 				this.tracksMenu.show();
+				timer.clearTimeout(this.barsTimer);
 			}
 		}));
 
