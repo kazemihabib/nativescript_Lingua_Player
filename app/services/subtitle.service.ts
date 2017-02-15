@@ -88,11 +88,7 @@ export class Subtitle{
     public getNextDialogWordList (isCurrentSubEmpty:boolean){
         let obj:any;
         if(this.index < this.subData.length)
-            if(isCurrentSubEmpty) 
-                obj = this.subData[this.index];
-            else 
-                obj = this.subData[++this.index];
-
+            obj = this.subData[++this.index];
             return obj;
     }
 

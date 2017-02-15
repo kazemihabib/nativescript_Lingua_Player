@@ -497,8 +497,12 @@ export class playerPage implements OnInit {
 			this.isRTL = isRTL;
 			this._ngZone.run(() => {
 				this.subtitleIsLoading = false;
+				this.subtitleIsLoaded = true;
 			});
-			this.subtitleIsLoaded = true;
+			//to show the subtitle dialog if it's paused and user loads
+			//subtitle --> shows if there is dialog there and also
+			//enables next and previous with setting index in subtitle.service
+			this.getSubtitleDialog();
 		});
 	}
 
