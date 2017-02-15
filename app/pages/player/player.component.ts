@@ -204,6 +204,18 @@ export class playerPage implements OnInit {
 	private pageLoaded(){
 		//to hide the status bar when activity paused and resumed and navigate to this page
 		this.hideStatusBar();
+		timer.setTimeout(() => {
+			//update 
+			//I found that if i put it in setTimeOut I can use it here 
+			//thie place is better because the bars are not shown 
+			//at the background of  resumeDialog and also it doesn't effect ui
+
+			//now at the start the bars will hide
+			//so the bars will not shown on the screen at the start it's beautifull 
+			//and also user has to tap screen to see them and timeout of hiding 
+			//them will set.
+			this.hideBarsWithNoAnimation();
+		}, 0);
 	}
 
 
@@ -214,12 +226,6 @@ export class playerPage implements OnInit {
 			if(!this.modalIsOpen)
 				timer.setTimeout(() => {
 					this.vlcAction.play();
-					//now at the start the bars will hide, here was the best place to 
-					//make it work correctly some other places might cause not hide action bar
-					//so the bars will not shown on the screen at the start it's beautifull 
-					//and also user has to tap screen to see them and timeout of hiding 
-					//them will set.
-					this.hideBars();
 				}, 0);
 		}
 
@@ -381,6 +387,18 @@ export class playerPage implements OnInit {
 
 	private hideStatusBar(){
 		frame.topmost().android.activity.getWindow().getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_FULLSCREEN);
+	}
+	private hideBarsWithNoAnimation(){
+		this.hideStatusBar();
+		let page = frame.topmost().currentPage;
+   	  	let actionBar = page.actionBar;
+			 
+		page.actionBarHidden = true;
+
+		this._ngZone.run(() => {
+			this.visible = false;
+		});
+
 	}
 	private hideBars() {
 		this.hideStatusBar();
