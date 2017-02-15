@@ -119,10 +119,41 @@ export class playerPage implements OnInit {
 		});
 	}
 	private eventTimeChanged() {
+		this.syncPosition();
+		this.getSubtitleDialog();
+	}
+
+	private syncPosition(){
 		this._ngZone.run(() => {
 			this.currentPosition = this.vlcAction.getPosition();
 		});
-		this.getSubtitleDialog();
+
+	}
+
+    public getPreviousDialogWordList (){
+		let subObj = this.subtitle.getPreviousDialogWordList(this.isSubEmpty);
+		if(subObj){
+			//warning
+			//TODO
+			//consider fast seek that seeks are not  that not seeks to exact position
+			//so user press previous button(when it's pause) and it seeks to prev dialog
+			//then it plays again and might not continue that dialog (perhaps one or two before that).
+			//how to fix it !!! ??? 
+			this.isSubEmpty = false;
+			this.vlcAction.seek(subObj.startTime);
+			this._ngZone.run(() => { this.subText = subObj.wordList; });
+			this.syncPosition();
+		}
+	}
+
+    public getNextDialogWordList (){
+		let subObj = this.subtitle.getNextDialogWordList(this.isSubEmpty);
+		if(subObj){
+			this.isSubEmpty = false;
+			this.vlcAction.seek(subObj.startTime);
+			this._ngZone.run(() => { this.subText = subObj.wordList; });
+			this.syncPosition();
+		}
 	}
 
 	private getSubtitleDialog() {
@@ -400,7 +431,8 @@ export class playerPage implements OnInit {
 	private tapPlayerController() {
 	}
 
-
+	//To chcek should I show show < and > below subtitle.
+	private subtitleIsLoaded:boolean = false;
 	public addSub(subPath: string) {
 
 		this._ngZone.run(() => {
@@ -413,6 +445,7 @@ export class playerPage implements OnInit {
 			this._ngZone.run(() => {
 				this.subtitleIsLoading = false;
 			});
+			this.subtitleIsLoaded = true;
 		});
 	}
 
@@ -422,7 +455,7 @@ export class playerPage implements OnInit {
 		this.vlcAction.pause();
 
 		let options: ModalDialogOptions = {
-			context: { item: item },
+			context: { word:item.text },
 			viewContainerRef: this.viewContainerRef
 		};
 
@@ -624,6 +657,19 @@ export class playerPage implements OnInit {
 		this.tracksMenu = null;
 
 	}
+
+
+	/*App settings*/
+		/*subtitle setting*/
+			private subtitleMarginBottom:number = 30;
+			//use rgb color picker with out alpha parameter
+			private subtitleColor:string = "rgba(255, 255, 255, 1)";
+			//use rgb color selector for this with alpha for opacity of background
+			private subtitleBackgroundColor:string ="rgba(0, 0, 0, 0.09)";
+			//use slider for this
+			private subtitleSize:number = 30;
+			//use slider for this
+			private spaceBetweenWords:number = 5;
 
 
 }

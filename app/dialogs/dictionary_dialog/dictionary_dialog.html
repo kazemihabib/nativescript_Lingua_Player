@@ -1,20 +1,29 @@
+<StackLayout id="container"  (tap)="toggle()" >
+    <StackLayout id="left-side">
+        <!--<DropDown #dd  [items]="languages" [selectedIndex]="1" (selectedIndexChanged)="onchange($event)" width="20%" horizontalAlignment="left" marginLeft="10"></DropDown>-->
+        <FlexboxLayout id="word-container" >
+            <FlexboxLayout flexDirection="row" justifyContent = "flex-start" id="word-volume" alignItems="center" >
+                <Label class="mdi" [text]="'mdi-volume-up' | fonticon" id="volume-icon" > </Label>
+                <TextView  [text]="word"  id="wordLabel" focus="true"></TextView>
+            </FlexboxLayout >
+            <Label  class="mdi" [text]="'mdi-star' | fonticon" > </Label>
+            
+        </FlexboxLayout>
+
+        <WebView  [src]="web1" #webView ></WebView>
+
+    </StackLayout>
+
+    <FlexboxLayout justifyContent="space-between" flexDirection="column" id="dictionary-list-container">
+        <ListView [items]="dictionaries" (itemTap)="onItemTap($event)" rowHeight="100" (loadMoreItems)="listViewLoadMoreItems(item)">
+            <template let-item="item" let-i="index" let-odd="odd" let-even="even">
+                <GridLayout [class.odd]="odd" [class.even]="even">
+                    <Image  id="dictionary-item" [src] ="'~/images/'+item" stretch="fill" ></Image> 
+                </GridLayout>
+            </template>
+        </ListView>
+
+        <Button class="mdi" [text]="'mdi-settings' | fonticon" (tap)="download()" height="150" fontSize="50" backgroundColor="transparent" ></Button>
+    </FlexboxLayout>
+
 <StackLayout>
-    <FlexboxLayout>
-        <Label [text]="'English'"></Label>
-        <Label [text]="'book'"></Label>
-    </FlexboxLayout>
-
-    <FlexboxLayout>
-        <Label [text]="'Persian'"></Label>
-        <Label [text]="'کتاب'"></Label>
-    </FlexboxLayout>
-
-    <FlexboxLayout flexWrap="wrap" >
-        <Button [text]="'New Translation'"></Button>
-        <Button [text]="'Add'"></Button>
-        <Button [text]="'Translate Sentence'"></Button>
-        <Label id="item-icon" class="mdi" [text]="'\ue2c7'" ></Label>
-    </FlexboxLayout>
-
-
-</StackLayout>

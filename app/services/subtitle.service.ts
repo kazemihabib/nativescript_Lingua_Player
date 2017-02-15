@@ -33,6 +33,8 @@ export class Subtitle{
             let response:ISubWorker.ISubWorkerResponse = msg.data;
 
             if(ISubWorker.functions.loadSubtitle == response.function){
+                // index should be -1 when load subtitle because subtitle file can change
+                this.index = -1;
                 if(response.pathAsId == this.lastUsedPathForLoading){
                     this.subData = response.subData;
                     callback(response.isRTL, response.success, response.error);
@@ -57,20 +59,43 @@ export class Subtitle{
         }
     }
 
+    private index:number;
     public getDialogWordList (time:number):any{
-        let index = _.sortedIndex(this.subData, {startTime: time}, function(sub){return sub.startTime});
-        index--;
-        if(index<0)
+        this.index = _.sortedIndex(this.subData, {startTime: time}, function(sub){return sub.startTime});
+        this.index--;
+        if(this.index<0)
             //return empty wordList
             return [];
         
-        let obj:any = this.subData[index];
+        let obj:any = this.subData[this.index];
 
         if(time > obj.endTime)
             //return empty wordList
             return [];
         return obj.wordList;
     } 
+    public getPreviousDialogWordList (isCurrentSubEmpty:boolean){
+        let obj:any;
+        if(this.index > 0)
+            if(isCurrentSubEmpty) 
+                obj = this.subData[this.index];
+            else 
+                obj = this.subData[--this.index];
+
+            return obj;
+    }
+
+    public getNextDialogWordList (isCurrentSubEmpty:boolean){
+        let obj:any;
+        if(this.index < this.subData.length)
+            if(isCurrentSubEmpty) 
+                obj = this.subData[this.index];
+            else 
+                obj = this.subData[++this.index];
+
+            return obj;
+    }
+
 
 
 }

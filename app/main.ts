@@ -15,6 +15,11 @@ import {AudioSelector} from "./dialogs/audio_selector/audio_selector";
 import {ResumeConfirm} from "./dialogs/resume_confirm/resume_confirm";
 import {DictionaryDialog} from "./dialogs/dictionary_dialog/dictionary_dialog";
 import {NotFound } from "./dialogs/not_found/not_found";
+import { registerElement } from "nativescript-angular/element-registry";
+
+import {Dictionary} from "./services/dictionary.service"
+
+registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown);
 
 import { TNSFontIconModule} from 'nativescript-ng2-fonticon';
 @NgModule({
@@ -43,6 +48,9 @@ import { TNSFontIconModule} from 'nativescript-ng2-fonticon';
 
     ],
     entryComponents: [FilePicker,AccelerationSelector,AudioSelector,ResumeConfirm,DictionaryDialog,NotFound],
+    providers: [ // singleton services
+        Dictionary
+    ],
     bootstrap: [
         AppComponent
     ]
