@@ -81,6 +81,8 @@ vlc {
 #subtitle-flex{
     justify-content:center;
     flex-wrap:wrap;
+    /*to center labels inside background*/
+    /*align-items: center;*/
 }
 
 
@@ -127,4 +129,17 @@ vlc {
 
 #subtitle-loading{
     color:red;
+}
+
+.sub-arrow-button{
+    width:50;
+    flex-grow:0;
+    color:red;
+    background-color:rgba(0, 0, 0, 0.15);
+    font-size:50; 
+
+}
+
+ .sub-arrow-button:highlighted {
+    background-color: blue;
 }

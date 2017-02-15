@@ -113,10 +113,41 @@ export class playerPage implements OnInit {
 		});
 	}
 	private eventTimeChanged() {
+		this.syncPosition();
+		this.getSubtitleDialog();
+	}
+
+	private syncPosition(){
 		this._ngZone.run(() => {
 			this.currentPosition = this.vlcAction.getPosition();
 		});
-		this.getSubtitleDialog();
+
+	}
+
+    public getPreviousDialogWordList (){
+		let subObj = this.subtitle.getPreviousDialogWordList(this.isSubEmpty);
+		if(subObj){
+			//warning
+			//TODO
+			//consider fast seek that seeks are not  that not seeks to exact position
+			//so user press previous button(when it's pause) and it seeks to prev dialog
+			//then it plays again and might not continue that dialog (perhaps one or two before that).
+			//how to fix it !!! ??? 
+			this.isSubEmpty = false;
+			this.vlcAction.seek(subObj.startTime);
+			this._ngZone.run(() => { this.subText = subObj.wordList; });
+			this.syncPosition();
+		}
+	}
+
+    public getNextDialogWordList (){
+		let subObj = this.subtitle.getNextDialogWordList(this.isSubEmpty);
+		if(subObj){
+			this.isSubEmpty = false;
+			this.vlcAction.seek(subObj.startTime);
+			this._ngZone.run(() => { this.subText = subObj.wordList; });
+			this.syncPosition();
+		}
 	}
 
 	private getSubtitleDialog() {
@@ -338,7 +369,8 @@ export class playerPage implements OnInit {
 	private tapPlayerController() {
 	}
 
-
+	//To chcek should I show show < and > below subtitle.
+	private subtitleIsLoaded:boolean = false;
 	public addSub(subPath: string) {
 
 		this.subtitleIsLoading = true;
@@ -347,6 +379,8 @@ export class playerPage implements OnInit {
 			console.log('sub err: ', err)
 			this.isRTL = isRTL;
 			this.subtitleIsLoading = false;
+			this.subtitleIsLoaded = true;
+			
 		});
 	}
 

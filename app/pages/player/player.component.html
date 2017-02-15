@@ -57,17 +57,23 @@
   <Button id="unlock-button" row="0" class="mdi font-icon" [text]="'mdi-lock' | fonticon" (tap)="unLockScreen()" [visibility] =" lockIconVisible ? 'visible' : 'collapse'"></Button>
   <StackLayout row="1" >
   <!--Subtitle -->
-  <!--change marginBottom to handle position of subtitle in screen-->
+  <!--show the arrow buttons only when subtitle is loaded and it's paused-->
+    <FlexBoxLayout *ngIf="subtitleIsLoaded" justifyContent="center" [visibility] ="isPlaying ? 'collapse': 'visible' " >
+
+      <button  class="mdi sub-arrow-button" [text]="'mdi-keyboard-arrow-left' | fonticon" (tap)="getPreviousDialogWordList()" > </button>
+      <button class="mdi sub-arrow-button" [text]="'mdi-keyboard-arrow-right' | fonticon" (tap)="getNextDialogWordList()" > </button>
+    </FlexBoxLayout>
+    <!--change marginBottom to handle position of subtitle in screen-->
     <FlexBoxLayout id="subtitle-flex" [flexDirection]="isRTL ? 'row-reverse': 'row'"  [visibility] ="isSubEmpty ? 'collapse': 'visible' " 
-      [marginBottom] ="subtitleMarginBottom"  >
+    [marginBottom] ="subtitleMarginBottom"  >
       <FlexBoxLayout  *ngFor="let item of subText" [backgroundColor]="subtitleBackgroundColor" 
         [style.font-size]="subtitleSize" >
         <Label *ngIf="item.isWord"  [text]="item.text"  (tap)="showDictionary(item)" [color]="subtitleColor" [marginLeft]="spaceBetweenWords" > </Label>
         <Label *ngIf="item.isNotWord" [text]="item.text" [color]="subtitleColor" [marginLeft]="spaceBetweenWords" ></Label>
         <Label *ngIf="item.isLine" flexWrapBefore="true" [text]="''" [color]="subtitleColor" [marginLeft]="spaceBetweenWords" ></Label>
       </FlexBoxLayout>
-
     </FlexBoxLayout>
+
   <!--Subtitle -->
 
 
