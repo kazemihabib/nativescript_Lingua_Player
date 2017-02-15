@@ -22,7 +22,7 @@ export class AudioSelector {
     private selectedAudioTrack: number;
     private audioTracks;
     items = [];
-
+    private hasNoAudioTrack:boolean = false;
     constructor(private params: ModalDialogParams) {
         let audioTracks = params.context.audioTracks;
         this.selectedAudioTrack = params.context.currentAudioTrack;
@@ -30,6 +30,8 @@ export class AudioSelector {
             (element, index, array) => {
                 this.items.push(new AudioTrack(element.id, element.name))
             })
+        if(audioTracks.length == 0 )
+            this.hasNoAudioTrack = true;
     }
 
 

@@ -4,5 +4,6 @@
     </FlexboxLayout>
 
     <Button *ngFor="let item of items" [text]="item.name" (tap)="onItemTap(item)" [selected]="item.name == selectedAudioTrack ? true : false"></Button>
+    <Label *ngIf="hasNoAudioTrack" id="no-audio" [text]="'No audio track'"></Label>
 
 </StackLayout>

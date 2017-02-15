@@ -17,3 +17,10 @@ button[selected = true]{ color: blue; }
 
 button:highlighted { background-color:#64b5f6;}
 
+#no-audio{
+    height: 50;
+    color:black;
+    horizontal-align:center;
+    margin-top: 20;
+}
+
