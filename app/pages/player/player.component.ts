@@ -204,8 +204,9 @@ export class playerPage implements OnInit {
 	private pageLoaded(){
 		//to hide the status bar when activity paused and resumed and navigate to this page
 		this.hideStatusBar();
-
 	}
+
+
 	private VLCLoaded(vlc) {
 		this.videoTitle = fs.File.fromPath(this.videoPath.replace('file://', '')).name;
 
@@ -213,6 +214,12 @@ export class playerPage implements OnInit {
 			if(!this.modalIsOpen)
 				timer.setTimeout(() => {
 					this.vlcAction.play();
+					//now at the start the bars will hide, here was the best place to 
+					//make it work correctly some other places might cause not hide action bar
+					//so the bars will not shown on the screen at the start it's beautifull 
+					//and also user has to tap screen to see them and timeout of hiding 
+					//them will set.
+					this.hideBars();
 				}, 0);
 		}
 
@@ -401,26 +408,48 @@ export class playerPage implements OnInit {
 
 
 	}
-	public toggleScreen() {
-		if (this.isLocked) {
-			this.hideStatusBar();	
-			if (this.lockIconVisible)
-				this.lockIconVisible = false;
-			else
-				this.lockIconVisible = true;
-		}
-
-		else if (this.visible)
-			this.hideBars();
-
-		else if (!this.visible)
-			this.showBars();
-
+	
+	private doubleTapScreen(args){
         if(this.tapToTogglePlayer)
 			if(this.isPlaying)
 				this.vlcAction.pause();
             else	
 				this.vlcAction.play();
+
+	}
+	
+	private lockIconTimer;
+	private barsTimer;
+
+	public toggleScreen() {
+		//If I don't clear it and  toggle screen multiple times it might
+		//it might be hide sooner than 2 seconds because of previous lock icons
+		timer.clearTimeout(this.lockIconTimer);
+		timer.clearTimeout(this.barsTimer);
+		if (this.isLocked) {
+			//to close it when user opens it by pulling down status bar
+			this.hideStatusBar();	
+			if (this.lockIconVisible){
+				this.lockIconVisible = false;
+			}
+			else{
+				this.lockIconVisible = true;
+				this.lockIconTimer = timer.setTimeout(()=>{
+					this.lockIconVisible = false;
+				},this.timeOutTime)
+			}
+		}
+
+		else if (this.visible)
+			this.hideBars();
+
+		else if (!this.visible){
+			this.showBars();
+			this.barsTimer = timer.setTimeout(()=>{
+				this.hideBars();
+			},this.timeOutTime)
+		}
+
 	}
 
 	private save() {
@@ -665,19 +694,22 @@ export class playerPage implements OnInit {
 	}
 
 
-	/*App settings*/
-		/*subtitle setting*/
-			private subtitleMarginBottom:number = 30;
-			//use rgb color picker with out alpha parameter
-			private subtitleColor:string = "rgba(255, 255, 255, 1)";
-			//use rgb color selector for this with alpha for opacity of background
-			private subtitleBackgroundColor:string ="rgba(0, 0, 0, 0.09)";
-			//use slider for this
-			private subtitleSize:number = 30;
-			//use slider for this
-			private spaceBetweenWords:number = 5;
+/*App settings*/
+	/*subtitle setting*/
+		private subtitleMarginBottom:number = 30;
+		//use rgb color picker with out alpha parameter
+		private subtitleColor:string = "rgba(255, 255, 255, 1)";
+		//use rgb color selector for this with alpha for opacity of background
+		private subtitleBackgroundColor:string ="rgba(0, 0, 0, 0.09)";
+		//use slider for this
+		private subtitleSize:number = 30;
+		//use slider for this
+		private spaceBetweenWords:number = 5;
 
-       /*player settings*/
-	  		private tapToTogglePlayer:boolean = true;
+	/*player settings*/
+		//should pause and resume with tap
+		private tapToTogglePlayer:boolean = true;
+		//ms to hide bars and lock icon
+		private timeOutTime:number = 2000;
 
 }

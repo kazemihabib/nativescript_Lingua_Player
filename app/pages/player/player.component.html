@@ -46,12 +46,12 @@
 </FlexBoxLayout>
   
   <GridLayout  #guestures row="0" rowSpan="3" columns = "*,*" (loaded)="guestueresAreLoaded(guestures)">
-    <Label  #leftGuestures   row="0"  col="0"   rowSpan="3" (loaded)="label1Loaded(leftGuestures )" horizontalAlignment= "stretch" (tap)="toggleScreen()" ></Label>
-    <Label  #rightGuestures  row="0"  col="1"   rowSpan="3" (loaded)="label2Loaded(rightGuestures)" horizontalAlignment= "stretch" (tap)="toggleScreen()" ></Label>
+    <Label  #leftGuestures   row="0"  col="0"   rowSpan="3" (loaded)="label1Loaded(leftGuestures )" horizontalAlignment= "stretch" (doubleTap)="doubleTapScreen()" (tap)="toggleScreen()" ></Label>
+    <Label  #rightGuestures  row="0"  col="1"   rowSpan="3" (loaded)="label2Loaded(rightGuestures)" horizontalAlignment= "stretch" (doubleTap)="doubleTapScreen()" (tap)="toggleScreen()" ></Label>
   </GridLayout >
 
   <!--To disable guestures when locked -->
-  <GridLayout *ngIf="isLocked" (tap)="toggleScreen()" row="0" rowSpan="3"> </GridLayout>
+  <GridLayout *ngIf="isLocked" (tap)="toggleScreen()" row="0" (doubleTap)="doubleTapScreen()" rowSpan="3"> </GridLayout>
   
   
   <Button id="unlock-button" row="0" class="mdi font-icon" [text]="'mdi-lock' | fonticon" (tap)="unLockScreen()" [visibility] =" lockIconVisible ? 'visible' : 'collapse'"></Button>
