@@ -415,6 +415,12 @@ export class playerPage implements OnInit {
 
 		else if (!this.visible)
 			this.showBars();
+
+        if(this.tapToTogglePlayer)
+			if(this.isPlaying)
+				this.vlcAction.pause();
+            else	
+				this.vlcAction.play();
 	}
 
 	private save() {
@@ -671,5 +677,7 @@ export class playerPage implements OnInit {
 			//use slider for this
 			private spaceBetweenWords:number = 5;
 
+       /*player settings*/
+	  		private tapToTogglePlayer:boolean = true;
 
 }
