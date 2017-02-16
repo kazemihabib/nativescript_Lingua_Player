@@ -30,7 +30,7 @@ FlexboxLayout {
         height: 80%;
 }
 
-#wordLabel{
+#word-label{
     color:black;
     /*remove underbar*/
     background-color: transparent;
@@ -46,6 +46,12 @@ FlexboxLayout {
 
 #volume-icon{
     margin-right:10;
+    margin-left:10;
+}
+
+#star-icon{
+    margin-right:10;
+    margin-left:10;
 }
 
 #dictionary-item{

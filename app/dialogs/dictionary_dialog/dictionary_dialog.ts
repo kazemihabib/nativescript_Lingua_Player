@@ -89,5 +89,9 @@ export class DictionaryDialog implements AfterViewInit {
         })
     }
 
+    private search(args) {
+        this.web1 = this.dictionary.getMeaning(this.word);
+    }
+
 }
 

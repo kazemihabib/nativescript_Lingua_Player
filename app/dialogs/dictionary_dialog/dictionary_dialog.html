@@ -2,11 +2,13 @@
     <StackLayout id="left-side">
         <!--<DropDown #dd  [items]="languages" [selectedIndex]="1" (selectedIndexChanged)="onchange($event)" width="20%" horizontalAlignment="left" marginLeft="10"></DropDown>-->
         <FlexboxLayout id="word-container" >
-            <FlexboxLayout flexDirection="row" justifyContent = "flex-start" id="word-volume" alignItems="center" >
-                <Label class="mdi" [text]="'mdi-volume-up' | fonticon" id="volume-icon" > </Label>
-                <TextView  [text]="word"  id="wordLabel" focus="true"></TextView>
-            </FlexboxLayout >
-            <Label  class="mdi" [text]="'mdi-star' | fonticon" > </Label>
+            <!--<FlexboxLayout flexDirection="row" justifyContent = "flex-start" id="word-volume" alignItems="center" >-->
+                <Label class="mdi" [text]="'mdi-volume-up' | fonticon" id="volume-icon" flexGrow="0"> </Label>
+                <TextField  [(ngModel)]="word"  (returnPress)="search($event)" returnKeyType="search" id="word-label"
+                autocorrect="false" [editable]="true" flexGrow="1" autocapitalizationType="none" ></TextField>
+
+            <!--</FlexboxLayout >-->
+            <Label  class="mdi" [text]="'mdi-star' | fonticon" flexGrow="0" id="star-icon"> </Label>
             
         </FlexboxLayout>
 
