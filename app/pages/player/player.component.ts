@@ -105,7 +105,9 @@ export class playerPage implements OnInit {
 	private eventPlaying () {
 		if(this.activityIsPaused)
 		{
-			this.vlcAction.pause();
+			timer.setTimeout(()=>{
+				this.vlcAction.pause();
+			},50);
 			this.activityIsPaused = false;
 		}
 		this._ngZone.run(() => {

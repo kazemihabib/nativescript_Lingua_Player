@@ -491,7 +491,7 @@ export class VLCComponent implements OnInit{
 
     public initLibVLC(){
 
-        this.libVLC = new this.LibVLC(org.videolan.vlc.util.VLCOptions.getLibOptions(application.android.currentContext));
+        this.libVLC = new this.LibVLC(application.android.currentContext,org.videolan.vlc.util.VLCOptions.getLibOptions(application.android.currentContext));
 
         this.LibVLC.setOnNativeCrashListener(new this.LibVLC.OnNativeCrashListener({
             onNativeCrash: () => {
