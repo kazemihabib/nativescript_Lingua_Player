@@ -242,6 +242,10 @@ export class playerPage implements OnInit {
 		this.videoTitle = fs.File.fromPath(this.videoPath.replace('file://', '')).name;
 
 		let play = () => {
+			//TODO:
+			//as if activityIsPaused is true this function will not called
+			//so I think I don't need this modalIsOpen 
+			//but I keep it because I will need it soon
 			if(!this.modalIsOpen)
 				timer.setTimeout(() => {
 					this.vlcAction.play();
@@ -252,9 +256,6 @@ export class playerPage implements OnInit {
 		this.vlcAction = this.vlc.getVLCAction();
 
 		if(this.activityIsPaused){
-			this._ngZone.run(() => {
-				this.currentPosition = this.positionInDb;
-			});
 			//we don't need to get data from database,show resume dialog and .. .
 			//because acitivy is paused not destroyed and we have them already
 			
@@ -269,6 +270,9 @@ export class playerPage implements OnInit {
 			//but for now it's the best method I found
 			this.syncPosition();
 			return timer.setTimeout(() => {
+				this._ngZone.run(() => {
+					this.currentPosition = this.positionInDb;
+				});
 				this.vlcAction.play();
 			}, 0);
 		}
