@@ -103,6 +103,9 @@ export class playerPage implements OnInit {
 		this.routerExtensions.back();
 	}
 	private eventPlaying () {
+		timer.clearTimeout(this.barsTimer);
+		this.setBarsHideTimer();
+
 		if(this.activityIsPaused)
 		{
 			timer.setTimeout(()=>{
@@ -121,6 +124,7 @@ export class playerPage implements OnInit {
 	}
 
 	private eventPausd() {
+		timer.clearTimeout(this.barsTimer);
 		this._ngZone.run(() => {
 			this.isPlaying = false;
 		});
@@ -226,7 +230,10 @@ export class playerPage implements OnInit {
 			//so the bars will not shown on the screen at the start it's beautifull 
 			//and also user has to tap screen to see them and timeout of hiding 
 			//them will set.
-			this.hideBarsWithNoAnimation();
+			if(this.activityIsPaused)
+				this.showBars();
+            else
+				this.hideBarsWithNoAnimation();
 		}, 0);
 	}
 
@@ -492,10 +499,16 @@ export class playerPage implements OnInit {
 
 		else if (!this.visible){
 			this.showBars();
-			this.barsTimer = timer.setTimeout(()=>{
-				this.hideBars();
-			},this.timeOutTime)
+			if(this.isPlaying)
+				this.setBarsHideTimer();
 		}
+
+	}
+
+	private setBarsHideTimer() {
+		this.barsTimer = timer.setTimeout(() => {
+			this.hideBars();
+		}, this.timeOutTime)
 
 	}
 
