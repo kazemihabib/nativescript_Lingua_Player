@@ -103,6 +103,11 @@ export class playerPage implements OnInit {
 		this.routerExtensions.back();
 	}
 	private eventPlaying () {
+		if(this.activityIsPaused)
+		{
+			this.vlcAction.pause();
+			this.activityIsPaused = false;
+		}
 		this._ngZone.run(() => {
 			this.isPlaying = true;
 		});
@@ -232,10 +237,23 @@ export class playerPage implements OnInit {
 		this.vlc = vlc;
 		this.vlcAction = this.vlc.getVLCAction();
 
-		if(this.activityIsPaused)
+		if(this.activityIsPaused){
 			//we don't need to get data from database,show resume dialog and .. .
 			//because acitivy is paused not destroyed and we have them already
-			return;
+			
+
+			//the below paly call is just for preparing surfaceView
+			//so I have to play and pause it to prepare it
+			//If I don't do it the seek won't work befor first resuming it
+			//that's why I don't use the above play method 
+			//because it should be played even when modalIsOpen	
+			//fix #53
+			//actually doing this will not fix it verry well(seek might enable but screen is black event after seek)
+			//but for now it's the best method I found
+			return timer.setTimeout(() => {
+				this.vlcAction.play();
+			}, 0);
+		}
 
 		this.positionInDb = this.positionInDb > 5000 ? this.positionInDb - 5000 : 0;	
 		
