@@ -107,8 +107,8 @@ export class playerPage implements OnInit {
 		{
 			timer.setTimeout(()=>{
 				this.vlcAction.pause();
-			},50);
-			this.activityIsPaused = false;
+				this.activityIsPaused = false;
+			},0);
 		}
 		this._ngZone.run(() => {
 			this.isPlaying = true;
@@ -126,7 +126,12 @@ export class playerPage implements OnInit {
 		});
 	}
 	private eventTimeChanged() {
-		this.syncPosition();
+		if(!this.activityIsPaused)
+			//at the startPlayback instantiate it will return 
+			//0 for position and it will show the wrong position for us
+			//so it will not sync until activityIsPaused become false
+			//it becomes false in eventPlaying
+			this.syncPosition();
 		this.getSubtitleDialog();
 	}
 
@@ -240,6 +245,9 @@ export class playerPage implements OnInit {
 		this.vlcAction = this.vlc.getVLCAction();
 
 		if(this.activityIsPaused){
+			this._ngZone.run(() => {
+				this.currentPosition = this.positionInDb;
+			});
 			//we don't need to get data from database,show resume dialog and .. .
 			//because acitivy is paused not destroyed and we have them already
 			
@@ -252,6 +260,7 @@ export class playerPage implements OnInit {
 			//fix #53
 			//actually doing this will not fix it verry well(seek might enable but screen is black event after seek)
 			//but for now it's the best method I found
+			this.syncPosition();
 			return timer.setTimeout(() => {
 				this.vlcAction.play();
 			}, 0);
