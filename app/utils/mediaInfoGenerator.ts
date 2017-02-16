@@ -2,6 +2,7 @@ var imageSource = require("image-source");
 var application = require("application");
 var fs = require("file-system");
 var database = require('./media.database');
+var utilsAd = require("utils/utils").ad;
 
 declare var org:any;
 declare var android:any;
@@ -13,11 +14,12 @@ declare var java:any;
 
 var bitmap = android.graphics.Bitmap
 var Media = org.videolan.libvlc.Media
+
 var VLCUtil = org.videolan.libvlc.util.VLCUtil;
 var LibVLC = org.videolan.libvlc.LibVLC;
 var MediaPlayer = org.videolan.libvlc.MediaPlayer;
-
-var libVLC = new LibVLC();
+var context = utilsAd.getApplicationContext();
+var libVLC = new LibVLC(context);
 
 
 function setMediaInfo(path:string) {
