@@ -517,6 +517,8 @@ export class playerPage implements OnInit {
 	}
 
 	private changeAspectRatio() {
+		timer.clearTimeout(this.barsTimer);
+		this.setBarsHideTimer();
 		let currentAspectRatio = this.vlc.getCurrentAspectRatioItem();
 		console.log('currentAspectRatio' + currentAspectRatio.name);
 		this.currentAspectRatio = (currentAspectRatio.value + 1) % 7;
@@ -524,6 +526,8 @@ export class playerPage implements OnInit {
 
 	// function to prevent calling toggleScreen on tap
 	private tapPlayerController() {
+		timer.clearTimeout(this.barsTimer);
+		this.setBarsHideTimer();
 	}
 
 	//To chcek should I show show < and > below subtitle.

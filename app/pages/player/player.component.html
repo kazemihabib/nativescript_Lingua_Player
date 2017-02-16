@@ -87,7 +87,7 @@
           <Label id="remaining-time" [text]="currentPosition - movieLength | DurationPipe" ></Label>
         </FlexBoxLayout>
 
-        <FlexBoxLayout id="player-controller-buttons" row="1" (tap)="tapPlayerController" >
+        <FlexBoxLayout id="player-controller-buttons" row="1" (tap)="tapPlayerController()" >
           <Label  flexGrow="3"></Label>
           <Button class="mdi font-icon"  [text]="'mdi-lock' | fonticon" (tap)="lockScreen()" opacity="1"></Button>
           <Button #tracksBtn class="mdi font-icon" [text]="'mdi-subtitles' | fonticon" (loaded)="tracksBtnLoaded(tracksBtn)"></Button>
