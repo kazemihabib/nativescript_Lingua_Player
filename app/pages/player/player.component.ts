@@ -96,6 +96,8 @@ export class playerPage implements OnInit {
 		console.log("event: eventHardwareAccelerationError");
 	}
 	private eventEndReached() {
+		//prevent to hide home components action bar
+		timer.clearTimeout(this.barsTimer);
 		console.log('eventEndReached');
 		this.positionInDb = 0;
 		this.save();
@@ -361,6 +363,8 @@ export class playerPage implements OnInit {
 	}
 
 	private prepareGoBack(){
+		//prevent to hide home components action bar
+		timer.clearTimeout(this.barsTimer);
 		this.vlc.stopPlayback();
 		this.positionInDb = this.vlc.lastPosition;
 		this.save();
