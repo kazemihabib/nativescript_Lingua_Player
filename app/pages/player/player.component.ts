@@ -98,7 +98,6 @@ export class playerPage implements OnInit {
 	private eventEndReached() {
 		//prevent to hide home components action bar
 		timer.clearTimeout(this.barsTimer);
-		console.log('eventEndReached');
 		this.positionInDb = 0;
 		this.save();
 		this.clearUI();
@@ -583,7 +582,6 @@ export class playerPage implements OnInit {
 	public guestureEventCallbacks: IGuestureEventCallbacks = {
 		seekEventFired: () => {
 			this.eventTimeChanged();
-			console.log('seekEventFired');
 		}
 	}
 

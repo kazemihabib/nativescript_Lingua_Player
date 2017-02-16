@@ -99,7 +99,8 @@ vlc {
 #current-position{
     color:white;
     margin:7;
-    width:40;
+    margin-right:3;
+    width:50;
 }
 
 #remaining-time{
