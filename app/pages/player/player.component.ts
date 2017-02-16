@@ -585,76 +585,35 @@ export class playerPage implements OnInit {
 
 
 	private shouldDismissTracksMenu: boolean = false;
-	private shouldDismissMoreMenu: boolean = false;
 
 	private tracksMenu: any;
-	private moreMenu: any;
-
-	private moreButtonLoaded(moreBtn) {
-
-		let btn = moreBtn._nativeView;
-		let isSelected:boolean = false;
-
-		this.moreMenu = new android.widget.PopupMenu(application.android.foregroundActivity, btn);
-		this.moreMenu.getMenu().add("decoder");
-
-		this.moreMenu.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener({
-			onMenuItemClick: (item) => {
-				isSelected = true;
-				this._ngZone.run(() => {
-					this.showAccelerationDialog();
-				});
-				return false;
-			}
-		}));
-
-		this.moreMenu.setOnDismissListener(new android.widget.PopupMenu.OnDismissListener({
-			onDismiss:(menu)=>{
-				//opening menu automatically shows status bar 
-				//and dialog is also shows status bar so If I don't check
-				//if menu item is selected so it will hide status bar and dialog shows again
-				//so there is push down and push up happens for activity 
-				if(!isSelected)
-					this.hideStatusBar();
-				isSelected=false;
-				this.hideBars();
-			} 	
-		}));
-
-		btn.setOnClickListener(new android.view.View.OnClickListener({
-			onClick: () => {
-				this.moreMenu.show();
-				timer.clearTimeout(this.barsTimer);
-			}
-		}));
-
-	}
-
 
 	private tracksBtnLoaded(tracksBtn) {
 		let btn = tracksBtn._nativeView;
 		let isSelected:boolean = false;
 		this.tracksMenu = new android.widget.PopupMenu(application.android.foregroundActivity, btn);
 		let menu = this.tracksMenu.getMenu();
-		menu.add(0, 0, 0, "Audio Track");
-		menu.add(0, 1, 2, "Subtitles").setEnabled(false);
-		menu.add(0, 2, 1, "Select Subtitle file");
+		menu.add(0, 0, 1, "Subtitles").setEnabled(false);
+		menu.add(0, 1, 0, "Select Subtitle file");
+		menu.add(0, 2, 2, "Settings");
 
 		this.tracksMenu.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener({
 			onMenuItemClick: (item) => {
 				isSelected = true;
 				if (item.getItemId() == 0) {
 					
+					return true;
+				}
+
+				else if (item.getItemId() == 1) {
 					this._ngZone.run(() => {
-						this.showAudioTracksDialog();
+						this.showFilePickerDialog();
 					});
 					return true;
 				}
 
-				else if (item.getItemId() == 2) {
-					this._ngZone.run(() => {
-						this.showFilePickerDialog();
-					});
+				if (item.getItemId() == 2) {
+					
 					return true;
 				}
 			}
@@ -760,11 +719,8 @@ export class playerPage implements OnInit {
 
 	clearUI() {
 
-		if (this.moreMenu)
-			this.moreMenu.dismiss();
 		if (this.tracksMenu)
 			this.tracksMenu.dismiss();
-		this.moreMenu = null;
 		this.tracksMenu = null;
 
 	}

@@ -143,3 +143,12 @@ vlc {
  .sub-arrow-button:highlighted {
     background-color: blue;
 }
+
+.action-bar-icon{
+    background-color:transparent;
+    color:white;
+    font-size:30;
+}
+.action-bar-icon:highlighted{
+    background-color: blue;
+}
