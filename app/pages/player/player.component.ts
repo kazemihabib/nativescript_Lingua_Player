@@ -523,12 +523,22 @@ export class playerPage implements OnInit {
 		database.updatePosition(this.videoPath.replace('file://', ''), this.positionInDb);
 	}
 
+	private currentAspectRatioName = null;
+	private aspectRatioTimer = null;
 	private changeAspectRatio() {
 		timer.clearTimeout(this.barsTimer);
 		this.setBarsHideTimer();
+		timer.clearTimeout(this.aspectRatioTimer);
 		let currentAspectRatio = this.vlc.getCurrentAspectRatioItem();
-		console.log('currentAspectRatio' + currentAspectRatio.name);
 		this.currentAspectRatio = (currentAspectRatio.value + 1) % 7;
+		timer.setTimeout(()=>{
+			currentAspectRatio = this.vlc.getCurrentAspectRatioItem();
+			this.currentAspectRatioName = currentAspectRatio.name;
+			this.aspectRatioTimer = timer.setTimeout(()=>{
+				this.currentAspectRatioName = null; 
+			},2000);
+		},0);
+
 	}
 
 	// function to prevent calling toggleScreen on tap

@@ -93,19 +93,19 @@ export class VLCComponent implements OnInit{
     [
       {
         value: this.SURFACE_BEST_FIT,
-        name:"best fit"
+        name:"Best fit"
       },
       {
           value: this.SURFACE_FIT_HORIZONTAL,
-          name:"fit horizontal"
+          name:"Fit horizontal"
       },
       {
          value:this.SURFACE_FIT_VERTICAL,
-         name:"fit vertical"
+         name:"Fit vertical"
       },
       {
           value:this.SURFACE_FILL,
-          name:"fill"
+          name:"Fill"
       },
       {
         value:this.SURFACE_16_9,
@@ -117,7 +117,7 @@ export class VLCComponent implements OnInit{
      },
      {
         value:this.SURFACE_ORIGINAL,
-        name:"original"
+        name:"Center"
      }
     ]
 

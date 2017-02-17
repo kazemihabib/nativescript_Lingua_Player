@@ -56,6 +56,18 @@ vlc {
     background-color:blue;
 }
 
+#aspect-ratio-label {
+    vertical-align:center;
+}
+
+#aspect-ratio-label label{
+    font-size:50;
+    color:white;
+    background-color:rgba(0, 0, 0, 0.09);
+    horizontal-align:center;
+
+}
+
 
 #vol-chart-icon{
     color:white;

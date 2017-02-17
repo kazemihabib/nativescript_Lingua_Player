@@ -55,6 +55,10 @@
     <Label id="bright-chart-icon" class="mdi"  [text]="'mdi-brightness-high' | fonticon"  > </Label>
   </StackLayout>
 
+  <StackLayout  [opacity]="currentAspectRatioName ? 1 : 0 " id="aspect-ratio-label">
+      <Label [text]="currentAspectRatioName" ></Label>
+  </StackLayout>
+
   <StackLayout orientation="vertical" [opacity]="guestureHandler.volumeChartVisible ? 1 : 0" verticalAlignment= "center">
     <GridLayout rows="*,*,*,*,*,*,*,*,*,*,*,*,*,*,*," id="bar-chart">
       <Label id="vol-chart-core" *ngIf="guestureHandler.currentVolume" [row]="15 - guestureHandler.currentVolume" [rowSpan]=" guestureHandler.currentVolume == 0 ? 1 : guestureHandler.currentVolume" ></Label>
