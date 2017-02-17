@@ -631,7 +631,7 @@ export class playerPage implements OnInit {
 				if(!isSelected)
 					this.hideStatusBar();
 				isSelected=false;
-				this.hideBars();
+				this.setBarsHideTimer();
 			} 	
 		}));
 
