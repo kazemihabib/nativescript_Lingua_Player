@@ -82,8 +82,8 @@
   <!--show the arrow buttons only when subtitle is loaded and it's paused-->
     <FlexBoxLayout *ngIf="subtitleIsLoaded" justifyContent="center" [visibility] ="isPlaying ? 'collapse': 'visible' " >
 
-      <button  class="mdi sub-arrow-button" [text]="'mdi-keyboard-arrow-left' | fonticon" (tap)="getPreviousDialogWordList()" > </button>
-      <button class="mdi sub-arrow-button" [text]="'mdi-keyboard-arrow-right' | fonticon" (tap)="getNextDialogWordList()" > </button>
+      <button  class="mdi sub-arrow-button" [text]="'mdi-keyboard-arrow-left' | fonticon" (tap)="getPreviousDialogWordList()" (longPress)="seekToPreviousDialogWordList()" > </button>
+      <button class="mdi sub-arrow-button" [text]="'mdi-keyboard-arrow-right' | fonticon" (tap)="getNextDialogWordList()" (longPress)="seekToNextDialogWordList()"> </button>
     </FlexBoxLayout>
     <!--change marginBottom to handle position of subtitle in screen-->
     <FlexBoxLayout id="subtitle-flex" [flexDirection]="isRTL ? 'row-reverse': 'row'"  [visibility] ="isSubEmpty ? 'collapse': 'visible' " 

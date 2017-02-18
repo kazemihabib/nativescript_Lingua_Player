@@ -150,16 +150,8 @@ export class playerPage implements OnInit {
     public getPreviousDialogWordList (){
 		let subObj = this.subtitle.getPreviousDialogWordList(this.isSubEmpty);
 		if(subObj){
-			//warning
-			//TODO
-			//consider fast seek that seeks are not  that not seeks to exact position
-			//so user press previous button(when it's pause) and it seeks to prev dialog
-			//then it plays again and might not continue that dialog (perhaps one or two before that).
-			//how to fix it !!! ??? 
 			this.isSubEmpty = false;
-			this.vlcAction.seek(subObj.startTime);
 			this._ngZone.run(() => { this.subText = subObj.wordList; });
-			this.syncPosition();
 		}
 	}
 
@@ -167,10 +159,35 @@ export class playerPage implements OnInit {
 		let subObj = this.subtitle.getNextDialogWordList(this.isSubEmpty);
 		if(subObj){
 			this.isSubEmpty = false;
-			this.vlcAction.seek(subObj.startTime);
 			this._ngZone.run(() => { this.subText = subObj.wordList; });
+		}
+	}
+
+	private seekToPreviousDialogWordList(){
+		//warning
+		//TODO
+		//consider fast seek that seeks are not  that not seeks to exact position
+		//so user press previous button(when it's pause) and it seeks to prev dialog
+		//then it plays again and might not continue that dialog (perhaps one or two before that).
+		//how to fix it !!! ??? 
+
+
+		//after user release long touching the (tap) will be fired
+		//so the getPreviousDialogWordList will call.
+		let subObj = this.subtitle.getPreviousDialogWordList(this.isSubEmpty);
+		if(subObj){
+			this.vlcAction.seek(subObj.startTime);
 			this.syncPosition();
 		}
+				
+	}
+	private seekToNextDialogWordList(){
+		let subObj = this.subtitle.getNextDialogWordList(this.isSubEmpty);
+		if(subObj){
+			this.vlcAction.seek(subObj.startTime);
+			this.syncPosition();
+		}
+
 	}
 
 	private getSubtitleDialog() {
