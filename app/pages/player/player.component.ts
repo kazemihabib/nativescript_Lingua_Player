@@ -231,7 +231,7 @@ export class playerPage implements OnInit {
 			//so the bars will not shown on the screen at the start it's beautifull 
 			//and also user has to tap screen to see them and timeout of hiding 
 			//them will set.
-			if(this.activityIsPaused)
+			if(this.activityIsPaused && !this.isLocked)
 				this.showBars();
             else
 				this.hideBarsWithNoAnimation();
