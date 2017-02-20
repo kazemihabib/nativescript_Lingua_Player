@@ -1,8 +1,8 @@
 <StackLayout >
-    <ActionBar title="myPlayer" class="header" [style.marginTop]="statusBarHeight"></ActionBar>
+    <ActionBar title="myPlayer" class="header" [style.marginTop]="statusBarHeight"> </ActionBar>
 
     <GridLayout>
-        <RadListView [items]="paths" selectionBehavior="Press" (itemSelected)="onItemTap($event)"  (loaded)="loaded()" >
+        <RadListView [items]="paths" selectionBehavior="Press" (itemSelected)="onItemTap($event)"  (loaded)="loaded()" pullToRefresh="true" (pullToRefreshInitiated)="onPullToRefreshInitiated($event)" >
             <template tkListItemTemplate let-item="item">
                 <StackLayout id="thumb-container" >
                     <StackLayout id="thumb-image-container" >

@@ -17,6 +17,12 @@ import { Brightness } from '../../utils/brightness';
 import { VideoInfo } from "../../models/videoInfo.model";
 import {NotFound } from "../../dialogs/not_found/not_found";
 
+import { registerElement } from "nativescript-angular/element-registry";
+import { PullToRefresh } from "nativescript-pulltorefresh";
+import timer = require("timer")
+ 
+registerElement("pullToRefresh",() => require("nativescript-pulltorefresh").PullToRefresh);
+
 var database = require('../../utils/media.database');
 
 @Component({
@@ -48,9 +54,14 @@ export class HomeComponent implements OnInit {
         // this.statusBarHeight = this.getStatusBarHeight();
         VLCSettings.hardwareAcceleration = HW.HW_ACCELERATION_FULL;
         VLCSettings.networkCachingValue = 3000;
+        this.refresh();
+
+    }
+
+    private refresh(){
         this.source = this.videoExplorer.explore();
         let subscription = this.source.subscribe(
-            (paths) => {
+            (paths:VideoInfo[]) => {
                 this._ngZone.run(() => {
                     this.paths = new ObservableArray(paths);
                 });
@@ -131,6 +142,18 @@ export class HomeComponent implements OnInit {
                 this.play(URIPath, 0);
             }
         });
+    }
+
+    public onPullToRefreshInitiated(args: ListViewEventData) {
+        var listView = args.object;
+        //I can not put this in complete of subscriber 
+        //because if I put there it will never end
+        //https://github.com/telerik/nativescript-ui-feedback/issues/64
+
+        listView.notifyPullToRefreshFinished();
+        timer.setTimeout(()=>{
+            this.refresh();
+        },0)
     }
 
 }
