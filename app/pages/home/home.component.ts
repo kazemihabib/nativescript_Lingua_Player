@@ -138,9 +138,12 @@ export class HomeComponent implements OnInit {
                 let position = row.POSITION;
                 this.play(URIPath, position);
             }
-            if (err) {
+            else if (err) {
                 this.play(URIPath, 0);
             }
+            else    
+                //not exist in database so it never started
+                this.play(URIPath,0);
         });
     }
 
