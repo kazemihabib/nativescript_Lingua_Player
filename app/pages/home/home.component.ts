@@ -16,10 +16,12 @@ import { Brightness } from '../../utils/brightness';
 
 import { VideoInfo } from "../../models/videoInfo.model";
 import {NotFound } from "../../dialogs/not_found/not_found";
+import {PermissionNotGranted} from "../../dialogs/permission_not_granted/permission_not_granted";
 
 import { registerElement } from "nativescript-angular/element-registry";
 import { PullToRefresh } from "nativescript-pulltorefresh";
 import timer = require("timer")
+import * as permissions from "nativescript-permissions";
  
 registerElement("pullToRefresh",() => require("nativescript-pulltorefresh").PullToRefresh);
 
@@ -35,8 +37,10 @@ var database = require('../../utils/media.database');
 export class HomeComponent implements OnInit {
 
     private statusBarHeight = 0;
-
-    private paths: ObservableArray<VideoInfo>;
+    
+    //if I don't initialize it here it will be undefined 
+    //and granted will no
+    private paths: ObservableArray<VideoInfo> = new ObservableArray([]);
 
     private source: RxObservable<ObservableArray<VideoInfo>>;
     
@@ -59,22 +63,34 @@ export class HomeComponent implements OnInit {
     }
 
     private refresh(){
-        this.source = this.videoExplorer.explore(this._ngZone);
-        let subscription = this.source.subscribe(
-            (paths:ObservableArray<VideoInfo>) => {
-                this._ngZone.run(() => {
-                    this.paths = paths;
-                });
-            },
+        permissions.requestPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            .then(()=>{
+                this.source = this.videoExplorer.explore(this._ngZone);
+                let subscription = this.source.subscribe(
+                    (paths:ObservableArray<VideoInfo>) => {
+                        this._ngZone.run(() => {
+                            this.paths = paths;
+                        });
+                    },
 
-            (error)=>{
-                console.log('error in videoExplorer subscribe');
-            },
+                    (error)=>{
+                        console.log('error in videoExplorer subscribe');
+                    },
 
-            ()=>{
-                console.log('loading videos finished');
-            }
-        )
+                    ()=>{
+                        console.log('loading videos finished');
+                    }
+                )
+            })
+            .catch(()=>{
+                let options: ModalDialogOptions = {
+                    context: {},
+                    viewContainerRef: this.viewContainerRef
+                };
+                this.modalService.showModal(PermissionNotGranted, options).then((res: string) => {this.refresh() });
+            });
+
+
 
     }
 
@@ -152,8 +168,8 @@ export class HomeComponent implements OnInit {
         //I can not put this in complete of subscriber 
         //because if I put there it will never end
         //https://github.com/telerik/nativescript-ui-feedback/issues/64
-
         listView.notifyPullToRefreshFinished();
+
         timer.setTimeout(()=>{
             this.refresh();
         },0)
