@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
 
     private paths: ObservableArray<VideoInfo>;
 
-    private source: RxObservable<VideoInfo[]>;
+    private source: RxObservable<ObservableArray<VideoInfo>>;
     
     private powerManager:any;
 
@@ -59,11 +59,11 @@ export class HomeComponent implements OnInit {
     }
 
     private refresh(){
-        this.source = this.videoExplorer.explore();
+        this.source = this.videoExplorer.explore(this._ngZone);
         let subscription = this.source.subscribe(
-            (paths:VideoInfo[]) => {
+            (paths:ObservableArray<VideoInfo>) => {
                 this._ngZone.run(() => {
-                    this.paths = new ObservableArray(paths);
+                    this.paths = paths;
                 });
             },
 

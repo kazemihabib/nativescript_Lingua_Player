@@ -10,6 +10,7 @@ import imageSource = require("image-source");
 import database = require('../utils/media.database');
 
 import { VideoInfo } from "../models/videoInfo.model";
+import { ObservableArray } from "data/observable-array";
 
 declare var android: any;
 declare var org: any;
@@ -75,14 +76,14 @@ export class VideoExplorer{
         //database
     }
 
-    private videoInformations: VideoInfo[] = [];
+    private videoInformations:ObservableArray<VideoInfo>;
     private subscriber: any;
 
 
 
 
 
-    private mediaStoreQuery(): [VideoInfo[], string[]] {
+    private mediaStoreQuery(): [ObservableArray<VideoInfo>, string[]] {
 
         let MediaStore = android.provider.MediaStore;
         let Uri = android.net.Uri;
@@ -93,13 +94,18 @@ export class VideoExplorer{
         let projection = [MediaStore.Video.VideoColumns.DATA];
         let c = application.android.context.getContentResolver().query(uri, projection, null, null, null);
 
-        let videoInformations: VideoInfo[] = [];
+        let videoInformations: ObservableArray<VideoInfo>;
         if (c != null) {
             let temp;
             while (temp = c.moveToNext()) {
                 let path: string = c.getString(0); // give path
                 let exists = fs.File.exists(path);
-                if (exists) videoInformations.push(new VideoInfo(path));
+                if (exists){
+                    if(videoInformations)
+                        videoInformations.push(new VideoInfo(path));
+                    else
+                        videoInformations = new ObservableArray(new VideoInfo(path));
+                }
                 else notExistVideos.push(path)
             }
             c.close();
@@ -121,7 +127,7 @@ export class VideoExplorer{
 
     }
 
-    public explore() {
+    public explore(ngZone) {
 
         if (!database.isDatabaseReady()) {
             database.initDataBase();
@@ -139,12 +145,13 @@ export class VideoExplorer{
             subscriber.next(this.videoInformations);
 
             let setDetailsOfVideoInformations = (mediaRow: any, index: number) => {
-                let videoInfo = this.videoInformations[index];
-
-                videoInfo.position = mediaRow.POSITION;
-                videoInfo.length = mediaRow.LENGTH;
-                videoInfo.subLocation = mediaRow.SUBLOCATION;
-                videoInfo.thumbnail = mediaRow.THUMBNAIL;
+                let videoInfo = this.videoInformations.getItem(index);
+                ngZone.run(() => {
+                    videoInfo.position = mediaRow.POSITION;
+                    videoInfo.length = mediaRow.LENGTH;
+                    videoInfo.subLocation = mediaRow.SUBLOCATION;
+                    videoInfo.thumbnail = mediaRow.THUMBNAIL;
+                });
             }
 
 
@@ -156,7 +163,7 @@ export class VideoExplorer{
                     return this.subscriber.complete();
                 }
 
-                let path = this.videoInformations[inx].path;
+                let path = this.videoInformations.getItem(inx).path;
 
                 database.getMediaInfo(path, (err, row) => {
                     if (err) {
