@@ -10,13 +10,13 @@
                 <TextField  #searchField id="search-field" autocorrect="false" returnKeyType="search"
                     autocapitalizationType="none" hint="Search media files and folders" textAlignment="left" [ngModel]="searchValue"
                     (returnPress)="search()" (ngModelChange)="searchValueChange(searchField.text)"></TextField>
-                <Label [opacity]="clearIconVisibility ? '1' : '0'" id="clear-icon" class="mdi" [text]="'mdi-clear'|fonticon" (tap)="clearSearchField(searchField)" 
+                <Label [opacity]="clearIconVisibility ? '1' : '0'" id="clear-icon" class="mdi" [text]="'mdi-clear'|fonticon" (tap)="clearSearchField()" 
                 ></Label>
             </StackLayout>
 
         </ActionItem>
 
-      <NavigationButton text="Go Back" android.systemIcon="ic_menu_back" color="#ffffff" (tap)="dismissSearchBar(searchField)"
+      <NavigationButton text="Go Back" android.systemIcon="ic_menu_back" color="#ffffff" (tap)="dismissSearchBar()"
         [visibility]=" searchBarVisiblity ? 'visible' : 'collapse'">
       </NavigationButton>
     </ActionBar>

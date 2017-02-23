@@ -1,4 +1,4 @@
-﻿import {Component, OnInit, NgZone, ViewContainerRef} from "@angular/core";
+﻿import {Component, OnInit, NgZone, ViewContainerRef,ViewChild} from "@angular/core";
 import application = require("application");
 import { Router } from "@angular/router";
 import { chroma, HW, VLCSettings } from "../../components/VLCSettings";
@@ -47,6 +47,7 @@ export class HomeComponent implements OnInit {
     private powerManager:any;
     private searchBarVisiblity = false;
 
+ 	@ViewChild("searchField") searchField:any ;
 
     constructor(private _router: Router, private videoExplorer: VideoExplorer, private _ngZone: NgZone,
         private viewContainerRef: ViewContainerRef,private modalService: ModalDialogService) { }
@@ -57,6 +58,17 @@ export class HomeComponent implements OnInit {
 
     public ngOnInit() {
         // this.statusBarHeight = this.getStatusBarHeight();
+		application.android.off(application.AndroidApplication.activityBackPressedEvent);
+		application.android.on(application.AndroidApplication.activityBackPressedEvent,(args:any)=>{
+            if(this.searchBarVisiblity){
+                args.cancel = true;
+                this._ngZone.run(()=>{
+                    this.dismissSearchBar();
+                });
+            }
+                
+        },this);
+
         VLCSettings.hardwareAcceleration = HW.HW_ACCELERATION_FULL;
         VLCSettings.networkCachingValue = 3000;
         this.refresh();
@@ -192,43 +204,41 @@ export class HomeComponent implements OnInit {
     private clearIconVisibility:boolean=false; 
 
     private search(){
-        console.log(this.searchValue);
         if(this.searchValue != this.prevSearchedValue){
             this.prevSearchedValue = this.searchValue;
             this.refresh(this.searchValue);
         }
     }
 
-    private clearSearchField(searchField){
+    private clearSearchField(){
         this.searchValue = "";
     }
 
-    private dismissSearchBar(searchField){
+    private dismissSearchBar(){
         let shouldRefresh = this.prevSearchedValue !== "";
         this.searchValue = "";
         this.prevSearchedValue = "";
         this.searchBarVisiblity = false;
-        searchField.dismissSoftInput();
+        this.searchField.nativeElement.dismissSoftInput();
         if(shouldRefresh)
             timer.setTimeout(()=>{
                 this.refresh();
             },50);
     }
 
-    private openSearchBar(searchField){
+    private openSearchBar(){
         if(this.searchBarVisiblity)
             //search bar is open
             this.search();
         else{
             this.searchBarVisiblity = true;
             timer.setTimeout(()=>{
-                searchField.focus(); 
+                this.searchField.nativeElement.focus(); 
             },0);
         }
     }
 
     private searchValueChange(value){
-        console.log('searchValueChange');
         this.searchValue = value;
         //it's enable when 
         if(value.length)
