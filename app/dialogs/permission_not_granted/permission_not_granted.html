@@ -1,0 +1,9 @@
+<StackLayout>
+    <FlexboxLayout class="header">
+        <Label [text]="title"></Label>
+    </FlexboxLayout>
+
+    <Label id="detail" [textWrap]="'true'" [text]="message"></Label>
+    <button text="ok" (tap)="ok()"></button>
+
+</StackLayout>

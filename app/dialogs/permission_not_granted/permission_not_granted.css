@@ -1,0 +1,18 @@
+StackLayout{
+     background-color:white;
+     opacity:.8;
+}
+
+#detail{
+    margin: 20;
+}
+
+button { 
+    color:black;
+    background-color: white;
+    text-align:center;
+    font-size:15;
+    width:50%;
+}
+
+button:highlighted { background-color:#64b5f6;}
