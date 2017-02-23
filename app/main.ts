@@ -16,6 +16,7 @@ import {ResumeConfirm} from "./dialogs/resume_confirm/resume_confirm";
 import {DictionaryDialog} from "./dialogs/dictionary_dialog/dictionary_dialog";
 import {NotFound } from "./dialogs/not_found/not_found";
 import { registerElement } from "nativescript-angular/element-registry";
+import {PermissionNotGranted} from "./dialogs/permission_not_granted/permission_not_granted";
 
 import {Dictionary} from "./services/dictionary.service"
 
@@ -44,10 +45,11 @@ import { TNSFontIconModule} from 'nativescript-ng2-fonticon';
         AudioSelector,
         ResumeConfirm,
         DictionaryDialog,
-        NotFound
+        NotFound,
+        PermissionNotGranted
 
     ],
-    entryComponents: [FilePicker,AccelerationSelector,AudioSelector,ResumeConfirm,DictionaryDialog,NotFound],
+    entryComponents: [FilePicker,AccelerationSelector,AudioSelector,ResumeConfirm,DictionaryDialog,NotFound,PermissionNotGranted],
     providers: [ // singleton services
         Dictionary
     ],
