@@ -11,6 +11,7 @@ import database = require('../utils/media.database');
 
 import { VideoInfo } from "../models/videoInfo.model";
 import { ObservableArray } from "data/observable-array";
+import _ = require('underscore');
 
 declare var android: any;
 declare var org: any;
@@ -83,8 +84,7 @@ export class VideoExplorer{
 
 
 
-    private mediaStoreQuery(): [ObservableArray<VideoInfo>, string[]] {
-
+    private mediaStoreQuery(filter?:string): [ObservableArray<VideoInfo>, string[]] {
         let MediaStore = android.provider.MediaStore;
         let Uri = android.net.Uri;
 
@@ -101,6 +101,10 @@ export class VideoExplorer{
                 let path: string = c.getString(0); // give path
                 let exists = fs.File.exists(path);
                 if (exists){
+                    if(filter && (path.toUpperCase().indexOf(filter.toUpperCase())===-1)){
+                        continue;
+                    }
+
                     if(videoInformations)
                         videoInformations.push(new VideoInfo(path));
                     else
@@ -116,7 +120,7 @@ export class VideoExplorer{
     }
 
     private removeNotExistRows(notExistVideos: string[]) {
-        if (notExistVideos.length) {
+        if (notExistVideos && notExistVideos.length) {
             notExistVideos.forEach((path) => {
                 database.deleteRow(path, (err, id) => {
                     if (err) console.log(err);
@@ -127,17 +131,19 @@ export class VideoExplorer{
 
     }
 
-    public explore(ngZone) {
+    public explore(ngZone,filter?:string) {
 
         if (!database.isDatabaseReady()) {
             database.initDataBase();
         }
+        if(this.worker)
+            this.worker.terminate();
 
         this.worker = new Worker('../workers/setMediaInfo.worker');
 
         let notExistVideos: string[] = [];
 
-        [this.videoInformations, notExistVideos] = this.mediaStoreQuery();
+        [this.videoInformations, notExistVideos] = this.mediaStoreQuery(filter);
         this.removeNotExistRows(notExistVideos);
 
         return RxObservable.create(subscriber => {
@@ -187,7 +193,7 @@ export class VideoExplorer{
                 });
             }
 
-            if (this.videoInformations.length) {
+            if (this.videoInformations && this.videoInformations.length) {
                 getVideoInfo(0);
             }
 

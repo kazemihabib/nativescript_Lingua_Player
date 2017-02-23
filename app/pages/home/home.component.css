@@ -30,3 +30,30 @@ RadListView{
 #video-length{
     vertical-alignment:center;
 }
+
+#search-icon{
+    color:black;
+    background-color: transparent;
+    font-size:22;
+}
+
+#search-field{
+    border-color:transparent;
+    border-width:1;
+    font-size:15;
+    width:220;
+    hint-color:white;
+    color:#FFFFFF;
+    background-color: transparent;
+    height:60;
+    /*padding to touch it easier*/
+    padding:10;
+}
+
+#clear-icon{
+    height:60;
+    font-size:22;
+    margin-top:20;
+    /*padding to touch it easier*/
+    padding:10;
+}

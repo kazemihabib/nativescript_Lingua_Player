@@ -1,5 +1,26 @@
 <StackLayout >
-    <ActionBar title="myPlayer" class="header" [style.marginTop]="statusBarHeight"> </ActionBar>
+    <ActionBar [title]=" searchBarVisiblity ? '' : 'myPlayer'"  class="header" color="black" [style.marginTop]="statusBarHeight">
+        <ActionItem (tap)="openSearchBar(searchField)">
+            <Label padding="10"  id="search-icon" class="mdi" [text]="'mdi-search'|fonticon" ></Label>
+        </ActionItem>
+
+        <!--I added visibility in both because it seems that there is bug after navigation it shows this ActionItem-->
+        <ActionItem [visibility]=" searchBarVisiblity ? 'visible' : 'collapse'">
+            <StackLayout [visibility]=" searchBarVisiblity ? 'visible' : 'collapse'" orientation="horizontal" >
+                <TextField  #searchField id="search-field" autocorrect="false" returnKeyType="search"
+                    autocapitalizationType="none" hint="Search media files and folders" textAlignment="left" [ngModel]="searchValue"
+                    (returnPress)="search()" (ngModelChange)="searchValueChange(searchField.text)"></TextField>
+                <Label [opacity]="clearIconVisibility ? '1' : '0'" id="clear-icon" class="mdi" [text]="'mdi-clear'|fonticon" (tap)="clearSearchField(searchField)" 
+                ></Label>
+            </StackLayout>
+
+        </ActionItem>
+
+      <NavigationButton text="Go Back" android.systemIcon="ic_menu_back" color="#ffffff" (tap)="dismissSearchBar(searchField)"
+        [visibility]=" searchBarVisiblity ? 'visible' : 'collapse'">
+      </NavigationButton>
+    </ActionBar>
+
 
     <GridLayout>
         <RadListView [items]="paths" selectionBehavior="Press" (itemSelected)="onItemTap($event)"  (loaded)="loaded()" pullToRefresh="true" (pullToRefreshInitiated)="onPullToRefreshInitiated($event)" >

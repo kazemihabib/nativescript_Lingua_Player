@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, NgZone, ViewContainerRef } from "@angular/core";
+﻿import {Component, OnInit, NgZone, ViewContainerRef} from "@angular/core";
 import application = require("application");
 import { Router } from "@angular/router";
 import { chroma, HW, VLCSettings } from "../../components/VLCSettings";
@@ -45,6 +45,7 @@ export class HomeComponent implements OnInit {
     private source: RxObservable<ObservableArray<VideoInfo>>;
     
     private powerManager:any;
+    private searchBarVisiblity = false;
 
 
     constructor(private _router: Router, private videoExplorer: VideoExplorer, private _ngZone: NgZone,
@@ -62,14 +63,18 @@ export class HomeComponent implements OnInit {
 
     }
 
-    private refresh(){
+    private refresh(filterValue?:string){
         permissions.requestPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
             .then(()=>{
-                this.source = this.videoExplorer.explore(this._ngZone);
+                this.source = this.videoExplorer.explore(this._ngZone,filterValue);
                 let subscription = this.source.subscribe(
                     (paths:ObservableArray<VideoInfo>) => {
                         this._ngZone.run(() => {
-                            this.paths = paths;
+                            if(paths)
+                                this.paths = paths;
+                            else
+                                this.paths = new ObservableArray([]);
+
                         });
                     },
 
@@ -82,7 +87,9 @@ export class HomeComponent implements OnInit {
                     }
                 )
             })
-            .catch(()=>{
+            .catch((e)=>{
+                console.log('error');
+                console.log(e);
                 let options: ModalDialogOptions = {
                     context: {},
                     viewContainerRef: this.viewContainerRef
@@ -171,8 +178,63 @@ export class HomeComponent implements OnInit {
         listView.notifyPullToRefreshFinished();
 
         timer.setTimeout(()=>{
-            this.refresh();
+            //for situation user search somthing then clears it and refresh
+            //then if he/she searchs that word again it will not search 
+            //because searchValue and prevSearchValue are same
+
+            this.prevSearchedValue = "";
+            this.refresh(this.searchValue);
         },0)
+    }
+
+    private searchValue:string = "";
+    private prevSearchedValue:string = "";
+    private clearIconVisibility:boolean=false; 
+
+    private search(){
+        console.log(this.searchValue);
+        if(this.searchValue != this.prevSearchedValue){
+            this.prevSearchedValue = this.searchValue;
+            this.refresh(this.searchValue);
+        }
+    }
+
+    private clearSearchField(searchField){
+        this.searchValue = "";
+    }
+
+    private dismissSearchBar(searchField){
+        let shouldRefresh = this.prevSearchedValue !== "";
+        this.searchValue = "";
+        this.prevSearchedValue = "";
+        this.searchBarVisiblity = false;
+        searchField.dismissSoftInput();
+        if(shouldRefresh)
+            timer.setTimeout(()=>{
+                this.refresh();
+            },50);
+    }
+
+    private openSearchBar(searchField){
+        if(this.searchBarVisiblity)
+            //search bar is open
+            this.search();
+        else{
+            this.searchBarVisiblity = true;
+            timer.setTimeout(()=>{
+                searchField.focus(); 
+            },0);
+        }
+    }
+
+    private searchValueChange(value){
+        console.log('searchValueChange');
+        this.searchValue = value;
+        //it's enable when 
+        if(value.length)
+            this.clearIconVisibility = true;
+        else
+            this.clearIconVisibility = false;
     }
 
 }
