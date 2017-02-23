@@ -160,7 +160,8 @@ vlc {
 .action-bar-icon{
     background-color:transparent;
     color:white;
-    font-size:30;
+    font-size:22;
+    width:43;
 }
 .action-bar-icon:highlighted{
     background-color: blue;

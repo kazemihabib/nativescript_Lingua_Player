@@ -1,16 +1,11 @@
 <GridLayout id="root" rows="*,auto" columns="*" (loaded)="pageLoaded()">
    <ActionBar row="0" rowSpan="2" [title]="videoTitle"  class="player-controller-container-action-bar">
-    <ActionItem (tap)="showAudioTracksDialog()">
-        <Button class="mdi action-bar-icon" [text]="'mdi-audiotrack' | fonticon" ></Button>
-    </ActionItem>
 
-    <ActionItem  text=""  android.position="popup" >
-    </ActionItem>
-
-    <ActionItem  text="Settings"  android.position="popup" >
-    </ActionItem>
-
-    <ActionItem  text="About"  android.position="popup" >
+    <ActionItem>
+      <StackLayout orientation="horizontal">
+        <Button class="mdi action-bar-icon" [text]="'mdi-audiotrack' | fonticon"  (tap)="showAudioTracksDialog()" ></Button>
+        <Button #overflowBtn class="mdi action-bar-icon" [text]="'mdi-more-vert' | fonticon"  (loaded)="overflowButtonLoaded(overflowBtn)" ></Button>
+      </StackLayout>
     </ActionItem>
 
     <!--play on background button-->

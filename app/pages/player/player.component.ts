@@ -88,6 +88,7 @@ export class playerPage implements OnInit {
 
  	@ViewChild("playerController") playerController:any ;
 
+
 	private eventNativeCrashError (){
 		console.log("event: eventNativeCrashError");
 	}
@@ -658,7 +659,8 @@ export class playerPage implements OnInit {
 				if(!isSelected)
 					this.hideStatusBar();
 				isSelected=false;
-				this.setBarsHideTimer();
+				if(this.isPlaying)
+					this.setBarsHideTimer();
 			} 	
 		}));
 
@@ -669,6 +671,60 @@ export class playerPage implements OnInit {
 			}
 		}));
 
+	}
+
+	private overflowBtn;
+	private overflowButtonLoaded(overflowBtn){
+		let btn = overflowBtn._nativeView;
+		let isSelected:boolean = false;
+		this.overflowBtn = new android.widget.PopupMenu(application.android.foregroundActivity, btn);
+		let menu = this.overflowBtn.getMenu();
+
+		menu.add(0, 0, 0, "Settings");
+		menu.add(0, 1, 1, "About");
+
+		this.overflowBtn.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener({
+			onMenuItemClick: (item) => {
+				isSelected = true;
+				if (item.getItemId() == 0) {
+					console.log('Settings');
+					
+					return true;
+				}
+
+				else if (item.getItemId() == 1) {
+					console.log('About')
+					return true;
+				}
+
+				if (item.getItemId() == 2) {
+					
+					return true;
+				}
+			}
+
+		}));
+
+		this.overflowBtn.setOnDismissListener(new android.widget.PopupMenu.OnDismissListener({
+			onDismiss:(menu)=>{
+				//opening menu automatically shows status bar 
+				//and dialog is also shows status bar so If I don't check
+				//if menu item is selected so it will hide status bar and dialog shows again
+				//so there is push down and push up happens for activity 
+				if(!isSelected)
+					this.hideStatusBar();
+				isSelected=false;
+				if(this.isPlaying)
+					this.setBarsHideTimer();
+			} 	
+		}));
+
+		btn.setOnClickListener(new android.view.View.OnClickListener({
+			onClick: () => {
+				this.overflowBtn.show();
+				timer.clearTimeout(this.barsTimer);
+			}
+		}));
 	}
 
 	private showFilePickerDialog(){
@@ -750,6 +806,11 @@ export class playerPage implements OnInit {
 
 		if (this.tracksMenu)
 			this.tracksMenu.dismiss();
+
+		if (this.overflowBtn)
+			this.overflowBtn.dismiss();
+
+        this.overflowBtn = null;
 		this.tracksMenu = null;
 
 	}
